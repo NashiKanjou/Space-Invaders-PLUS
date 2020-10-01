@@ -13,12 +13,19 @@ In terms of functionality, I plan to add many upgrades and new features for the 
 # Educational Goals
 
 **_Object Oriented Design_** - The player, projectiles, enemies, powerup, amongst other things displayed and interacted with within the game will be constructors, with new instances of these objects being created during the game.
+
 **_Test Driven Development_** - The game will be thoroughly tested, with each single level played in every fashion imaginable, where every possibility of movement, strategy, and game-state will be considered and tried out, to ensure that there are no bugs or glitches that can occur in the game.
+
 **_Unified Modeling Language (UML)_** - A large and complex UML diagram will be created for the application, showing the relationships between each class and its corresponding member variables and methods, to ensure a complete understanding of how the game’s working parts come together to form the entire application and the experience that stems from it.
+
 **_Debugging_** - The game will be thoroughly tested, as previously mentioned, and then its code will be analyzed for possible bugs. Each game member and all of its functionality will be caught for exceptions and possible mishaps, to prevent crashes in the middle of the game.
+
 **_Code profiling and optimization_** - The game will be optimized and its code will be profiled to utilize the current and modern Java methods and functionalities, in order to make use of newer technology and avoid possible code malfunctionality from older methods and Java-included classes.
+
 **_On-the-fly coding_** - Since the game will have difficulty selection, the game’s code will then be able to be modified and its functionality changed during run time, thus utilizing on-the-fly coding. Not only this, but the movement of the player and its projectiles will also change during runtime, corresponding to the user’s key input.
+
 **_Graphic User Interface_** - The game will contain a simple and functional GUI that will offer players the option to play the game, receive help for playing it, lower the difficulty, as well as the losing, winning, starting, and leaderboard screens being displayed. Of course, the graphical user interface in the game itself will be dynamic, changing with the player controls and game functionality in real-time.
+
 **_Access to Database_** - The scorecard will utilize SQL to create a database of players and their respective scores, which then will be sorted using SQL statements/scripts in descending order, automatically being input and re-calculated after each game.
 
 # Game Screenshot
