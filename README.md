@@ -28,6 +28,10 @@ In terms of functionality, I plan to add many upgrades and new features for the 
 
 **_Access to Database_** - The scorecard will utilize SQL to create a database of players and their respective scores, which then will be sorted using SQL statements/scripts in descending order, automatically being input and re-calculated after each game.
 
+# UML Diagram
+
+![UML_Diagram](https://github.com/mishagolikov/Space-Invaders-PLUS/blob/master/UML%20Diagram%20Space%20Invaders%20PLUS.png)
+
 # Game Screenshot
 
 ![Game Screen](https://raw.githubusercontent.com/tatilattanzi/space-invaders/master/screens/space-invaders-game-screen.png)
