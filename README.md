@@ -30,7 +30,7 @@ In terms of functionality, I plan to add many upgrades and new features for the 
 
 # Whiteboard Presentation Slide
 
-![Whiteboard_Slide](https://github.com/mishagolikov/Space-Invaders-PLUS/blob/master/Space-Invaders-PLUS.iml)
+![Whiteboard_Slide](https://github.com/mishagolikov/Space-Invaders-PLUS/blob/master/Space%20Invaders%20SLIDE.png)
 
 # UML Diagram
 
