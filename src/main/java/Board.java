@@ -42,7 +42,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private boolean havewon = true;
 	private final String expl = "/img/explosion.png";
 	private final String alienpix = "/img/alien.png";
-	private String message = "Seu planeta nos pertence agora...";
+	private String message = SpaceInvaders.lang.getEndingLoseMessage();
 
 	private Thread animator;
 
@@ -175,7 +175,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		g.setColor(Color.white);
 		g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
-		Font small = new Font("Helvetica", Font.BOLD, 14);
+		Font small = new Font("z", Font.BOLD, 14);
 		FontMetrics metr = this.getFontMetrics(small);
 
 		g.setColor(Color.white);
@@ -187,7 +187,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Parabéns! Você salvou a galáxia!";
+			message = SpaceInvaders.lang.getEndingWinMessage();
 		}
 
 		// player
@@ -266,7 +266,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens estão invadindo a galáxia!";
+					message = SpaceInvaders.lang.getInvadeMessage();
 				}
 
 				alien.act(direction);
