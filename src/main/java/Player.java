@@ -29,10 +29,12 @@ public class Player extends Sprite implements Commons {
 
 	public void act() {
 		x += dx;
+		y += dy;
 		if (x <= 2)
 			x = 2;
 		if (x >= BOARD_WIDTH - 2 * width)
 			x = BOARD_WIDTH - 2 * width;
+
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -46,6 +48,14 @@ public class Player extends Sprite implements Commons {
 			dx = 2;
 		}
 
+		if (key == KeyEvent.VK_UP) {
+			dy = -2;
+		}
+
+		if (key == KeyEvent.VK_DOWN) {
+			dy = 2;
+		}
+
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -57,6 +67,14 @@ public class Player extends Sprite implements Commons {
 
 		if (key == KeyEvent.VK_RIGHT) {
 			dx = 0;
+		}
+
+		if (key == KeyEvent.VK_UP) {
+			dy = 0;
+		}
+
+		if (key == KeyEvent.VK_DOWN) {
+			dy = 0;
 		}
 	}
 }
