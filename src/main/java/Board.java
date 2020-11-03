@@ -1,3 +1,5 @@
+package main.java;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -66,7 +68,6 @@ public class Board extends JPanel implements Runnable, Commons {
 
 	public void gameInit() {
 		aliens = new ArrayList();
-
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
 
 		for (int i = 0; i < 4; i++) {
