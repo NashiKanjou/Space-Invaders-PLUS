@@ -1,4 +1,5 @@
 import javax.swing.ImageIcon;
+import java.math.*;
 
 
 public class Shot extends Sprite {

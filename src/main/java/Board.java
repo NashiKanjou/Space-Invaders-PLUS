@@ -1,9 +1,4 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -218,8 +213,18 @@ public class Board extends JPanel implements Runnable, Commons {
 					}
 				}
 			}
+			// do aiming code here
+			// do shot.setY and .setX to fit position of aiming place
+			// using mouse or keyboard.
 
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			int mouseX = p.x;
+			int mouseY = p.y;
+			// do trig between mouse and spaceship to know trajectory
+			// include to update X as well
+			// SHOT POSITION UPDATING LINE
 			int y = shot.getY();
+			// SHOT TRAVEL SPEED
 			y -= 8;
 			if (y < 0)
 				shot.die();
