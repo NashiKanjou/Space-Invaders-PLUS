@@ -16,7 +16,7 @@ Anna, age 27, is a lead mobile application software developer for a mid-level co
 Anna's experience as a mobile and game developer, both in past and present, allows her to be comfortable and skilled in what she does currently. She enjoys the fact that games allow people to relax and wind down after a long day, and that she can help create them and gift that experience to people. Due to having worked on many complex projects and have seen their outcome, Anna believes that less complex mobile games have a higher success and enjoyability rate than their complex counterparts. She is extremely interested in using and getting to port Space Invaders to a mobile version, as she believes the simple, seamless, and easily-learnable experience of the game is what will allow its success and great reviews amongst the general public.
 
 # Trello/Features Link
-[Trello](https://trello.com/b/qEVfP4xu/space-invaders-plus)
+##[Trello](https://trello.com/b/qEVfP4xu/space-invaders-plus)
 
 # Project Description
 
