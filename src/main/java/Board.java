@@ -1,5 +1,3 @@
-package main.java;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,14 +6,23 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.imageio.ImageIO;
+
+import entity.Alien;
+import entity.Bomb;
+import entity.GameOver;
+import entity.Player;
+import entity.Shot;
+import entity.Sprite;
+import entity.Won;
+import util.Commons;
+import util.MapLoader;
 
 /**
  * 
@@ -29,7 +36,8 @@ public class Board extends JPanel implements Runnable, Commons {
 	private static final long serialVersionUID = 1L;
 
 	private Dimension d;
-	private ArrayList aliens;
+	private ArrayList<Sprite> aliens;
+	private ArrayList<Sprite> map;
 	private Player player;
 	private Shot shot;
 	private GameOver gameend;
@@ -67,16 +75,18 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void gameInit() {
-		aliens = new ArrayList();
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
+		aliens = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
+		System.out.println("size: " + aliens.size());
+		// map = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
+		// ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 6; j++) {
-				Alien alien = new Alien(alienX + 18 * j, alienY + 18 * i);
-				alien.setImage(ii.getImage());
-				aliens.add(alien);
-			}
-		}
+		// for (int i = 0; i < 4; i++) {
+		// for (int j = 0; j < 6; j++) {
+		// Alien alien = new Alien(alienX + 18 * j, alienY + 18 * i);
+		// alien.setImage(ii.getImage());
+		// aliens.add(alien);
+		// }
+		// }
 
 		player = new Player();
 		shot = new Shot();
@@ -84,6 +94,12 @@ public class Board extends JPanel implements Runnable, Commons {
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
 			animator.start();
+		}
+	}
+
+	public void drawMap(Graphics g) {
+		for (Sprite s : map) {
+			g.drawImage(s.getImage(), s.getX(), s.getY(), this);
 		}
 	}
 
@@ -149,6 +165,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 			g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
 			drawAliens(g);
+			// drawMap(g);
 			drawPlayer(g);
 			drawShot(g);
 			drawBombing(g);
@@ -181,14 +198,13 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		g.setColor(Color.white);
 		g.setFont(small);
-		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
-				BOARD_WIDTH / 2);
+		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2, BOARD_WIDTH / 2);
 	}
 
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Parabéns! Você salvou a galáxia!";
+			message = "Parabï¿½ns! Vocï¿½ salvou a galï¿½xia!";
 		}
 
 		// player
@@ -207,11 +223,9 @@ public class Board extends JPanel implements Runnable, Commons {
 				int alienY = alien.getY();
 
 				if (alien.isVisible() && shot.isVisible()) {
-					if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH)
-							&& shotY >= (alienY)
+					if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
 							&& shotY <= (alienY + ALIEN_HEIGHT)) {
-						ImageIcon ii = new ImageIcon(getClass().getResource(
-								expl));
+						ImageIcon ii = new ImageIcon(getClass().getResource(expl));
 						alien.setImage(ii.getImage());
 						alien.setDying(true);
 						deaths++;
@@ -267,7 +281,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens estão invadindo a galáxia!";
+					message = "Aliens estï¿½o invadindo a galï¿½xia!";
 				}
 
 				alien.act(direction);
@@ -296,11 +310,9 @@ public class Board extends JPanel implements Runnable, Commons {
 			int playerY = player.getY();
 
 			if (player.isVisible() && !b.isDestroyed()) {
-				if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH)
-						&& bombY >= (playerY)
+				if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
 						&& bombY <= (playerY + PLAYER_HEIGHT)) {
-					ImageIcon ii = new ImageIcon(this.getClass().getResource(
-							expl));
+					ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
 					player.setImage(ii.getImage());
 					player.setDying(true);
 					b.setDestroyed(true);
