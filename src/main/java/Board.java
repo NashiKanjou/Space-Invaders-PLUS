@@ -69,8 +69,8 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 6; j++) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 8; j++) {
 				Alien alien = new Alien(alienX + 18 * j, alienY + 18 * i);
 				alien.setImage(ii.getImage());
 				aliens.add(alien);
@@ -279,7 +279,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		Random generator = new Random();
 
 		while (i3.hasNext()) {
-			int shot = generator.nextInt(15);
+			int shot = generator.nextInt(25);
 			Alien a = (Alien) i3.next();
 			Bomb b = a.getBomb();
 			if (shot == CHANCE && a.isVisible() && b.isDestroyed()) {
