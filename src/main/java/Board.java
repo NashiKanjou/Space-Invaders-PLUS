@@ -32,6 +32,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private int alienY = 25;
 	private int direction = -1;
 	private int deaths = 0;
+	private double angle = 0; // aiming angle for shooting, default straight
 
 	private boolean ingame = true;
 	private boolean havewon = true;
@@ -224,12 +225,23 @@ public class Board extends JPanel implements Runnable, Commons {
 			// include to update X as well
 			// SHOT POSITION UPDATING LINE
 			int y = shot.getY();
+			int x = shot.getX();
+			// shooting angle
+
+			double rads = angle * Math.PI/180.0;
+
 			// SHOT TRAVEL SPEED
-			y -= 8;
-			if (y < 0)
-				shot.die();
-			else
+			int shotSpeed = 8;
+			// shot direction in x and y coordinates
+			x += (int)(shotSpeed * Math.cos(rads));
+			y -= (int)(shotSpeed * Math.sin(rads));
+
+			if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits borders
+				shot.die(); // shot dies
+			else { // else keep shot moving
 				shot.setY(y);
+				shot.setX(x);
+			}
 		}
 
 		// aliens
@@ -364,6 +376,12 @@ public class Board extends JPanel implements Runnable, Commons {
 
 					if (!shot.isVisible())
 						shot = new Shot(x, y);
+				}
+				if (key == KeyEvent.VK_A) {
+					angle += 15;
+				}
+				if (key == KeyEvent.VK_D) {
+					angle -= 15;
 				}
 			}
 		}
