@@ -1,11 +1,9 @@
 # Project Overview
 
 # Vision Statement
-## Chin-Hung Lee
 Beside a classic game that only have a very straight forward gameplay, space invaders plus will include some modern game styles, virtual update and leaderboard.
 
 # Personas
-## Chin-Hung Lee
 Arusu, age 24, is a game designer in Compile Heart. She has a diploma in computer science from Tokyo Institute of Technology. She went to several software companies in Japan. Since she loves games more, she joined the Compile Heart and become a game designer.
 Before Arusu actually join a game company, she does not only do programming for work, she also had her own club creating games as a hobby. She released several mini games and those games have lots of positive reviews. Arusu is interested in Space Invaders Plus and want to try and test the game.
 
