@@ -1,7 +1,5 @@
 # Project Overview
 
-# [Trello](https://trello.com/b/qEVfP4xu/space-invaders-plus)
-
 # Vision Statement
 FOR gamers and ordinary people WHO need to pass time, take a quick fun break, or to enjoy themselves playing video games. SPACE INVADERS PLUS is a Java-based video game THAT provides a simple, retro game experience, fit for any skill level, and having basic and straightforward playability for an uncomplicated gaming experience. UNLIKE most modern games which involve thorough and complex tutorials, gameplay mechanics, and a higher-end skill level, OUR product provides a fun and relaxing experience for all ages, skill levels, and most importantly, situations, where jumping in and out of the game is seamless and requires no thought, allowing one to have fun thoughtlessly.
 
@@ -13,14 +11,12 @@ Joseph, age 45, is a video game developer for Capcom. Joseph is one of the lead 
 Arusu, age 24, is a game designer in Compile Heart. She has a diploma in computer science from Tokyo Institute of Technology. She went to several software companies in Japan. Since she loves games more, she joined the Compile Heart and become a game designer.
 Before Arusu actually join a game company, she does not only do programming for work, she also had her own club creating games as a hobby. She released several mini games and those games have lots of positive reviews. Arusu is interested in Space Invaders Plus and want to try and test the game.
 
-
 ## Misha
+Anna, age 27, is a lead mobile application software developer for a mid-level company based out of London, England. Her company works on various mobile application projects, mostly games, which are to be implemented and ported onto mobile versions. She manages a group of 20 software developers at her company. She has a Bachelor's Degree from King's College in London, having graduated with a 3.8 GPA. She commutes home where she lives with her family in order to help them out financially. She has a variety of skills, including Android development, Swift development, as well as having worked in numerous game development companies prior to this one.
+Anna's experience as a mobile and game developer, both in past and present, allows her to be comfortable and skilled in what she does currently. She enjoys the fact that games allow people to relax and wind down after a long day, and that she can help create them and gift that experience to people. Due to having worked on many complex projects and have seen their outcome, Anna believes that less complex mobile games have a higher success and enjoyability rate than their complex counterparts. She is extremely interested in using and getting to port Space Invaders to a mobile version, as she believes the simple, seamless, and easily-learnable experience of the game is what will allow its success and great reviews amongst the general public.
 
 # Trello/Features Link
-
-
-
-
+[Trello](https://trello.com/b/qEVfP4xu/space-invaders-plus)
 
 # Project Description
 
