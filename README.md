@@ -3,7 +3,7 @@
 # [Trello](https://trello.com/b/qEVfP4xu/space-invaders-plus)
 
 # Vision Statement
-Beside a classic game that only have a very straight forward gameplay, space invaders plus will include some modern game styles, virtual update and leaderboard.
+FOR gamers and ordinary people WHO need to pass time, take a quick fun break, or to enjoy themselves playing video games. SPACE INVADERS PLUS is a Java-based video game THAT provides a simple, retro game experience, fit for any skill level, and having basic and straightforward playability for an uncomplicated gaming experience. UNLIKE most modern games which involve thorough and complex tutorials, gameplay mechanics, and a higher-end skill level, OUR product provides a fun and relaxing experience for all ages, skill levels, and most importantly, situations, where jumping in and out of the game is seamless and requires no thought, allowing one to have fun thoughtlessly.
 
 # Personas
 ## Raymond
