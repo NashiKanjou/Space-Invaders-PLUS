@@ -1,8 +1,15 @@
 # Project Overview
 
 # Vision Statement
+## Chin-Hung Lee
+Beside a classic game that only have a very straight forward gameplay, space invaders plus will include some modern game styles, virtual update and leaderboard.
 
 # Personas
+## Chin-Hung Lee
+Arusu, age 24, is a game designer in Compile Heart. She has a diploma in computer science from Tokyo Institute of Technology. She went to several software companies in Japan. Since she loves games more, she joined the Compile Heart and become a game designer.
+Before Arusu actually join a game company, she does not only do programming for work, she also had her own club creating games as a hobby. She released several mini games and those games have lots of positive reviews. Arusu is interested in Space Invaders Plus and want to try and test the game.
+
+
 ## Misha
 
 # Trello/Features Link
@@ -20,6 +27,8 @@ The project is a Java implementation of the classic game “Space Invaders”. T
 I plan to upgrade and overhaul the game, adding many new features, reworking functionality, and upgrading the interface to be more user-friendly, as well as modern. In terms of graphics, I plan to make the graphical user interface more modern and simplistic, configuring text and buttons to be placed uniformly both in location and color, as well as implementing them as graphical JFrame objects, rather than JButton objects, for simplicity and presentation. Additionally, I plan to use different sprites that are more simplistic and minimalist, rather than retro, increasing their size, as well as the application screen’s size as well. I also plan to add background music and gameplay sounds to increase the playability and official-factor of the game.
 
 In terms of functionality, I plan to add many upgrades and new features for the gameplay of the game. First of all, the player will be able to move not only horizontally, but also vertically across the lower half of the screen. The enemies will also not be restrained in place, and will be able to move around the screen towards the player, as well as remain stationary, dependent on their type, and the level of the game. The enemies will have differing behaviors as previously mentioned, being able to attack the player “melee-style”, or instead shoot the players from further away, without contact. Additionally, there will be power-ups throughout the entirety of the level(s), which will provide the player with temporary advancements to their character, such as having invincibility or a faster firing rate, for a short duration of time. The contributions will also include the game itself having several levels, which the player will have to advance through in order to progress to the next one, with each level increasing in difficulty. Not only this, but the player will have a health bar, instead of dying from a single projectile hit, which will allow them to remain in each level for a greater amount of time. This will be counterbalanced with a decrease in damage from the projectiles fired from the player, now taking one or more projectiles to destroy an enemy. The increasing difficulty in levels will be due to both the number of projectiles fired at the player, as well as the number and type of enemies. There will also be a scorecard, which will keep track of different players’ scores, retaining these scores on a leaderboard, no matter if the application has been shut down and restarted or not, meaning permanently. Each player will be able to enter their name, with their score being displayed on the leaderboard.
+
+For this project, we have a list of new features to add in the original space invaders. We’ll make the players and enemies to move in 2D, having different powerups, language selection, be able to use controller to move, virtual update, leaderboard, health function, and different levels. I will contribute the language selection, health functionality & health bar and powerups including health, shield, increase firing speed, double trajectory projectiles.
 
 # Educational Goals
 
