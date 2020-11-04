@@ -118,6 +118,15 @@ public class Board extends JPanel implements Runnable, Commons {
 		if (shot.isVisible())
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
 	}
+	public void drawAim(Graphics g) {
+		if (ingame) {
+			g.setColor(Color.WHITE);
+			// fix this drawLine to show where player is aiming
+			g.drawLine(player.getX(), player.getY(),
+					(int)(Math.cos(angle * Math.PI/180.0)),
+					(int)(Math.sin(angle * Math.PI/180.0)));
+		}
+	}
 
 	public void drawBombing(Graphics g) {
 		Iterator i3 = aliens.iterator();
@@ -147,6 +156,7 @@ public class Board extends JPanel implements Runnable, Commons {
 			drawPlayer(g);
 			drawShot(g);
 			drawBombing(g);
+			drawAim(g);
 		}
 
 		Toolkit.getDefaultToolkit().sync();
@@ -233,8 +243,10 @@ public class Board extends JPanel implements Runnable, Commons {
 			// SHOT TRAVEL SPEED
 			int shotSpeed = 8;
 			// shot direction in x and y coordinates
+
 			x += (int)(shotSpeed * Math.cos(rads));
 			y -= (int)(shotSpeed * Math.sin(rads));
+
 
 			if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits borders
 				shot.die(); // shot dies
@@ -377,10 +389,15 @@ public class Board extends JPanel implements Runnable, Commons {
 					if (!shot.isVisible())
 						shot = new Shot(x, y);
 				}
-				if (key == KeyEvent.VK_A) {
+				// move angle of shooting angle to left
+				// use !shot.isVisible to prevent moving (arcing)
+				// shots when they're mid flight
+				if (key == KeyEvent.VK_A && !shot.isVisible()) {
 					angle += 15;
+
 				}
-				if (key == KeyEvent.VK_D) {
+				// move angle of shooting angle to right
+				if (key == KeyEvent.VK_D && !shot.isVisible()) {
 					angle -= 15;
 				}
 			}
