@@ -18,5 +18,6 @@ public interface Commons {
     public static final int DELAY = 17;
     public static final int PLAYER_WIDTH = 25;
     public static final int PLAYER_HEIGHT = 25;
+    public static final int default_maxhealth = 5;
 
 }

@@ -1,12 +1,12 @@
-lang: ¤¤¤å(ÁcÅé)
-title: ¤ÓªÅ«I²¤ªÌ
-start: ¥ô°È¶}©l
-close: Ãö³¬
-top_message: ¤ÓªÅ«I²¤ªÌ <br> Javaª©
-initial_message: ²îªø, ½ĞÀ°§U§Ú­Ì !! <br> ¥~¬P¤H¥¿¸Õ¹Ï¤J«I§Ú­Ìªº¬P²y<br> <br> <br> §Aªº¥ô°È:<br> <br> ¦b¥~¬P¤H§¹¥ş«I¤J¦a²y«e±ş¦º¥L­Ì<br> ¦Ó¥B, ½Ğ³Ì¦n¤£­n¦b¾Ô°«¤¤¦º¤`<br> <br> <br> ¯¬¦n¹B!!!
-help_top_message: À°§U­¶­±
-help_message: ¾Ş±±:<br> <br> ²¾°Ê: <br> Áä½L¤Wªº¤è¦VÁä(¥ª/¥k)<br> <br> §ğÀ»: <br> ªÅ¥ÕÁä
-ending_win: ®¥³ß, §A¦¨¥\¬@±Ï¤F¦a²y
-ending_lose: §Aªº¬P²y²{¦b¬O§Ú­Ìªº¤F...
-invade: ¥~¬P¤H¤J«I¤¤!
-language_selection: »y¨¥¿ï¾Ü
+lang: ä¸­æ–‡(ç¹é«”)
+title: å¤ªç©ºä¾µç•¥è€…
+start: ä»»å‹™é–‹å§‹
+close: é—œé–‰
+top_message: å¤ªç©ºä¾µç•¥è€… <br> Javaç‰ˆ
+initial_message: èˆ¹é•·, è«‹å¹«åŠ©æˆ‘å€‘ !! <br> å¤–æ˜Ÿäººæ­£è©¦åœ–å…¥ä¾µæˆ‘å€‘çš„æ˜Ÿçƒ<br> <br> <br> ä½ çš„ä»»å‹™:<br> <br> åœ¨å¤–æ˜Ÿäººå®Œå…¨ä¾µå…¥åœ°çƒå‰æ®ºæ­»ä»–å€‘<br> è€Œä¸”, è«‹æœ€å¥½ä¸è¦åœ¨æˆ°é¬¥ä¸­æ­»äº¡<br> <br> <br> ç¥å¥½é‹!!!
+help_top_message: å¹«åŠ©é é¢
+help_message: ç§»å‹•: <br> éµç›¤ä¸Šçš„æ–¹å‘éµ<br> <br> æ”»æ“Š: <br> ç©ºç™½éµ
+ending_win: æ­å–œ, ä½ æˆåŠŸæ‹¯æ•‘äº†åœ°çƒ
+ending_lose: ä½ çš„æ˜Ÿçƒç¾åœ¨æ˜¯æˆ‘å€‘çš„äº†...
+invade: å¤–æ˜Ÿäººå…¥ä¾µä¸­!
+language_selection: èªè¨€é¸æ“‡

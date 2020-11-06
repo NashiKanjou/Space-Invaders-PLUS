@@ -1,0 +1,12 @@
+lang: Português
+title: Space Invaders
+start: Iniciar Missão
+close: Fechar
+top_message: Space Invaders <br> Java Version
+initial_message: Ajude-nos, capitão impressionante!! <br> Os alienígenas estão tentando invadir nosso planeta.<br> <br> <br> Sua missão:<br> <br> Matar todos os alienígenas invasores antes que eles consigam invadir o planeta Terra.<br> E, de preferência, não morra durante a batalha!<br> <br> <br> BOA SORTE!!!
+help_top_message: Ajuda
+help_message: Controles: <br> <br> Movimento à Esquerda: <br>Seta Esquerda do teclado<br> <br> Movimento à Direita: <br>Seta Direita do teclado<br> <br> Atirar: <br>Barra de espaço
+ending_win: Parabéns! Você salvou a galáxia!
+ending_lose: Seu planeta nos pertence agora...
+invade: Aliens estão invadindo a galáxia!
+language_selection: Seleção de idioma
