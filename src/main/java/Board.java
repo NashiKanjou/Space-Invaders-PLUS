@@ -1,3 +1,5 @@
+import sun.jvm.hotspot.gc.shared.Space;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -33,6 +35,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private int direction = -1;
 	private int deaths = 0;
 	private double angle = 0; // aiming angle for shooting, default straight
+	//public int aimType = 1; // 0 = mouse, 1 = default = keys
 
 	private boolean ingame = true;
 	private boolean havewon = true;
@@ -371,6 +374,8 @@ public class Board extends JPanel implements Runnable, Commons {
 
 	private class TAdapter extends KeyAdapter {
 
+
+
 		public void keyReleased(KeyEvent e) {
 			player.keyReleased(e);
 		}
@@ -385,19 +390,18 @@ public class Board extends JPanel implements Runnable, Commons {
 			if (ingame) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
-
 					if (!shot.isVisible())
 						shot = new Shot(x, y);
 				}
 				// move angle of shooting angle to left
 				// use !shot.isVisible to prevent moving (arcing)
 				// shots when they're mid flight
-				if (key == KeyEvent.VK_A && !shot.isVisible()) {
+				if (key == KeyEvent.VK_A) {
 					angle += 15;
 
 				}
 				// move angle of shooting angle to right
-				if (key == KeyEvent.VK_D && !shot.isVisible()) {
+				if (key == KeyEvent.VK_D) {
 					angle -= 15;
 				}
 			}

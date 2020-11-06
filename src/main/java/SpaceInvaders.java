@@ -18,10 +18,16 @@ public class SpaceInvaders extends JFrame implements Commons {
 	public static Language lang;
 	private JButton start, help, lang_sel;
 
+	String[] aimStrings = {"Mouse", "Keys"};
+	JComboBox aimList = new JComboBox(aimStrings); // combobox for aim type selection
+	protected static int aimType = 0;
+
+
 	JFrame frame;
 	JFrame frame2;
 	JFrame frame3;
 	JFrame frame4;
+	JFrame frame5;
 	/*
 	 * Constructor
 	 */
@@ -49,6 +55,22 @@ public class SpaceInvaders extends JFrame implements Commons {
 		frame2 = new JFrame(lang.getTitle());
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
+
+
+		aimList.setBounds(900,900,100,100);
+		aimList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(aimList.getSelectedIndex() == 0) { // mouse
+					// set var to 0
+					aimType = 0;
+				}
+				if(aimList.getSelectedIndex() == 1) { // keys
+					// set var to 1
+					aimType = 1;
+				}
+			}
+		});
 
 		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
 		String message = "<html>" + lang.getInitialMessage() + "</html>";
@@ -81,12 +103,14 @@ public class SpaceInvaders extends JFrame implements Commons {
 		nedredel.add(help);
 		nedredel.add(start);
 		nedredel.add(lang_sel);
+		nedredel.add(aimList);
 
 		frame2.add(nedredel, BorderLayout.PAGE_END);
 		frame2.setSize(500, 500);
 		frame2.setLocationRelativeTo(null);
 		frame2.setVisible(true);
 		frame2.setResizable(false);
+
 
 	}
 	public void reloadLanguage(){
