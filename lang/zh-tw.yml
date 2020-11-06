@@ -1,0 +1,12 @@
+lang: 中文(繁體)
+title: 太空侵略者
+start: 任務開始
+close: 關閉
+top_message: 太空侵略者 <br> Java版
+initial_message: 船長, 請幫助我們 !! <br> 外星人正試圖入侵我們的星球<br> <br> <br> 你的任務:<br> <br> 在外星人完全侵入地球前殺死他們<br> 而且, 請最好不要在戰鬥中死亡<br> <br> <br> 祝好運!!!
+help_top_message: 幫助頁面
+help_message: 操控:<br> <br> 移動: <br> 鍵盤上的方向鍵(左/右)<br> <br> 攻擊: <br> 空白鍵
+ending_win: 恭喜, 你成功拯救了地球
+ending_lose: 你的星球現在是我們的了...
+invade: 外星人入侵中!
+language_selection: 語言選擇

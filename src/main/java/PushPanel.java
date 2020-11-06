@@ -18,7 +18,7 @@ public class PushPanel extends JPanel {
 	 * Constructor
 	 */
 	public PushPanel() {
-		push = new JButton("start");
+		push = new JButton(SpaceInvaders.lang.getStartMessage());
 		push.addActionListener(new ButtonListener());
 		push.setBounds(800, 800, 200, 100);
 
