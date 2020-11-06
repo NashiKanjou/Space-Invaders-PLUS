@@ -1,8 +1,10 @@
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Properties;
 import javax.swing.*;
 
 /**
@@ -17,10 +19,16 @@ public class SpaceInvaders extends JFrame implements Commons {
 	private static final long serialVersionUID = -4905230094675077405L;
 	public static Language lang;
 	private JButton start, help, lang_sel;
+	///
+	Properties properties = new Properties();
+	InputStream configFileIn;
+	OutputStream configFileOut;
 
+
+	///
 	String[] aimStrings = {"Mouse", "Keys"};
 	JComboBox aimList = new JComboBox(aimStrings); // combobox for aim type selection
-	protected static int aimType = 0;
+	// protected static int aimType = 0;
 
 
 	JFrame frame;
@@ -49,6 +57,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 	public static HashMap<String, Language> langs = new HashMap<String,Language>();
 
 	public SpaceInvaders() {
+
 		lang = langs.get("default");
 
 		frame = new JFrame(lang.getTitle());
@@ -56,18 +65,51 @@ public class SpaceInvaders extends JFrame implements Commons {
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
 
+		/*/////// CONFIG AND PLAY SETTINGS
+		// start reading from config file, if it exists
+		try {
+			configFile = new FileInputStream("/src/main/java/config.properties");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		// load the config file into the properties, if "parsing" is successful
+		try {
+			properties.load(configFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+/*
+
+		try {
+			String propFileName = "config.properties";
+
+			configFileIn = getClass().getClassLoader().getResourceAsStream(propFileName);
+
+			if (configFileIn != null) {
+				properties.load(configFileIn);
+			} else {
+				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+*/
+
 
 		aimList.setBounds(900,900,100,100);
 		aimList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(aimList.getSelectedIndex() == 0) { // mouse
+				if(aimList.getSelectedItem().toString() == "Mouse") { // mouse
 					// set var to 0
-					aimType = 0;
+					//aimType = 0;
+					properties.setProperty("AimControlType", "test mouse"); // permanently remembers this option
+
 				}
-				if(aimList.getSelectedIndex() == 1) { // keys
+				if(aimList.getSelectedItem().toString() == "Keys") { // keys
 					// set var to 1
-					aimType = 1;
+					// aimType = 1;
+					properties.setProperty("AimControlType", "test keys"); // permanently remembers this option
 				}
 			}
 		});
