@@ -1,8 +1,9 @@
-package scene;
+package main.java.scene;
+
+import main.java.manager.KeyboardManager;
 
 import java.awt.Graphics;
 
-import manager.KeyboardManager;
 
 public interface IScene {
 

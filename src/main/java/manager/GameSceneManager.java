@@ -1,4 +1,6 @@
-package manager;
+package main.java.manager;
+
+import main.java.scene.IScene;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,7 +9,6 @@ import java.util.Stack;
 
 import javax.swing.JPanel;
 
-import scene.IScene;
 
 public class GameSceneManager {
     private Stack<IScene> scenes;

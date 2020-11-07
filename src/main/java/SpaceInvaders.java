@@ -1,3 +1,9 @@
+package main.java;
+
+import main.java.manager.GameSceneManager;
+import main.java.manager.KeyboardManager;
+import main.java.scene.MainGameScene;
+import main.java.util.Commons;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -13,10 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import manager.GameSceneManager;
-import manager.KeyboardManager;
-import scene.MainGameScene;
-import util.Commons;
 
 /**
  * 

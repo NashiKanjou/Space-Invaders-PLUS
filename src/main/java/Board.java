@@ -1,4 +1,4 @@
-
+package main.java;
 /** 
  * 
  * The MainGameScene file is being used now instead of this one. Most
@@ -7,31 +7,18 @@
  * 
 */
 
+import main.java.entity.*;
+import main.java.util.Commons;
+import main.java.util.MapLoader;
+
+import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-
-import entity.Alien;
-import entity.Bomb;
-import scene.GameOver;
-import entity.Player;
-import entity.Shot;
-import entity.Sprite;
-import scene.Won;
-import util.Commons;
-import util.MapLoader;
 
 /**
  *
@@ -48,9 +35,9 @@ public class Board extends JPanel implements Runnable, Commons {
 	private ArrayList<Sprite> aliens;
 	private ArrayList<Sprite> map;
 	private Player player;
-	private Shot shot;
-	private GameOver gameend;
-	private Won vunnet;
+	private ArrayList<Shot> shots;
+//	private GameOver gameend;
+//	private Won vunnet;
 
 	private int alienX = 150;
 	private int alienY = 25;
@@ -85,21 +72,13 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void gameInit() {
+		shots = new ArrayList<>();
+
 		aliens = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
 		System.out.println("size: " + aliens.size());
-		// map = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
-		// ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
-
-		// for (int i = 0; i < 4; i++) {
-		// for (int j = 0; j < 6; j++) {
-		// Alien alien = new Alien(alienX + 18 * j, alienY + 18 * i);
-		// alien.setImage(ii.getImage());
-		// aliens.add(alien);
-		// }
-		// }
 
 		player = new Player();
-		shot = new Shot();
+		// shot = new Shot();
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
@@ -146,8 +125,17 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawShot(Graphics g) {
-		if (shot.isVisible())
-			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+
+		for (int i = 0; i < shots.size(); i++) {
+			try {
+				Shot shot = shots.get(i);
+				if (shot.isVisible() && !shot.isDying())
+					g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+			} catch (Exception e) {
+				// porb null, current modify, out of bound
+			}
+		}
+
 	}
 
 	public void drawAim(Graphics g) {
@@ -236,167 +224,146 @@ public class Board extends JPanel implements Runnable, Commons {
 		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2, BOARD_WIDTH / 2);
 	}
 
-	// public void animationCycle() {
-	// if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
-	// ingame = false;
-	// message = SpaceInvaders.lang.getEndingWinMessage();
-	// }
+	public void animationCycle() {
+		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
+			ingame = false;
+			message = message = SpaceInvaders.lang.getEndingWinMessage();
+		}
 
-	// // player
+		// player
 
-	// player.act();
+		player.act();
 
-	// // shot
-	// if (shot.isVisible()) {
-	// Iterator it = aliens.iterator();
-	// int shotX = shot.getX();
-	// int shotY = shot.getY();
+		// shot
+		ArrayList<Shot> temp = new ArrayList<>();
+		for (int i = 0; i < shots.size(); i++) {
+			try {
+				Shot shot = shots.get(i);
+				if (shot.isVisible()) {
+					Iterator it = aliens.iterator();
+					int shotX = shot.getX();
+					int shotY = shot.getY();
 
-	// while (it.hasNext()) {
-	// Alien alien = (Alien) it.next();
-	// int alienX = alien.getX();
-	// int alienY = alien.getY();
+					while (it.hasNext()) {
+						Alien alien = (Alien) it.next();
+						int alienX = alien.getX();
+						int alienY = alien.getY();
 
-	// if (alien.isVisible() && shot.isVisible()) {
-	// if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
-	// && shotY <= (alienY + ALIEN_HEIGHT)) {
-	// ImageIcon ii = new ImageIcon(getClass().getResource(expl));
-	// alien.setImage(ii.getImage());
-	// alien.setDying(true);
-	// deaths++;
-	// shot.die();
-	// }
-	// }
-	// }
-	// // do aiming code here
-	// // do shot.setY and .setX to fit position of aiming place
-	// // using mouse or keyboard.
+						if (alien.isVisible() && shot.isVisible() && !alien.isDying()) {
+							if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
+									&& shotY <= (alienY + ALIEN_HEIGHT)) {
+								ImageIcon ii = new ImageIcon(getClass().getResource(expl));
+								alien.setImage(ii.getImage());
+								alien.setDying(true);
+								deaths++;
+								shot.die();
+								temp.add(shot);
+							}
+						}
+					}
 
-	// Point p = MouseInfo.getPointerInfo().getLocation();
-	// int mouseX = p.x;
-	// int mouseY = p.y;
-	// // do trig between mouse and spaceship to know trajectory
-	// // include to update X as well
-	// // SHOT POSITION UPDATING LINE
-	// int y = shot.getY();
-	// int x = shot.getX();
-	// // shooting angle
+					int y = shot.getY();
+					y -= 8;
+					if (y < 0) {
+						shot.die();
+						temp.add(shot);
+					} else {
+						shot.setY(y);
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+		shots.removeAll(temp);
 
-	// double rads = angle * Math.PI / 180.0;
+		// aliens
 
-	// // SHOT TRAVEL SPEED
-	// int shotSpeed = 8;
-	// // shot direction in x and y coordinates
+		Iterator it1 = aliens.iterator();
 
-	// x += (int) (shotSpeed * Math.cos(rads));
-	// y -= (int) (shotSpeed * Math.sin(rads));
+		while (it1.hasNext()) {
+			Alien a1 = (Alien) it1.next();
+			int x = a1.getX();
 
-	// if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits
-	// borders
-	// shot.die(); // shot dies
-	// else { // else keep shot moving
+			if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
+				direction = -1;
+				Iterator i1 = aliens.iterator();
+				while (i1.hasNext()) {
+					Alien a2 = (Alien) i1.next();
+					a2.setY(a2.getY() + GO_DOWN);
+				}
+			}
 
-	// int y = shot.getY();
-	// y -= 8;
-	// if (y < 0)
-	// shot.die();
-	// else
-	// shot.setY(y);
-	// }
+			if (x <= BORDER_LEFT && direction != 1) {
+				direction = 1;
 
-	// // aliens
+				Iterator i2 = aliens.iterator();
+				while (i2.hasNext()) {
+					Alien a = (Alien) i2.next();
+					a.setY(a.getY() + GO_DOWN);
+				}
+			}
+		}
 
-	// Iterator it1 = aliens.iterator();
+		Iterator it = aliens.iterator();
 
-	// while (it1.hasNext()) {
-	// Alien a1 = (Alien) it1.next();
-	// int x = a1.getX();
+		while (it.hasNext()) {
+			Alien alien = (Alien) it.next();
+			if (alien.isVisible()) {
 
-	// if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
-	// direction = -1;
-	// Iterator i1 = aliens.iterator();
-	// while (i1.hasNext()) {
-	// Alien a2 = (Alien) i1.next();
-	// a2.setY(a2.getY() + GO_DOWN);
-	// }
-	// }
+				int y = alien.getY();
 
-	// if (x <= BORDER_LEFT && direction != 1) {
-	// direction = 1;
+				if (y > GROUND - ALIEN_HEIGHT) {
+					havewon = false;
+					ingame = false;
+					message = SpaceInvaders.lang.getInvadeMessage();
+				}
 
-	// Iterator i2 = aliens.iterator();
-	// while (i2.hasNext()) {
-	// Alien a = (Alien) i2.next();
-	// a.setY(a.getY() + GO_DOWN);
-	// }
-	// }
-	// }
+				alien.act(direction);
+			}
+		}
 
-	// Iterator it = aliens.iterator();
+		// bombs
 
-	// while (it.hasNext()) {
-	// Alien alien = (Alien) it.next();
-	// if (alien.isVisible()) {
+		Iterator i3 = aliens.iterator();
+		Random generator = new Random();
 
-	// int y = alien.getY();
+		while (i3.hasNext()) {
+			int shot = generator.nextInt(15);
+			Alien a = (Alien) i3.next();
+			Bomb b = a.getBomb();
+			if (shot == CHANCE && a.isVisible() && b.isDestroyed()) {
 
-	// if (y > GROUND - ALIEN_HEIGHT) {
-	// havewon = false;
-	// ingame = false;
-	// message = SpaceInvaders.lang.getInvadeMessage();
-	// }
+				b.setDestroyed(false);
+				b.setX(a.getX());
+				b.setY(a.getY());
+			}
 
-	// alien.act(direction);
-	// }
-	// }
+			int bombX = b.getX();
+			int bombY = b.getY();
+			int playerX = player.getX();
+			int playerY = player.getY();
 
-	// // bombs
+			if (player.isVisible() && !b.isDestroyed()) {
+				if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
+						&& bombY <= (playerY + PLAYER_HEIGHT)) {
+					b.setDestroyed(true);
+					int health = player.damage();
+					if (health <= 0) {
+						ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
+						player.setImage(ii.getImage());
+						player.setDying(true);
+					}
+				}
+			}
 
-	// Iterator i3 = aliens.iterator();
-	// Random generator = new Random();
-
-	// while (i3.hasNext()) {
-	// int shot = generator.nextInt(15);
-	// Alien a = (Alien) i3.next();
-	// Bomb b = a.getBomb();
-	// if (shot == CHANCE && a.isVisible() && b.isDestroyed()) {
-
-	// b.setDestroyed(false);
-	// b.setX(a.getX());
-	// b.setY(a.getY());
-	// }
-
-	// int bombX = b.getX();
-	// int bombY = b.getY();
-	// int playerX = player.getX();
-	// int playerY = player.getY();
-
-	// if (player.isVisible() && !b.isDestroyed()) {
-	// if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >=
-	// (playerY)
-	// && bombY <= (playerY + PLAYER_HEIGHT)) {
-	// ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
-	// player.setImage(ii.getImage());
-	// player.setDying(true);
-	// b.setDestroyed(true);
-	// int health = player.damage();
-	// if(health<=0) {
-	// ImageIcon ii = new ImageIcon(this.getClass().getResource(
-	// expl));
-	// player.setImage(ii.getImage());
-	// player.setDying(true);
-	// }
-	// }
-	// }
-
-	// if (!b.isDestroyed()) {
-	// b.setY(b.getY() + 1);
-	// if (b.getY() >= GROUND - BOMB_HEIGHT) {
-	// b.setDestroyed(true);
-	// }
-	// }
-	// }
-	// }
+			if (!b.isDestroyed()) {
+				b.setY(b.getY() + 1);
+				if (b.getY() >= GROUND - BOMB_HEIGHT) {
+					b.setDestroyed(true);
+				}
+			}
+		}
+	}
 
 	public void run() {
 		long beforeTime, timeDiff, sleep;
@@ -439,8 +406,22 @@ public class Board extends JPanel implements Runnable, Commons {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
 
-					if (!shot.isVisible())
-						shot = new Shot(x, y);
+					if (player.canShoot()) {
+						int m = player.getMultiTrajectoryProjectiles();
+						int i = m / 2;
+						for (int a = 0; a < i; a++) {
+							int b = a - i;
+							shots.add(new Shot(x - 5 * b, y));
+							shots.add(new Shot(x + 5 * b, y));
+						}
+						if (m % 2 != 0) {
+							shots.add(new Shot(x, y));
+						}
+						/*
+						 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
+						 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
+						 */
+					}
 				}
 			}
 		}

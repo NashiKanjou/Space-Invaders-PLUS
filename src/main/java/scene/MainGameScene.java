@@ -1,4 +1,9 @@
-package scene;
+package main.java.scene;
+
+import main.java.entity.*;
+import main.java.manager.GameSceneManager;
+import main.java.manager.KeyboardManager;
+import main.java.util.MapLoader;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,19 +15,13 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
-import entity.Alien;
-import entity.Bomb;
-import entity.Player;
-import entity.Shot;
-import entity.Sprite;
-import manager.GameSceneManager;
-import manager.KeyboardManager;
-import util.MapLoader;
+
 
 public class MainGameScene extends BaseScene {
     private static final long serialVersionUID = 1L;
 
     private ArrayList<Sprite> aliens;
+//    private ArrayList<Shot> shots;
     private Player player;
     private Shot shot;
     private GameOver gameend;
@@ -45,6 +44,7 @@ public class MainGameScene extends BaseScene {
         // load the map
         aliens = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
         player = new Player();
+//        shots = new ArrayList<>();
         shot = new Shot();
     }
 
@@ -78,6 +78,26 @@ public class MainGameScene extends BaseScene {
         if (keyboardManager.space.down) {
             if (!shot.isVisible())
                 shot = new Shot(player.getX(), player.getY());
+
+//            if (player.canShoot()) {
+//                int m = player.getMultiTrajectoryProjectiles();
+//                int i = m / 2;
+//                var x = player.getX();
+//                var y = player.getY();
+//
+//                for (int a = 0; a < i; a++) {
+//                    int b = a - i;
+//                    shots.add(new Shot(x - 5 * b, y));
+//                    shots.add(new Shot(x + 5 * b, y));
+//                }
+//                if (m % 2 != 0) {
+//                    shots.add(new Shot(x, y));
+//                }
+//                /*
+//                 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
+//                 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
+//                 */
+//            }
         }
 
         // change the shot angle
@@ -108,10 +128,9 @@ public class MainGameScene extends BaseScene {
     }
 
     public void drawAliens(Graphics g) {
-        Iterator<Sprite> it = aliens.iterator();
 
-        while (it.hasNext()) {
-            Alien alien = (Alien) it.next();
+        for (Sprite sprite : aliens) {
+            Alien alien = (Alien) sprite;
 
             if (alien.isVisible()) {
                 g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
@@ -126,13 +145,21 @@ public class MainGameScene extends BaseScene {
     public void drawShot(Graphics g) {
         if (shot.isVisible())
             g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+//        for (int i = 0; i < shots.size(); i++) {
+//            try {
+//                Shot shot = shots.get(i);
+//                if (shot.isVisible() && !shot.isDying())
+//                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+//            } catch (Exception e) {
+//                // porb null, current modify, out of bound
+//            }
+//        }
     }
 
     public void drawBombing(Graphics g) {
-        Iterator<Sprite> i3 = aliens.iterator();
 
-        while (i3.hasNext()) {
-            Alien a = (Alien) i3.next();
+        for (Sprite alien : aliens) {
+            Alien a = (Alien) alien;
 
             Bomb b = a.getBomb();
 
@@ -185,6 +212,8 @@ public class MainGameScene extends BaseScene {
     public void animationCycle() {
         if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
             // player won
+            // TODO add message to the Won scene
+            // message = SpaceInvaders.lang.getEndingWinMessage();
             gsm.addScene(new Won(gsm), true);
         }
 
@@ -193,71 +222,110 @@ public class MainGameScene extends BaseScene {
         player.act();
 
         // shot
-        if (shot.isVisible()) {
-            Iterator<Sprite> it = aliens.iterator();
-            int shotX = shot.getX();
-            int shotY = shot.getY();
+         if (shot.isVisible()) {
+         Iterator<Sprite> it = aliens.iterator();
+         int shotX = shot.getX();
+         int shotY = shot.getY();
 
-            while (it.hasNext()) {
-                Alien alien = (Alien) it.next();
-                int alienX = alien.getX();
-                int alienY = alien.getY();
+         while (it.hasNext()) {
+         Alien alien = (Alien) it.next();
+         int alienX = alien.getX();
+         int alienY = alien.getY();
 
-                if (alien.isVisible() && shot.isVisible()) {
-                    if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
-                            && shotY <= (alienY + ALIEN_HEIGHT)) {
-                        ImageIcon ii = new ImageIcon(getClass().getResource(expl));
-                        alien.setImage(ii.getImage());
-                        alien.setDying(true);
-                        deaths++;
-                        shot.die();
-                    }
-                }
-            }
-            // do aiming code here
-            // do shot.setY and .setX to fit position of aiming place
-            // using mouse or keyboard.
+         if (alien.isVisible() && shot.isVisible()) {
+         if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
+         && shotY <= (alienY + ALIEN_HEIGHT)) {
+         ImageIcon ii = new ImageIcon(getClass().getResource(expl));
+         alien.setImage(ii.getImage());
+         alien.setDying(true);
+         deaths++;
+         shot.die();
+         }
+         }
+         }
+         // do aiming code here
+         // do shot.setY and .setX to fit position of aiming place
+         // using mouse or keyboard.
 
-            Point p = MouseInfo.getPointerInfo().getLocation();
-            int mouseX = p.x;
-            int mouseY = p.y;
-            // do trig between mouse and spaceship to know trajectory
-            // include to update X as well
-            // SHOT POSITION UPDATING LINE
-            int y = shot.getY();
-            int x = shot.getX();
-            // shooting angle
+         Point p = MouseInfo.getPointerInfo().getLocation();
+         int mouseX = p.x;
+         int mouseY = p.y;
+         // do trig between mouse and spaceship to know trajectory
+         // include to update X as well
+         // SHOT POSITION UPDATING LINE
+         int y = shot.getY();
+         int x = shot.getX();
+         // shooting angle
 
-            double rads = angle * Math.PI / 180.0;
+         double rads = angle * Math.PI / 180.0;
 
-            // SHOT TRAVEL SPEED
-            int shotSpeed = 8;
-            // shot direction in x and y coordinates
+         // SHOT TRAVEL SPEED
+         int shotSpeed = 8;
+         // shot direction in x and y coordinates
 
-            x += (int) (shotSpeed * Math.cos(rads));
-            y -= (int) (shotSpeed * Math.sin(rads));
+         x += (int) (shotSpeed * Math.cos(rads));
+         y -= (int) (shotSpeed * Math.sin(rads));
 
-            if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits borders
-                shot.die(); // shot dies
-            else { // else keep shot moving
-                shot.setY(y);
-                shot.setX(x);
-            }
-        }
+         if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits borders
+         shot.die(); // shot dies
+         else { // else keep shot moving
+         shot.setY(y);
+         shot.setX(x);
+         }
+         }
+
+        // new shooting
+//        ArrayList<Shot> temp = new ArrayList<>();
+//        for (int i = 0; i < shots.size(); i++) {
+//            try {
+//                Shot shot = shots.get(i);
+//                if (shot.isVisible()) {
+//                    Iterator it = aliens.iterator();
+//                    int shotX = shot.getX();
+//                    int shotY = shot.getY();
+//
+//                    while (it.hasNext()) {
+//                        Alien alien = (Alien) it.next();
+//                        int alienX = alien.getX();
+//                        int alienY = alien.getY();
+//
+//                        if (alien.isVisible() && shot.isVisible() && !alien.isDying()) {
+//                            if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
+//                                    && shotY <= (alienY + ALIEN_HEIGHT)) {
+//                                ImageIcon ii = new ImageIcon(getClass().getResource(expl));
+//                                alien.setImage(ii.getImage());
+//                                alien.setDying(true);
+//                                deaths++;
+//                                shot.die();
+//                                temp.add(shot);
+//                            }
+//                        }
+//                    }
+//
+//                    int y = shot.getY();
+//                    y -= 8;
+//                    if (y < 0) {
+//                        shot.die();
+//                        temp.add(shot);
+//                    } else {
+//                        shot.setY(y);
+//                    }
+//                }
+//            } catch (Exception e) {
+//            }
+//        }
+//        shots.removeAll(temp);
 
         // aliens
 
-        Iterator<Sprite> it1 = aliens.iterator();
-
-        while (it1.hasNext()) {
-            Alien a1 = (Alien) it1.next();
+        for (Sprite sprite : aliens) {
+            Alien a1 = (Alien) sprite;
             int x = a1.getX();
 
             if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
                 direction = -1;
-                Iterator<Sprite> i1 = aliens.iterator();
-                while (i1.hasNext()) {
-                    Alien a2 = (Alien) i1.next();
+                for (Sprite alien : aliens) {
+                    Alien a2 = (Alien) alien;
                     a2.setY(a2.getY() + GO_DOWN);
                 }
             }
@@ -265,18 +333,15 @@ public class MainGameScene extends BaseScene {
             if (x <= BORDER_LEFT && direction != 1) {
                 direction = 1;
 
-                Iterator<Sprite> i2 = aliens.iterator();
-                while (i2.hasNext()) {
-                    Alien a = (Alien) i2.next();
+                for (Sprite alien : aliens) {
+                    Alien a = (Alien) alien;
                     a.setY(a.getY() + GO_DOWN);
                 }
             }
         }
 
-        Iterator<Sprite> it = aliens.iterator();
-
-        while (it.hasNext()) {
-            Alien alien = (Alien) it.next();
+        for (Sprite sprite : aliens) {
+            Alien alien = (Alien) sprite;
             if (alien.isVisible()) {
 
                 int y = alien.getY();
@@ -321,7 +386,6 @@ public class MainGameScene extends BaseScene {
                     player.setImage(ii.getImage());
                     player.setDying(true);
                     b.setDestroyed(true);
-                    ;
                 }
             }
 
@@ -333,5 +397,4 @@ public class MainGameScene extends BaseScene {
             }
         }
     }
-
 }

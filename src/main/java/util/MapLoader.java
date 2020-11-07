@@ -1,4 +1,7 @@
-package util;
+package main.java.util;
+
+import main.java.entity.Alien;
+import main.java.entity.Sprite;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import entity.Alien;
-import entity.Sprite;
 
 public class MapLoader {
 
