@@ -21,9 +21,9 @@ public class MainGameScene extends BaseScene {
     private static final long serialVersionUID = 1L;
 
     private ArrayList<Sprite> aliens;
-//    private ArrayList<Shot> shots;
+    private ArrayList<Shot> shots;
     private Player player;
-    private Shot shot;
+//    private Shot shot;
     private GameOver gameend;
     private Won vunnet;
     private boolean havewon = true;
@@ -44,8 +44,8 @@ public class MainGameScene extends BaseScene {
         // load the map
         aliens = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
         player = new Player();
-//        shots = new ArrayList<>();
-        shot = new Shot();
+        shots = new ArrayList<>();
+//        shot = new Shot();
     }
 
     @Override
@@ -76,28 +76,28 @@ public class MainGameScene extends BaseScene {
 
         // shoot the bullet
         if (keyboardManager.space.down) {
-            if (!shot.isVisible())
-                shot = new Shot(player.getX(), player.getY());
+//            if (!shot.isVisible())
+//                shot = new Shot(player.getX(), player.getY());
 
-//            if (player.canShoot()) {
-//                int m = player.getMultiTrajectoryProjectiles();
-//                int i = m / 2;
-//                var x = player.getX();
-//                var y = player.getY();
-//
-//                for (int a = 0; a < i; a++) {
-//                    int b = a - i;
-//                    shots.add(new Shot(x - 5 * b, y));
-//                    shots.add(new Shot(x + 5 * b, y));
-//                }
-//                if (m % 2 != 0) {
-//                    shots.add(new Shot(x, y));
-//                }
-//                /*
-//                 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
-//                 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
-//                 */
-//            }
+            if (player.canShoot()) {
+               int m = player.getMultiTrajectoryProjectiles();
+                int i = m / 2;
+                var x = player.getX();
+                var y = player.getY();
+
+                for (int a = 0; a < i; a++) {
+                    int b = a - i;
+                    shots.add(new Shot(x - 5 * b, y,angle));
+                    shots.add(new Shot(x + 5 * b, y,angle));
+                }
+                if (m % 2 != 0) {
+                    shots.add(new Shot(x, y,angle));
+                }
+                /*
+                 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
+                 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
+                 */
+            }
         }
 
         // change the shot angle
@@ -143,17 +143,17 @@ public class MainGameScene extends BaseScene {
     }
 
     public void drawShot(Graphics g) {
-        if (shot.isVisible())
-            g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
-//        for (int i = 0; i < shots.size(); i++) {
-//            try {
-//                Shot shot = shots.get(i);
-//                if (shot.isVisible() && !shot.isDying())
-//                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
-//            } catch (Exception e) {
-//                // porb null, current modify, out of bound
-//            }
-//        }
+//        if (shot.isVisible())
+//            g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+        for (int i = 0; i < shots.size(); i++) {
+            try {
+                Shot shot = shots.get(i);
+                if (shot.isVisible() && !shot.isDying())
+                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+            } catch (Exception e) {
+                // porb null, current modify, out of bound
+            }
+        }
     }
 
     public void drawBombing(Graphics g) {
@@ -220,8 +220,13 @@ public class MainGameScene extends BaseScene {
         // player
 
         player.act();
-
+        if(player.getShield()>0) {
+            player.setShielded();
+        }else{
+            player.setUnShielded();
+        }
         // shot
+/*
          if (shot.isVisible()) {
          Iterator<Sprite> it = aliens.iterator();
          int shotX = shot.getX();
@@ -273,48 +278,69 @@ public class MainGameScene extends BaseScene {
          shot.setX(x);
          }
          }
-
+*/
         // new shooting
-//        ArrayList<Shot> temp = new ArrayList<>();
-//        for (int i = 0; i < shots.size(); i++) {
-//            try {
-//                Shot shot = shots.get(i);
-//                if (shot.isVisible()) {
-//                    Iterator it = aliens.iterator();
-//                    int shotX = shot.getX();
-//                    int shotY = shot.getY();
-//
-//                    while (it.hasNext()) {
-//                        Alien alien = (Alien) it.next();
-//                        int alienX = alien.getX();
-//                        int alienY = alien.getY();
-//
-//                        if (alien.isVisible() && shot.isVisible() && !alien.isDying()) {
-//                            if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
-//                                    && shotY <= (alienY + ALIEN_HEIGHT)) {
-//                                ImageIcon ii = new ImageIcon(getClass().getResource(expl));
-//                                alien.setImage(ii.getImage());
-//                                alien.setDying(true);
-//                                deaths++;
-//                                shot.die();
-//                                temp.add(shot);
-//                            }
-//                        }
-//                    }
-//
-//                    int y = shot.getY();
-//                    y -= 8;
-//                    if (y < 0) {
-//                        shot.die();
-//                        temp.add(shot);
-//                    } else {
-//                        shot.setY(y);
-//                    }
-//                }
-//            } catch (Exception e) {
-//            }
-//        }
-//        shots.removeAll(temp);
+        ArrayList<Shot> temp = new ArrayList<>();
+        for (int i = 0; i < shots.size(); i++) {
+            try {
+                Shot shot = shots.get(i);
+                if (shot.isVisible()) {
+                    Iterator it = aliens.iterator();
+                    int shotX = shot.getX();
+                    int shotY = shot.getY();
+
+                    while (it.hasNext()) {
+                        Alien alien = (Alien) it.next();
+                        int alienX = alien.getX();
+                        int alienY = alien.getY();
+
+                        if (alien.isVisible() && shot.isVisible() && !alien.isDying()) {
+                            if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
+                                    && shotY <= (alienY + ALIEN_HEIGHT)) {
+                                ImageIcon ii = new ImageIcon(getClass().getResource(expl));
+                                alien.setImage(ii.getImage());
+                                alien.setDying(true);
+                                deaths++;
+                                shot.die();
+                                temp.add(shot);
+                            }
+                        }
+                    }
+
+                    // do aiming code here
+                    // do shot.setY and .setX to fit position of aiming place
+                    // using mouse or keyboard.
+
+                    Point p = MouseInfo.getPointerInfo().getLocation();
+                    int mouseX = p.x;
+                    int mouseY = p.y;
+                    // do trig between mouse and spaceship to know trajectory
+                    // include to update X as well
+                    // SHOT POSITION UPDATING LINE
+                    int y = shot.getY();
+                    int x = shot.getX();
+                    // shooting angle
+
+                    double rads = shot.getAngle() * Math.PI / 180.0;
+
+                    // SHOT TRAVEL SPEED
+                    int shotSpeed = 8;
+                    // shot direction in x and y coordinates
+
+                    x += (int) (shotSpeed * Math.cos(rads));
+                    y -= (int) (shotSpeed * Math.sin(rads));
+                    if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) {
+                        shot.die();
+                        temp.add(shot);
+                    } else {
+                        shot.setY(y);
+                        shot.setX(x);
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+        shots.removeAll(temp);
 
         // aliens
 
