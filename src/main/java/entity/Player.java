@@ -10,7 +10,7 @@ import util.Commons;
  * @author
  */
 public class Player extends Sprite implements Commons {
-
+	// Test Commit
 	private final int START_Y = 400;
 	private final int START_X = 270;
 
@@ -43,6 +43,7 @@ public class Player extends Sprite implements Commons {
 			y = 2;
 		if (y >= BOARD_HEIGTH - 3 * height)
 			y = BOARD_HEIGTH - 3 * height;
+
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -56,6 +57,14 @@ public class Player extends Sprite implements Commons {
 			dx = 2;
 		}
 
+		if (key == KeyEvent.VK_UP) {
+			dy = -2;
+		}
+
+		if (key == KeyEvent.VK_DOWN) {
+			dy = 2;
+		}
+
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -67,6 +76,14 @@ public class Player extends Sprite implements Commons {
 
 		if (key == KeyEvent.VK_RIGHT) {
 			dx = 0;
+		}
+
+		if (key == KeyEvent.VK_UP) {
+			dy = 0;
+		}
+
+		if (key == KeyEvent.VK_DOWN) {
+			dy = 0;
 		}
 	}
 }

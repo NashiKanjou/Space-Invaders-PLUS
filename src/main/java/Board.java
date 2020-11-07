@@ -1,13 +1,16 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Toolkit;
+
+/** 
+ * 
+ * The MainGameScene file is being used now instead of this one. Most
+ * changes are already in the new file, but there are still some that need
+ * to be brought over and tested.
+ * 
+*/
+
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -47,12 +50,13 @@ public class Board extends JPanel implements Runnable, Commons {
 	private int alienY = 25;
 	private int direction = -1;
 	private int deaths = 0;
+	private double angle = 0; // aiming angle for shooting, default straight
 
 	private boolean ingame = true;
 	private boolean havewon = true;
 	private final String expl = "/img/explosion.png";
 	private final String alienpix = "/img/alien.png";
-	private String message = "Seu planeta nos pertence agora...";
+	private String message = SpaceInvaders.lang.getEndingLoseMessage();
 
 	private Thread animator;
 
@@ -140,6 +144,31 @@ public class Board extends JPanel implements Runnable, Commons {
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
 	}
 
+	public void drawAim(Graphics g) {
+		if (ingame) {
+			g.setColor(Color.WHITE);
+
+			g.drawLine(player.getX() + PLAYER_WIDTH / 2, player.getY() + PLAYER_HEIGHT / 2, // from the center of the
+																							// player
+					(int) (player.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
+																										// line x a
+																										// distance of
+																										// 20 adj. for
+																										// angle from
+																										// center of
+																										// player
+					(int) (player.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
+																											// line y a
+																											// distance
+																											// of 20
+																											// adj. for
+																											// angle
+																											// from
+																											// center of
+																											// player
+		}
+	}
+
 	public void drawBombing(Graphics g) {
 		Iterator i3 = aliens.iterator();
 
@@ -169,6 +198,7 @@ public class Board extends JPanel implements Runnable, Commons {
 			drawPlayer(g);
 			drawShot(g);
 			drawBombing(g);
+			drawAim(g);
 		}
 
 		Toolkit.getDefaultToolkit().sync();
@@ -193,7 +223,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		g.setColor(Color.white);
 		g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
-		Font small = new Font("Helvetica", Font.BOLD, 14);
+		Font small = new Font("z", Font.BOLD, 14);
 		FontMetrics metr = this.getFontMetrics(small);
 
 		g.setColor(Color.white);
@@ -204,7 +234,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Parab�ns! Voc� salvou a gal�xia!";
+			message = SpaceInvaders.lang.getEndingWinMessage();
 		}
 
 		// player
@@ -233,13 +263,35 @@ public class Board extends JPanel implements Runnable, Commons {
 					}
 				}
 			}
+			// do aiming code here
+			// do shot.setY and .setX to fit position of aiming place
+			// using mouse or keyboard.
 
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			int mouseX = p.x;
+			int mouseY = p.y;
+			// do trig between mouse and spaceship to know trajectory
+			// include to update X as well
+			// SHOT POSITION UPDATING LINE
 			int y = shot.getY();
-			y -= 8;
-			if (y < 0)
-				shot.die();
-			else
+			int x = shot.getX();
+			// shooting angle
+
+			double rads = angle * Math.PI / 180.0;
+
+			// SHOT TRAVEL SPEED
+			int shotSpeed = 8;
+			// shot direction in x and y coordinates
+
+			x += (int) (shotSpeed * Math.cos(rads));
+			y -= (int) (shotSpeed * Math.sin(rads));
+
+			if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits borders
+				shot.die(); // shot dies
+			else { // else keep shot moving
 				shot.setY(y);
+				shot.setX(x);
+			}
 		}
 
 		// aliens
@@ -281,7 +333,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens est�o invadindo a gal�xia!";
+					message = SpaceInvaders.lang.getInvadeMessage();
 				}
 
 				alien.act(direction);
@@ -372,6 +424,17 @@ public class Board extends JPanel implements Runnable, Commons {
 
 					if (!shot.isVisible())
 						shot = new Shot(x, y);
+				}
+				// move angle of shooting angle to left
+				// use !shot.isVisible to prevent moving (arcing)
+				// shots when they're mid flight
+				if (key == KeyEvent.VK_A && !shot.isVisible()) {
+					angle += 15;
+
+				}
+				// move angle of shooting angle to right
+				if (key == KeyEvent.VK_D && !shot.isVisible()) {
+					angle -= 15;
 				}
 			}
 		}
