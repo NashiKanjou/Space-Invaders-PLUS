@@ -1,6 +1,6 @@
-import javax.swing.ImageIcon;
-import java.math.*;
+package entity;
 
+import javax.swing.ImageIcon;
 
 public class Shot extends Sprite {
 
