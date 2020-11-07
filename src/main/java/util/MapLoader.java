@@ -51,7 +51,7 @@ public class MapLoader {
         var sprites = new ArrayList<Sprite>();
         var readFirstLine = false;
         var x = 150;
-        var y = 25;
+        var y = 50;
 
         var rowSize = 0;
         var colSize = 0;
@@ -69,41 +69,43 @@ public class MapLoader {
                 rowSize = Integer.parseInt(values[0]);
                 colSize = Integer.parseInt(values[1]);
                 readFirstLine = true;
-            }
+            } else {
 
-            // look at each number and build the map with the corresponds objects
-            for (String s : values) {
-                Types obj = null;
-                try {
-                    obj = typesMap.getOrDefault(Integer.parseInt(s), Types.UNKNOWN_TYPE);
-                } catch (NumberFormatException e) {
-                    System.out.println("Only numbers are allowed in the map file:");
-                    e.printStackTrace();
+                // look at each number and build the map with the corresponds objects
+                for (String s : values) {
+                    Types obj = null;
+                    try {
+                        obj = typesMap.getOrDefault(Integer.parseInt(s), Types.UNKNOWN_TYPE);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Only numbers are allowed in the map file:");
+                        e.printStackTrace();
+                    }
+
+                    switch (obj) {
+                        case ALIEN:
+                            sprites.add(new Alien(x, y));
+                            break;
+                        case MEDIUM_ENEMY:
+                            System.out.println("medium enemy");
+                            break;
+                        case HARD_ENEMY:
+                            System.out.println("hard enemy");
+                            break;
+                        case UNKNOWN_TYPE:
+                            System.out.println("unknown type");
+                            break;
+                        default:
+                            System.out.println("not implemented yet");
+                    }
+
+                    x += offset;
+                    // y = ;
                 }
-
-                switch (obj) {
-                    case ALIEN:
-                        sprites.add(new Alien(x, currentCol));
-                        break;
-                    case MEDIUM_ENEMY:
-                        System.out.println("medium enemy");
-                        break;
-                    case HARD_ENEMY:
-                        System.out.println("hard enemy");
-                        break;
-                    case UNKNOWN_TYPE:
-                        System.out.println("unknown type");
-                        break;
-                    default:
-                        System.out.println("not implemented yet");
-                }
-
-                x = currentRow * offset;
-                // y = ;
+                y += offset;
+                x = 150;
+                currentRow++;
+                currentCol++;
             }
-
-            currentRow++;
-            currentCol++;
         }
         in.close();
         return sprites;

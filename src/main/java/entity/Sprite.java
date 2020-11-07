@@ -1,8 +1,6 @@
 package entity;
 
 import java.awt.Image;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 /**
  * 
@@ -16,6 +14,7 @@ public class Sprite {
     protected int y;
     protected boolean dying;
     protected int dx;
+    protected int dy;
 
     /*
      * Constructor
@@ -58,6 +57,22 @@ public class Sprite {
 
     public int getX() {
         return x;
+    }
+
+    public void setDx(int dx) {
+        this.dx = dx;
+    }
+
+    public int getDx() {
+        return dx;
+    }
+
+    public void setDy(int dy) {
+        this.dy = dy;
+    }
+
+    public int getDy() {
+        return dy;
     }
 
     public void setDying(boolean dying) {

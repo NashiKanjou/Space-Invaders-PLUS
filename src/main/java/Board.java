@@ -16,11 +16,11 @@ import javax.swing.JPanel;
 
 import entity.Alien;
 import entity.Bomb;
-import entity.GameOver;
+import scene.GameOver;
 import entity.Player;
 import entity.Shot;
 import entity.Sprite;
-import entity.Won;
+import scene.Won;
 import util.Commons;
 import util.MapLoader;
 
@@ -132,7 +132,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawGameEnd(Graphics g) {
-		g.drawImage(gameend.getImage(), 0, 0, this);
+		// g.drawImage(gameend.getImage(), 0, 0, this);
 	}
 
 	public void drawShot(Graphics g) {
@@ -178,15 +178,15 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void gameOver() {
 		Graphics g = this.getGraphics();
 
-		gameend = new GameOver();
-		vunnet = new Won();
+		// gameend = new GameOver();
+		// vunnet = new Won();
 
 		// g.setColor(Color.black);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
 		if (havewon == true) {
-			g.drawImage(vunnet.getImage(), 0, 0, this);
+			// g.drawImage(vunnet.getImage(), 0, 0, this);
 		} else {
-			g.drawImage(gameend.getImage(), 0, 0, this);
+			// g.drawImage(gameend.getImage(), 0, 0, this);
 		}
 		g.setColor(new Color(0, 32, 48));
 		g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);

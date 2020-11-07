@@ -2,13 +2,18 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import manager.GameSceneManager;
+import manager.KeyboardManager;
+import scene.MainGameScene;
+import scene.Won;
 import util.Commons;
 
 /**
  * 
  * @author
  */
-public class SpaceInvaders extends JFrame implements Commons {
+public class SpaceInvaders implements Commons {
 
 	/**
 	 * 
@@ -36,6 +41,9 @@ public class SpaceInvaders extends JFrame implements Commons {
 	JFrame frame = new JFrame("Space Invaders");
 	JFrame frame2 = new JFrame("Space Invaders");
 	JFrame frame3 = new JFrame("Ajuda");
+
+	private GameSceneManager gsm;
+	private KeyboardManager keyboardManager;
 
 	/*
 	 * Constructor
@@ -80,10 +88,58 @@ public class SpaceInvaders extends JFrame implements Commons {
 	public void closeIntro() {
 		frame2.dispose();
 		frame3.dispose();
+
+		// begin the main game loop
+		gameLoop();
 	}
 
 	public void closeHelp() {
 		frame3.dispose();
+	}
+
+	/**
+	 * The main game loop
+	 */
+	private void gameLoop() {
+		new Thread(() -> {
+			JPanel panel = new JPanel();
+			panel.setSize(BOARD_WIDTH, BOARD_HEIGTH);
+			panel.setFocusable(true);
+			panel.requestFocus();
+
+			frame.setContentPane(panel);
+			// setup the GameSceneManager
+
+			gsm = new GameSceneManager(panel);
+			keyboardManager = new KeyboardManager(panel);
+			gsm.addScene(new MainGameScene(gsm));
+
+			long beforeTime, timeDiff, sleep;
+
+			while (gsm.isIngame()) {
+				beforeTime = System.currentTimeMillis();
+
+				gsm.update();
+				keyboardManager.update();
+				gsm.input(keyboardManager);
+				gsm.draw(panel.getGraphics());
+
+				timeDiff = System.currentTimeMillis() - beforeTime;
+				sleep = DELAY - timeDiff;
+
+				if (sleep < 0)
+					sleep = 1;
+				try {
+					Thread.sleep(sleep);
+				} catch (InterruptedException e) {
+					System.out.println("interrupted");
+				}
+				beforeTime = System.currentTimeMillis();
+			}
+			System.out.println("game over");
+			gsm.dispose();
+			frame.dispose();
+		}, "Game Loop").start();
 	}
 
 	/*
@@ -96,11 +152,11 @@ public class SpaceInvaders extends JFrame implements Commons {
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
-			frame.getContentPane().add(new Board());
-			frame.setResizable(false);
+
+			// frame.getContentPane().add(new MainGameScene(gsm));
+			frame.setResizable(true);
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
 			closeIntro();

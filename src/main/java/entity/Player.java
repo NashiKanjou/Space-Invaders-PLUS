@@ -16,6 +16,7 @@ public class Player extends Sprite implements Commons {
 
 	private final String player = "/img/craft.png";
 	private int width;
+	private int height;
 
 	/*
 	 * Constructor
@@ -24,6 +25,7 @@ public class Player extends Sprite implements Commons {
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(player));
 
 		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
 
 		setImage(ii.getImage());
 		setX(START_X);
@@ -32,10 +34,15 @@ public class Player extends Sprite implements Commons {
 
 	public void act() {
 		x += dx;
+		y += dy;
 		if (x <= 2)
 			x = 2;
 		if (x >= BOARD_WIDTH - 2 * width)
 			x = BOARD_WIDTH - 2 * width;
+		if (y <= 2)
+			y = 2;
+		if (y >= BOARD_HEIGTH - 3 * height)
+			y = BOARD_HEIGTH - 3 * height;
 	}
 
 	public void keyPressed(KeyEvent e) {
