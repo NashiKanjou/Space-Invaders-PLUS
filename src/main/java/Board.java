@@ -1,20 +1,24 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Toolkit;
+package main.java;
+/** 
+ * 
+ * The MainGameScene file is being used now instead of this one. Most
+ * changes are already in the new file, but there are still some that need
+ * to be brought over and tested.
+ * 
+*/
+
+import main.java.entity.*;
+import main.java.util.Commons;
+import main.java.util.MapLoader;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -28,11 +32,12 @@ public class Board extends JPanel implements Runnable, Commons {
 	private static final long serialVersionUID = 1L;
 
 	private Dimension d;
-	private ArrayList aliens;
+	private ArrayList<Sprite> aliens;
+	private ArrayList<Sprite> map;
 	private Player player;
 	private ArrayList<Shot> shots;
-	private GameOver gameend;
-	private Won vunnet;
+//	private GameOver gameend;
+//	private Won vunnet;
 
 	private int alienX = 150;
 	private int alienY = 25;
@@ -43,7 +48,8 @@ public class Board extends JPanel implements Runnable, Commons {
 	private boolean havewon = true;
 	private final String expl = "/img/explosion.png";
 	private final String alienpix = "/img/alien.png";
-	private String message =SpaceInvaders.lang.getEndingLoseMessage();
+	private String message = SpaceInvaders.lang.getEndingLoseMessage();
+	private double angle = 0;
 
 	private Thread animator;
 
@@ -66,24 +72,23 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void gameInit() {
-		aliens = new ArrayList();
-		shots=new ArrayList<>();
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
+		shots = new ArrayList<>();
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 6; j++) {
-				Alien alien = new Alien(alienX + 18 * j, alienY + 18 * i);
-				alien.setImage(ii.getImage());
-				aliens.add(alien);
-			}
-		}
+		aliens = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
+		System.out.println("size: " + aliens.size());
 
 		player = new Player();
-		//shot = new Shot();
+		// shot = new Shot();
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
 			animator.start();
+		}
+	}
+
+	public void drawMap(Graphics g) {
+		for (Sprite s : map) {
+			g.drawImage(s.getImage(), s.getX(), s.getY(), this);
 		}
 	}
 
@@ -116,21 +121,46 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawGameEnd(Graphics g) {
-		g.drawImage(gameend.getImage(), 0, 0, this);
+		// g.drawImage(gameend.getImage(), 0, 0, this);
 	}
 
 	public void drawShot(Graphics g) {
 
-			for (int i = 0;i<shots.size();i++) {
-				try {
-					Shot shot = shots.get(i);
-					if (shot.isVisible() && !shot.isDying())
-						g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
-				}catch(Exception e){
-					//porb null, current modify, out of bound
-				}
+		for (int i = 0; i < shots.size(); i++) {
+			try {
+				Shot shot = shots.get(i);
+				if (shot.isVisible() && !shot.isDying())
+					g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+			} catch (Exception e) {
+				// porb null, current modify, out of bound
 			}
+		}
 
+	}
+
+	public void drawAim(Graphics g) {
+		if (ingame) {
+			g.setColor(Color.WHITE);
+
+			g.drawLine(player.getX() + PLAYER_WIDTH / 2, player.getY() + PLAYER_HEIGHT / 2, // from the center of the
+																							// player
+					(int) (player.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
+																										// line x a
+																										// distance of
+																										// 20 adj. for
+																										// angle from
+																										// center of
+																										// player
+					(int) (player.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
+																											// line y a
+																											// distance
+																											// of 20
+																											// adj. for
+																											// angle
+																											// from
+																											// center of
+																											// player
+		}
 	}
 
 	public void drawBombing(Graphics g) {
@@ -158,6 +188,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 			g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
 			drawAliens(g);
+			// drawMap(g);
 			drawPlayer(g);
 			drawShot(g);
 			drawBombing(g);
@@ -170,15 +201,15 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void gameOver() {
 		Graphics g = this.getGraphics();
 
-		gameend = new GameOver();
-		vunnet = new Won();
+		// gameend = new GameOver();
+		// vunnet = new Won();
 
 		// g.setColor(Color.black);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
 		if (havewon == true) {
-			g.drawImage(vunnet.getImage(), 0, 0, this);
+			// g.drawImage(vunnet.getImage(), 0, 0, this);
 		} else {
-			g.drawImage(gameend.getImage(), 0, 0, this);
+			// g.drawImage(gameend.getImage(), 0, 0, this);
 		}
 		g.setColor(new Color(0, 32, 48));
 		g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
@@ -190,8 +221,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		g.setColor(Color.white);
 		g.setFont(small);
-		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
-				BOARD_WIDTH / 2);
+		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2, BOARD_WIDTH / 2);
 	}
 
 	public void animationCycle() {
@@ -206,44 +236,42 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		// shot
 		ArrayList<Shot> temp = new ArrayList<>();
-		for (int i = 0;i<shots.size();i++) {
+		for (int i = 0; i < shots.size(); i++) {
 			try {
 				Shot shot = shots.get(i);
-			if (shot.isVisible()) {
-				Iterator it = aliens.iterator();
-				int shotX = shot.getX();
-				int shotY = shot.getY();
+				if (shot.isVisible()) {
+					Iterator it = aliens.iterator();
+					int shotX = shot.getX();
+					int shotY = shot.getY();
 
-				while (it.hasNext()) {
-					Alien alien = (Alien) it.next();
-					int alienX = alien.getX();
-					int alienY = alien.getY();
+					while (it.hasNext()) {
+						Alien alien = (Alien) it.next();
+						int alienX = alien.getX();
+						int alienY = alien.getY();
 
-					if (alien.isVisible() && shot.isVisible()&&!alien.isDying()) {
-						if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH)
-								&& shotY >= (alienY)
-								&& shotY <= (alienY + ALIEN_HEIGHT)) {
-							ImageIcon ii = new ImageIcon(getClass().getResource(
-									expl));
-							alien.setImage(ii.getImage());
-							alien.setDying(true);
-							deaths++;
-							shot.die();
-							temp.add(shot);
+						if (alien.isVisible() && shot.isVisible() && !alien.isDying()) {
+							if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
+									&& shotY <= (alienY + ALIEN_HEIGHT)) {
+								ImageIcon ii = new ImageIcon(getClass().getResource(expl));
+								alien.setImage(ii.getImage());
+								alien.setDying(true);
+								deaths++;
+								shot.die();
+								temp.add(shot);
+							}
 						}
 					}
-				}
 
-				int y = shot.getY();
-				y -= 8;
-				if (y < 0) {
-					shot.die();
-					temp.add(shot);
-				}else {
-					shot.setY(y);
+					int y = shot.getY();
+					y -= 8;
+					if (y < 0) {
+						shot.die();
+						temp.add(shot);
+					} else {
+						shot.setY(y);
+					}
 				}
-			}
-			}catch(Exception e){
+			} catch (Exception e) {
 			}
 		}
 		shots.removeAll(temp);
@@ -316,14 +344,12 @@ public class Board extends JPanel implements Runnable, Commons {
 			int playerY = player.getY();
 
 			if (player.isVisible() && !b.isDestroyed()) {
-				if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH)
-						&& bombY >= (playerY)
+				if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
 						&& bombY <= (playerY + PLAYER_HEIGHT)) {
 					b.setDestroyed(true);
 					int health = player.damage();
-					if(health<=0) {
-						ImageIcon ii = new ImageIcon(this.getClass().getResource(
-								expl));
+					if (health <= 0) {
+						ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
 						player.setImage(ii.getImage());
 						player.setDying(true);
 					}
@@ -346,7 +372,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		while (ingame) {
 			repaint();
-			animationCycle();
+			// animationCycle();
 
 			timeDiff = System.currentTimeMillis() - beforeTime;
 			sleep = DELAY - timeDiff;
@@ -381,24 +407,20 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (key == KeyEvent.VK_SPACE) {
 
 					if (player.canShoot()) {
- 						int m = player.getMultiTrajectoryProjectiles();
- 						int i = m/2;
-						for(int a = 0;a<i;a++){
-							int b=a-i;
-							shots.add(new Shot(x-5*b, y));
-							shots.add(new Shot(x+5*b, y));
+						int m = player.getMultiTrajectoryProjectiles();
+						int i = m / 2;
+						for (int a = 0; a < i; a++) {
+							int b = a - i;
+							shots.add(new Shot(x - 5 * b, y));
+							shots.add(new Shot(x + 5 * b, y));
 						}
- 						if(m%2!=0){
+						if (m % 2 != 0) {
 							shots.add(new Shot(x, y));
 						}
 						/*
-						if(player.isDoubleTrajectoryProjectiles()) {
-							shots.add(new Shot(x-5, y));
-							shots.add(new Shot(x+5, y));
-						}else{
-							shots.add(new Shot(x, y));
-						}
-						*/
+						 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
+						 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
+						 */
 					}
 				}
 			}

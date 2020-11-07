@@ -1,6 +1,11 @@
+package main.java.entity;
+
+import main.java.util.Commons;
+
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
+
 
 /**
  *
