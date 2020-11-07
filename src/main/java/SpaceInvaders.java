@@ -1,15 +1,21 @@
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import manager.GameSceneManager;
 import manager.KeyboardManager;
 import scene.MainGameScene;
-import scene.Won;
 import util.Commons;
 
 /**
@@ -17,15 +23,10 @@ import util.Commons;
  * @author
  */
 public class SpaceInvaders implements Commons {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4905230094675077405L;
 	public static Language lang;
 	private JButton start, help, lang_sel;
 
-	JFrame frame;
+	JFrame gameFrame;
 	JFrame frame2;
 	JFrame frame3;
 	JFrame frame4;
@@ -56,8 +57,9 @@ public class SpaceInvaders implements Commons {
 	public SpaceInvaders() {
 		lang = langs.get("default");
 
-		frame = new JFrame(lang.getTitle());
+		gameFrame = new JFrame(lang.getTitle());
 		frame2 = new JFrame(lang.getTitle());
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
 
@@ -102,13 +104,14 @@ public class SpaceInvaders implements Commons {
 	}
 
 	public void reloadLanguage() {
-		frame.dispose();
+		gameFrame.dispose();
 		frame2.dispose();
 		frame3.dispose();
 		frame4.dispose();
 
-		frame = new JFrame(lang.getTitle());
+		gameFrame = new JFrame(lang.getTitle());
 		frame2 = new JFrame(lang.getTitle());
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
 
@@ -173,7 +176,7 @@ public class SpaceInvaders implements Commons {
 			panel.setFocusable(true);
 			panel.requestFocus();
 
-			frame.setContentPane(panel);
+			gameFrame.setContentPane(panel);
 			// setup the GameSceneManager
 
 			gsm = new GameSceneManager(panel);
@@ -204,7 +207,7 @@ public class SpaceInvaders implements Commons {
 			}
 			System.out.println("game over");
 			gsm.dispose();
-			frame.dispose();
+			gameFrame.dispose();
 		}, "Game Loop").start();
 	}
 
@@ -228,13 +231,11 @@ public class SpaceInvaders implements Commons {
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
-
-			// frame.getContentPane().add(new MainGameScene(gsm));
-			frame.setResizable(true);
-			frame.setLocationRelativeTo(null);
-			frame.setVisible(true);
+			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
+			gameFrame.setResizable(true);
+			gameFrame.setLocationRelativeTo(null);
+			gameFrame.setVisible(true);
 			closeIntro();
 
 		}
