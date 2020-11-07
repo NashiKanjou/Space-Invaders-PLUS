@@ -3,7 +3,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 
 /**
- * 
+ *
  * @author
  */
 public class Player extends Sprite implements Commons {
@@ -14,7 +14,8 @@ public class Player extends Sprite implements Commons {
 	private final String player = "/img/craft.png";
 	private int width;
 	private int height;
-
+	private int maxhealth;
+	private int health;
 	/*
 	 * Constructor
 	 */
@@ -23,12 +24,58 @@ public class Player extends Sprite implements Commons {
 
 		width = ii.getImage().getWidth(null);
 		height = ii.getImage().getHeight(null);
-
+		maxhealth = default_maxhealth;
+		health = maxhealth;
 		setImage(ii.getImage());
 		setX(START_X);
 		setY(START_Y);
 	}
+	public int damage(int damage) {
+		health -= damage;
+		return health;
+	}
 
+	public int damage() {
+		health--;
+		return health;
+	}
+
+	public int getDefaultMaxhealth() {
+		return default_maxhealth;
+	}
+
+	public int getMaxhealth() {
+		return maxhealth;
+	}
+
+	public int addHealth(){
+		health++;
+		if(health>maxhealth){
+			health=maxhealth;
+		}
+		return health;
+	}
+
+	public int getHealth(){
+		return health;
+	}
+
+	public int addHealth(int i){
+		health+=i;
+		if(health>maxhealth){
+			health=maxhealth;
+		}
+		return health;
+	}
+
+	public int setMaxhealth(int newMaxHealth, boolean toaddextra) {
+		int i = newMaxHealth - maxhealth;
+		maxhealth = newMaxHealth;
+		if (toaddextra) {
+			addHealth(i);
+		}
+		return health;
+	}
 	public void act() {
 		x += dx;
 		y += dy;
