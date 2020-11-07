@@ -1,14 +1,11 @@
 package scene;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
 import manager.GameSceneManager;
-import manager.KeyboardManager;
 import util.Commons;
 
 public abstract class BaseScene extends JPanel implements Commons, IScene {

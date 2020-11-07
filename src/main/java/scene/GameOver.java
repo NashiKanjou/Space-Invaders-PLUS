@@ -8,14 +8,17 @@ import javax.swing.ImageIcon;
 import entity.Sprite;
 import manager.GameSceneManager;
 import manager.KeyboardManager;
-import util.Commons;
 
 /**
  * 
  * @author
  */
-public class GameOver extends BaseScene implements Commons {
+public class GameOver extends BaseScene {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private final String gameOver = "/img/gameover.png";
 	private Sprite sprite;
 	private int width;

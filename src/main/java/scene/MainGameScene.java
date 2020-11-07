@@ -2,8 +2,8 @@ package scene;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 
 import entity.Alien;
 import entity.Bomb;
-import scene.GameOver;
 import entity.Player;
 import entity.Shot;
 import entity.Sprite;
