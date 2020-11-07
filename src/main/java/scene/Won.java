@@ -8,13 +8,13 @@ import javax.swing.ImageIcon;
 import entity.Sprite;
 import manager.GameSceneManager;
 import manager.KeyboardManager;
-import util.Commons;
 
 /**
  * 
  * @author
  */
-public class Won extends BaseScene implements Commons {
+public class Won extends BaseScene {
+    private static final long serialVersionUID = 1L;
     private Sprite sprite;
     private final String won = "/img/won.jpg";
     private int width;

@@ -1,15 +1,12 @@
 package manager;
 
-import java.util.Stack;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.util.Stack;
 
-import scene.BaseScene;
+import javax.swing.JPanel;
+
 import scene.IScene;
 
 public class GameSceneManager {
