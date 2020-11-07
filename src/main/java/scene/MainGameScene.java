@@ -42,7 +42,8 @@ public class MainGameScene extends BaseScene {
     }
 
     private void init() {
-        aliens = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
+        // load the map
+        aliens = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
         player = new Player();
         shot = new Shot();
     }

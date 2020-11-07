@@ -311,10 +311,6 @@ public class SpaceInvaders implements Commons {
 				JButton button = new JButton(str);
 				button.addActionListener(new LangSelect(str));
 				nedredel.add(button);
-				// String message = "<html>" + lang.getHelpMessage() + "</html> ";
-				// JLabel tekst = new JLabel(message, SwingConstants.CENTER);
-				// Font font = new Font("Helvetica", Font.BOLD, 12);
-				// tekst.setFont(font);
 			}
 
 			frame4.add(toptekst, BorderLayout.PAGE_START);
