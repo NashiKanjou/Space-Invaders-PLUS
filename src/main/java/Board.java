@@ -203,6 +203,11 @@ public class Board extends JPanel implements Runnable, Commons {
 		// player
 
 		player.act();
+		if(player.getShield()>0) {
+			player.setShielded();
+		}else{
+			player.setUnShielded();
+		}
 
 		// shot
 		ArrayList<Shot> temp = new ArrayList<>();

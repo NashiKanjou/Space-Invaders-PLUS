@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
@@ -12,12 +13,16 @@ public class Player extends Sprite implements Commons {
 	private final int START_X = 270;
 
 	private final String player = "/img/craft.png";
+	private final String player_shield = "/img/craft_shield.png";
 	private int width;
 	private int height;
 	private int maxhealth;
 	private int health;
 	private long cd_shot;
 	private long current_cd_shot;
+	private int ShieldAmount;
+	private ImageIcon ii;
+	private ImageIcon ii_shield;
 
 	private int MultiTrajectoryProjectiles;
 
@@ -25,10 +30,11 @@ public class Player extends Sprite implements Commons {
 	 * Constructor
 	 */
 	public Player() {
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(player));
+		ii = new ImageIcon(this.getClass().getResource(player));
+		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
 		//isDoubleTrajectoryProjectiles=true;
 		MultiTrajectoryProjectiles=1;
-
+		ShieldAmount=0;
 		width = ii.getImage().getWidth(null);
 		height = ii.getImage().getHeight(null);
 		maxhealth = default_maxhealth;
@@ -38,6 +44,29 @@ public class Player extends Sprite implements Commons {
 		setImage(ii.getImage());
 		setX(START_X);
 		setY(START_Y);
+	}
+
+	public void setShieldAmount(int amount){
+		ShieldAmount=amount;
+	}
+
+	public void addShieldAmount(int amount){
+		ShieldAmount+=amount;
+	}
+
+	public int getShield(){
+		return ShieldAmount;
+	}
+
+	public void setUnShielded(){
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		setImage(ii.getImage());
+	}
+	public void setShielded(){
+		width = ii_shield.getImage().getWidth(null);
+		height = ii_shield.getImage().getHeight(null);
+		setImage(ii_shield.getImage());
 	}
 	/*
 	public void setDoubleTrajectoryProjectiles(boolean b){
@@ -60,7 +89,15 @@ public class Player extends Sprite implements Commons {
 	}
 
 	public int damage(int damage) {
-		health -= damage;
+		if(ShieldAmount>0){
+			ShieldAmount-=damage;
+			if(ShieldAmount<0){
+				health += ShieldAmount;
+				ShieldAmount=0;
+			}
+		}else {
+			health -= damage;
+		}
 		return health;
 	}
 	public boolean canShoot(){
@@ -72,7 +109,15 @@ public class Player extends Sprite implements Commons {
 		return false;
 	}
 	public int damage() {
-		health--;
+		if(ShieldAmount>0){
+			ShieldAmount--;
+			if(ShieldAmount<0){
+				health += ShieldAmount;
+				ShieldAmount=0;
+			}
+		}else {
+			health --;
+		}
 		return health;
 	}
 
