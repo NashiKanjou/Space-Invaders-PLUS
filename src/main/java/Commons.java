@@ -19,5 +19,6 @@ public interface Commons {
     public static final int PLAYER_WIDTH = 25;
     public static final int PLAYER_HEIGHT = 25;
     public static final int default_maxhealth = 5;
-
+    public static final long default_shot_cd = 100;
+    public static final long min_shot_cd = 100; //recommended
 }

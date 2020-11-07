@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private Dimension d;
 	private ArrayList aliens;
 	private Player player;
-	private Shot shot;
+	private ArrayList<Shot> shots;
 	private GameOver gameend;
 	private Won vunnet;
 
@@ -66,7 +67,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 	public void gameInit() {
 		aliens = new ArrayList();
-
+		shots=new ArrayList<>();
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
 
 		for (int i = 0; i < 4; i++) {
@@ -78,7 +79,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		}
 
 		player = new Player();
-		shot = new Shot();
+		//shot = new Shot();
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
@@ -119,8 +120,17 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawShot(Graphics g) {
-		if (shot.isVisible())
-			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+
+			for (int i = 0;i<shots.size();i++) {
+				try {
+					Shot shot = shots.get(i);
+					if (shot.isVisible() && !shot.isDying())
+						g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+				}catch(Exception e){
+					//porb null, current modify, out of bound
+				}
+			}
+
 	}
 
 	public void drawBombing(Graphics g) {
@@ -195,37 +205,48 @@ public class Board extends JPanel implements Runnable, Commons {
 		player.act();
 
 		// shot
-		if (shot.isVisible()) {
-			Iterator it = aliens.iterator();
-			int shotX = shot.getX();
-			int shotY = shot.getY();
+		ArrayList<Shot> temp = new ArrayList<>();
+		for (int i = 0;i<shots.size();i++) {
+			try {
+				Shot shot = shots.get(i);
+			if (shot.isVisible()) {
+				Iterator it = aliens.iterator();
+				int shotX = shot.getX();
+				int shotY = shot.getY();
 
-			while (it.hasNext()) {
-				Alien alien = (Alien) it.next();
-				int alienX = alien.getX();
-				int alienY = alien.getY();
+				while (it.hasNext()) {
+					Alien alien = (Alien) it.next();
+					int alienX = alien.getX();
+					int alienY = alien.getY();
 
-				if (alien.isVisible() && shot.isVisible()) {
-					if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH)
-							&& shotY >= (alienY)
-							&& shotY <= (alienY + ALIEN_HEIGHT)) {
-						ImageIcon ii = new ImageIcon(getClass().getResource(
-								expl));
-						alien.setImage(ii.getImage());
-						alien.setDying(true);
-						deaths++;
-						shot.die();
+					if (alien.isVisible() && shot.isVisible()&&!alien.isDying()) {
+						if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH)
+								&& shotY >= (alienY)
+								&& shotY <= (alienY + ALIEN_HEIGHT)) {
+							ImageIcon ii = new ImageIcon(getClass().getResource(
+									expl));
+							alien.setImage(ii.getImage());
+							alien.setDying(true);
+							deaths++;
+							shot.die();
+							temp.add(shot);
+						}
 					}
 				}
-			}
 
-			int y = shot.getY();
-			y -= 8;
-			if (y < 0)
-				shot.die();
-			else
-				shot.setY(y);
+				int y = shot.getY();
+				y -= 8;
+				if (y < 0) {
+					shot.die();
+					temp.add(shot);
+				}else {
+					shot.setY(y);
+				}
+			}
+			}catch(Exception e){
+			}
 		}
+		shots.removeAll(temp);
 
 		// aliens
 
@@ -359,8 +380,26 @@ public class Board extends JPanel implements Runnable, Commons {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
 
-					if (!shot.isVisible())
-						shot = new Shot(x, y);
+					if (player.canShoot()) {
+ 						int m = player.getMultiTrajectoryProjectiles();
+ 						int i = m/2;
+						for(int a = 0;a<i;a++){
+							int b=a-i;
+							shots.add(new Shot(x-5*b, y));
+							shots.add(new Shot(x+5*b, y));
+						}
+ 						if(m%2!=0){
+							shots.add(new Shot(x, y));
+						}
+						/*
+						if(player.isDoubleTrajectoryProjectiles()) {
+							shots.add(new Shot(x-5, y));
+							shots.add(new Shot(x+5, y));
+						}else{
+							shots.add(new Shot(x, y));
+						}
+						*/
+					}
 				}
 			}
 		}
