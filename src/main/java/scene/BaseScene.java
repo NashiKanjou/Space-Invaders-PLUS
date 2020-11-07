@@ -1,12 +1,13 @@
-package scene;
+package main.java.scene;
+
+import main.java.manager.GameSceneManager;
+import main.java.util.Commons;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import manager.GameSceneManager;
-import util.Commons;
 
 public abstract class BaseScene extends JPanel implements Commons, IScene {
     private static final long serialVersionUID = 1L;

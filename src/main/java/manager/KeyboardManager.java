@@ -1,4 +1,4 @@
-package manager;
+package main.java.manager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
