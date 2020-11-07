@@ -1,12 +1,16 @@
-import java.awt.*;
+package main.java.entity;
+
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
+import main.java.entity.Sprite;
+import main.java.util.Commons;
 /**
  *
  * @author
  */
+
 public class Player extends Sprite implements Commons {
 	// Test Commit
 	private final int START_Y = 400;
@@ -111,10 +115,6 @@ public class Player extends Sprite implements Commons {
 	public int damage() {
 		if(ShieldAmount>0){
 			ShieldAmount--;
-			if(ShieldAmount<0){
-				health += ShieldAmount;
-				ShieldAmount=0;
-			}
 		}else {
 			health --;
 		}

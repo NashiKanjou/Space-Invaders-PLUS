@@ -233,6 +233,11 @@ public class Board extends JPanel implements Runnable, Commons {
 		// player
 
 		player.act();
+		if(player.getShield()>0) {
+			player.setShielded();
+		}else{
+			player.setUnShielded();
+		}
 
 		// shot
 		ArrayList<Shot> temp = new ArrayList<>();
@@ -411,11 +416,11 @@ public class Board extends JPanel implements Runnable, Commons {
 						int i = m / 2;
 						for (int a = 0; a < i; a++) {
 							int b = a - i;
-							shots.add(new Shot(x - 5 * b, y));
-							shots.add(new Shot(x + 5 * b, y));
+							shots.add(new Shot(x - 5 * b, y,angle));
+							shots.add(new Shot(x + 5 * b, y,angle));
 						}
 						if (m % 2 != 0) {
-							shots.add(new Shot(x, y));
+							shots.add(new Shot(x, y,angle));
 						}
 						/*
 						 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
