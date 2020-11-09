@@ -74,7 +74,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void gameInit() {
 		shots = new ArrayList<>();
 
-		aliens = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
+//		aliens = MapLoader.loadMap("C:\\Users\\mcohe\\Desktop\\test.txt", 30, 18);
 		System.out.println("size: " + aliens.size());
 
 		player = new Player();

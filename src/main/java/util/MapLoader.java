@@ -39,7 +39,7 @@ public class MapLoader {
         }
     }
 
-    public static ArrayList<Sprite> loadMap(String filepath, int imageSize, int offset) {
+    public static Map loadMap(String filepath, int imageSize, int offset) {
         // attempt to load the text file
         Scanner in = null;
         try {
@@ -58,6 +58,7 @@ public class MapLoader {
         var colSize = 0;
         var currentRow = 1;
         var currentCol = 1;
+        var numberOfEnemies = 0;
 
         while (in.hasNextLine()) {
             var values = in.nextLine().split(" ");
@@ -81,6 +82,7 @@ public class MapLoader {
                         System.out.println("Only numbers are allowed in the map file:");
                         e.printStackTrace();
                     }
+                    numberOfEnemies++;
 
                     switch (obj) {
                         case ALIEN:
@@ -109,7 +111,7 @@ public class MapLoader {
             }
         }
         in.close();
-        return sprites;
+        return new Map(sprites, numberOfEnemies);
     }
 
 }

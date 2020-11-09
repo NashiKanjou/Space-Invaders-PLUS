@@ -3,6 +3,7 @@ package main.java.scene;
 import main.java.entity.*;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
+import main.java.util.Map;
 import main.java.util.MapLoader;
 
 import java.awt.Color;
@@ -23,6 +24,7 @@ public class MainGameScene extends BaseScene {
     private ArrayList<Sprite> aliens;
     private ArrayList<Shot> shots;
     private Player player;
+    private Map gameMap;
 //    private Shot shot;
     private GameOver gameend;
     private Won vunnet;
@@ -42,7 +44,9 @@ public class MainGameScene extends BaseScene {
 
     private void init() {
         // load the map
-        aliens = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
+        gameMap = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
+        // get a reference to the list of aliens
+        aliens = gameMap.getSprites();
         player = new Player();
         shots = new ArrayList<>();
 //        shot = new Shot();
@@ -109,6 +113,7 @@ public class MainGameScene extends BaseScene {
         }
 
         // check for quit
+        //TODO Remove quit from game level and make into a paused screen that has an option to quit or resume
         if (keyboardManager.escape.clicked)
             gsm.ingame = false;
     }
@@ -210,7 +215,7 @@ public class MainGameScene extends BaseScene {
     }
 
     public void animationCycle() {
-        if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
+        if (deaths == gameMap.getNumberOfEnemies()) {
             // player won
             // TODO add message to the Won scene
             // message = SpaceInvaders.lang.getEndingWinMessage();
