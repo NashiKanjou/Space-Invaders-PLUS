@@ -65,7 +65,7 @@ public class GameOver extends BaseScene {
 
 	@Override
 	public void draw(Graphics g) {
-		g.drawImage(sprite.getImage(), 0, 0, null);
+		g.drawImage(sprite.getImage(), 0, 0, gsm.panel);
 		g.setColor(Color.WHITE);
 		g.drawString("Press ESCAPE to quit or SPACE(not working yet) to play again", 200, 340);
 		// TODO implement the ability for the game to be restarted

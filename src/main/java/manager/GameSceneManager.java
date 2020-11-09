@@ -12,14 +12,16 @@ import javax.swing.JPanel;
 
 public class GameSceneManager {
     private Stack<IScene> scenes;
-//    public final JPanel panel;
-//    private final Graphics g;
+    public final JPanel panel;
+    private final Graphics g;
 
     public boolean ingame;
 
-    public GameSceneManager() {
+    public GameSceneManager(JPanel panel) {
         ingame = true;
+        this.panel = panel;
         scenes = new Stack<>();
+        g = panel.getGraphics();
     }
 
     public void input(KeyboardManager keyboardManager) {
@@ -37,6 +39,9 @@ public class GameSceneManager {
     public void addScene(IScene scene) {
         if (scene != null) {
             scenes.push(scene);
+            // panel.add(scenes.peek());
+            panel.repaint();
+            panel.setBackground(Color.black);
         }
     }
 
@@ -74,9 +79,11 @@ public class GameSceneManager {
         }
     }
 
-    public void draw(Graphics g) {
-        if (scenes != null && scenes.size() > 0) {
-            scenes.peek().draw(g);
+    public void draw(Graphics g2) {
+        if (scenes.size() > 0) {
+            scenes.peek().draw(g2);
+            Toolkit.getDefaultToolkit().sync();
+            g2.dispose();
         }
     }
 

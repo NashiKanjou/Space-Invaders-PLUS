@@ -5,10 +5,10 @@ import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -55,7 +55,6 @@ public class SpaceInvaders implements Commons {
 
 	private GameSceneManager gsm;
 	private KeyboardManager keyboardManager;
-	private Canvas gameCanvas;
 
 	public SpaceInvaders() {
 		lang = langs.get("default");
@@ -174,15 +173,16 @@ public class SpaceInvaders implements Commons {
 	 */
 	private void gameLoop() {
 		new Thread(() -> {
-			gameCanvas = new Canvas();
-			gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_WIDTH));
+			JPanel panel = new JPanel();
+			panel.setSize(BOARD_WIDTH, BOARD_HEIGTH);
+			panel.setFocusable(true);
+			panel.requestFocus();
 
-			gameFrame.add(gameCanvas);
+			gameFrame.setContentPane(panel);
+			// setup the GameSceneManager
 
-			keyboardManager = new KeyboardManager();
-			gameFrame.addKeyListener(keyboardManager.getKeyListener());
-
-			gsm = new GameSceneManager();
+			gsm = new GameSceneManager(panel);
+			keyboardManager = new KeyboardManager(panel);
 			gsm.addScene(new MainGameScene(gsm));
 
 			long beforeTime, timeDiff, sleep;
@@ -190,8 +190,10 @@ public class SpaceInvaders implements Commons {
 			while (gsm.isIngame()) {
 				beforeTime = System.currentTimeMillis();
 
-				update();
-				render();
+				gsm.update();
+				keyboardManager.update();
+				gsm.input(keyboardManager);
+				gsm.draw(panel.getGraphics());
 
 				timeDiff = System.currentTimeMillis() - beforeTime;
 				sleep = DELAY - timeDiff;
@@ -209,25 +211,6 @@ public class SpaceInvaders implements Commons {
 			gsm.dispose();
 			gameFrame.dispose();
 		}, "Game Loop").start();
-	}
-	
-	private void update() {
-		gsm.update();
-		keyboardManager.update();
-		gsm.input(keyboardManager);
-	}
-
-	private void render() {
-		BufferStrategy bs = gameCanvas.getBufferStrategy();
-		if (bs == null) {
-			gameCanvas.createBufferStrategy(3);
-			return;
-		}
-		Graphics g = bs.getDrawGraphics();
-		gsm.draw(g);
-
-		g.dispose();
-		bs.show();
 	}
 
 	public void closeLangauageSelection() {
