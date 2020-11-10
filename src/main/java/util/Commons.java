@@ -7,7 +7,7 @@ package main.java.util;
 public interface Commons {
 
     public static final int BOARD_WIDTH = 640;
-    public static final int BOARD_HEIGTH = 480;
+    public static final int BOARD_HEIGHT = 480;
     public static final int GROUND = 440;
     public static final int BOMB_HEIGHT = 5;
     public static final int ALIEN_HEIGHT = 25;
@@ -20,7 +20,8 @@ public interface Commons {
     public static final int DELAY = 17;
     public static final int PLAYER_WIDTH = 25;
     public static final int PLAYER_HEIGHT = 25;
-    public static final int default_maxhealth = 5;
-    public static final long default_shot_cd = 1000;
-    public static final long min_shot_cd = 100; //recommended
+    public static final int DEFAULT_MAX_HEALTH = 5;
+    public static final long DEFAULT_SHOT_CD = 1000;
+    public static final long MIN_SHOT_CD = 100; //recommended
+    public static final double UPDATE_PER_SECOND = 60.0;
 }
