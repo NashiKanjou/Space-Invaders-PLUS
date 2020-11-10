@@ -1,41 +1,43 @@
+package main.java;
+
+import main.java.manager.GameSceneManager;
+import main.java.manager.KeyboardManager;
+import main.java.scene.MainGameScene;
+import main.java.util.Commons;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Properties;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 
 /**
- * 
- * @author 
-*/
-public class SpaceInvaders extends JFrame implements Commons {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4905230094675077405L;
+ *
+ * @author
+ */
+public class SpaceInvaders implements Commons {
 	public static Language lang;
 	private JButton start, help, lang_sel;
-	///
-	Properties properties = new Properties();
-	InputStream configFileIn;
-	OutputStream configFileOut;
 
-
-	///
-	String[] aimStrings = {"Mouse", "Keys"};
-	JComboBox aimList = new JComboBox(aimStrings); // combobox for aim type selection
-	// protected static int aimType = 0;
-
-
-	JFrame frame;
+	JFrame gameFrame;
 	JFrame frame2;
 	JFrame frame3;
 	JFrame frame4;
-	JFrame frame5;
+
+	private GameSceneManager gsm;
+	private KeyboardManager keyboardManager;
+	private Canvas gameCanvas;
+	private Thread gameThread;
+
 	/*
 	 * Constructor
 	 */
@@ -47,72 +49,25 @@ public class SpaceInvaders extends JFrame implements Commons {
 				try {
 					Language lang = new Language(fileEntry.getPath());
 					langs.put(lang.getLanguageName(), lang);
-				}catch(Exception e){
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
 	}
 
-	public static HashMap<String, Language> langs = new HashMap<String,Language>();
+	public static HashMap<String, Language> langs = new HashMap<String, Language>();
+
+
 
 	public SpaceInvaders() {
-
 		lang = langs.get("default");
 
-		frame = new JFrame(lang.getTitle());
+		gameFrame = new JFrame(lang.getTitle());
 		frame2 = new JFrame(lang.getTitle());
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
-
-		/*/////// CONFIG AND PLAY SETTINGS
-		// start reading from config file, if it exists
-		try {
-			configFile = new FileInputStream("/src/main/java/config.properties");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		// load the config file into the properties, if "parsing" is successful
-		try {
-			properties.load(configFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-/*
-
-		try {
-			String propFileName = "config.properties";
-
-			configFileIn = getClass().getClassLoader().getResourceAsStream(propFileName);
-
-			if (configFileIn != null) {
-				properties.load(configFileIn);
-			} else {
-				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-			}
-		} catch (Exception e) {
-			System.out.println("Exception: " + e);
-		}
-*/
-
-
-		aimList.setBounds(900,900,100,100);
-		aimList.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(aimList.getSelectedItem().toString() == "Mouse") { // mouse
-					// set var to 0
-					//aimType = 0;
-					properties.setProperty("AimControlType", "test mouse"); // permanently remembers this option
-
-				}
-				if(aimList.getSelectedItem().toString() == "Keys") { // keys
-					// set var to 1
-					// aimType = 1;
-					properties.setProperty("AimControlType", "test keys"); // permanently remembers this option
-				}
-			}
-		});
 
 		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
 		String message = "<html>" + lang.getInitialMessage() + "</html>";
@@ -145,7 +100,6 @@ public class SpaceInvaders extends JFrame implements Commons {
 		nedredel.add(help);
 		nedredel.add(start);
 		nedredel.add(lang_sel);
-		nedredel.add(aimList);
 
 		frame2.add(nedredel, BorderLayout.PAGE_END);
 		frame2.setSize(500, 500);
@@ -153,16 +107,17 @@ public class SpaceInvaders extends JFrame implements Commons {
 		frame2.setVisible(true);
 		frame2.setResizable(false);
 
-
 	}
-	public void reloadLanguage(){
-		frame.dispose();
+
+	public void reloadLanguage() {
+		gameFrame.dispose();
 		frame2.dispose();
 		frame3.dispose();
 		frame4.dispose();
 
-		frame = new JFrame(lang.getTitle());
+		gameFrame = new JFrame(lang.getTitle());
 		frame2 = new JFrame(lang.getTitle());
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
 
@@ -208,14 +163,102 @@ public class SpaceInvaders extends JFrame implements Commons {
 	public void closeIntro() {
 		frame2.dispose();
 		frame3.dispose();
+
+		// begin the main game loop
+		gameThread = new Thread("Game Thread"){
+			@Override
+			public void run() {
+				gameLoop();
+			}
+		};
+		gameThread.start();
 	}
 
 	public void closeHelp() {
 		frame3.dispose();
 	}
+
+
+	/**
+	 * The main game loop
+	 */
+	public void gameLoop() {
+		gameCanvas = new Canvas();
+		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+
+		gameFrame.add(gameCanvas);
+		gameFrame.pack();
+
+		keyboardManager = new KeyboardManager();
+		gameFrame.addKeyListener(keyboardManager);
+
+		gsm = new GameSceneManager();
+		gsm.ingame = true;
+		gsm.addScene(new MainGameScene(gsm));
+
+		long lastTime = System.nanoTime();
+		// used to reset fps and timer per second
+		long timer = System.currentTimeMillis();
+		final double ns = 1e9 / UPDATE_PER_SECOND;
+		double delta = 0;
+		int fps = 0;
+		int updates = 0;
+
+		while (gsm.ingame) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+
+			while (delta >= 1) {
+				update();
+				updates++;
+				delta--;
+			}
+			render();
+			fps++;
+
+			if (System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				gameFrame.setTitle("Space Invaders  | " + " U: " + updates + " FPS: " + fps);
+				fps = 0;
+				updates = 0;
+			}
+		}
+		gsm.dispose();
+		gameFrame.dispose();
+		System.out.println("game over");
+	}
+
+	private void update() {
+		keyboardManager.update();
+		gsm.input(keyboardManager);
+		gsm.update();
+	}
+
+	private void render() {
+		BufferStrategy bs = gameCanvas.getBufferStrategy();
+		if (bs == null) {
+			gameCanvas.createBufferStrategy(3);
+			return;
+		}
+		Graphics g = bs.getDrawGraphics();
+		// clear the screen
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
+		// render the current screen
+		gsm.draw(g);
+
+		g.dispose();
+		// swap buffers
+		bs.show();
+	}
+
+
 	public void closeLangauageSelection() {
 		frame4.dispose();
 	}
+
 	/*
 	 * Main
 	 */
@@ -225,20 +268,18 @@ public class SpaceInvaders extends JFrame implements Commons {
 	}
 
 	public static void loadLanguage() {
-		final File folder = new File(Paths.get("").toAbsolutePath().toString()+ File.separator + "lang");
+		final File folder = new File(Paths.get("").toAbsolutePath().toString() + File.separator + "lang");
 		listFilesForFolder(folder);
 	}
 
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
-			frame.getContentPane().add(new Board());
-			frame.setResizable(false);
-			frame.setLocationRelativeTo(null);
-			frame.setVisible(true);
+			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
+			gameFrame.setResizable(true);
+			gameFrame.setLocationRelativeTo(null);
+			gameFrame.setVisible(true);
 			closeIntro();
 
 		}
@@ -258,9 +299,11 @@ public class SpaceInvaders extends JFrame implements Commons {
 
 	private class LangSelect implements ActionListener {
 		private String language;
-		public LangSelect(String language){
-			this.language=language;
+
+		public LangSelect(String language) {
+			this.language = language;
 		}
+
 		public void actionPerformed(ActionEvent event) {
 			lang = langs.get(language);
 			closeLangauageSelection();
@@ -268,6 +311,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 		}
 
 	}
+
 	private class HelpButton implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			JButton close = new JButton(lang.getCloseMessage());
@@ -307,14 +351,10 @@ public class SpaceInvaders extends JFrame implements Commons {
 			Font font2 = new Font("Helvetica", Font.BOLD, 18);
 			toptekst.setFont(font2);
 			JPanel nedredel = new JPanel();
-			for(String str: langs.keySet()) {
+			for (String str : langs.keySet()) {
 				JButton button = new JButton(str);
 				button.addActionListener(new LangSelect(str));
 				nedredel.add(button);
-				//String message = "<html>" + lang.getHelpMessage() + "</html> ";
-				//JLabel tekst = new JLabel(message, SwingConstants.CENTER);
-				//Font font = new Font("Helvetica", Font.BOLD, 12);
-				//tekst.setFont(font);
 			}
 
 			frame4.add(toptekst, BorderLayout.PAGE_START);

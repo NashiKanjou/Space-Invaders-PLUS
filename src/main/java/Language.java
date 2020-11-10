@@ -1,35 +1,25 @@
+package main.java;
+
 import java.io.IOException;
 
 public class Language {
 
-    private String TITLE = "Space Invaders";
-    private String START = "Iniciar Missão";
-    private String CLOSE = "Fechar";
-    /*
-     * Inicio
-     */
-    private String TOP_MESSAGE = "Space Invaders <br> Java Version";
-    private String INITIAL_MESSAGE = "Ajude-nos, capitão impressionante!!"
-            + "<br>Os alienígenas estão tentando invadir nosso planeta."
-            + "<br><br><br>Sua missão:"
-            + "<br><br>Matar todos os alienígenas invasores antes que eles consigam invadir o planeta Terra."
-            + "<br>E, de preferência, não morra durante a batalha!"
-            + "<br><br><br>BOA SORTE!!!";
-    /*
-     * Ajuda
-     */
-    private String HELP_TOP_MESSAGE = "Ajuda";
-    private String HELP_MESSAGE = "Controles: "
-            + "<br><br>Movimento à Esquerda: <br>Seta Esquerda do teclado"
-            + "<br><br>Movimento à Direita: <br>Seta Direita do teclado"
-            + "<br><br>Atirar: <br>Barra de espaço";
-    private String ENDING_WIN = "Parabéns! Você salvou a galáxia!";
-    private String ENDING_LOSE = "Seu planeta nos pertence agora...";
-    private String INVADE = "Aliens estão invadindo a galáxia!";
+    private String TITLE;
+    private String START;
+    private String CLOSE;
 
-    private String Lang_select="Language Selection";
+    private String TOP_MESSAGE;
+    private String INITIAL_MESSAGE;
 
-    private String Lang_Name = "none";
+    private String HELP_TOP_MESSAGE;
+    private String HELP_MESSAGE;
+    private String ENDING_WIN;
+    private String ENDING_LOSE;
+    private String INVADE;
+
+    private String Lang_select;
+
+    private String Lang_Name;
 
     public Language(String path) throws IOException {
         Config config = new Config(path);
@@ -55,7 +45,7 @@ public class Language {
         return Lang_select;
     }
     public String getLanguageName(){
-            return Lang_Name;
+        return Lang_Name;
     }
     public String getEndingWinMessage(){
         return ENDING_WIN;

@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -6,7 +8,7 @@ public class Config {
 
     public Config(String path) throws IOException {
         FileInputStream fis = new FileInputStream(path);
-        BufferedReader br = new BufferedReader(new InputStreamReader(fis, "Big5"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis, "utf-8"));
         String oneLine;
         while((oneLine = br.readLine()) != null) {
             raw.add(oneLine);
