@@ -23,4 +23,5 @@ public interface Commons {
     public static final int DEFAULT_MAX_HEALTH = 5;
     public static final long DEFAULT_SHOT_CD = 1000;
     public static final long MIN_SHOT_CD = 100; //recommended
+    public static final double UPDATE_PER_SECOND = 60.0;
 }

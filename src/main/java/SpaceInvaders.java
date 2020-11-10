@@ -199,7 +199,7 @@ public class SpaceInvaders implements Commons {
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
 		long timer = System.currentTimeMillis();
-		final double ns = 1e9 / 60.0;
+		final double ns = 1e9 / UPDATE_PER_SECOND;
 		double delta = 0;
 		int fps = 0;
 		int updates = 0;
@@ -230,9 +230,9 @@ public class SpaceInvaders implements Commons {
 	}
 
 	private void update() {
-		gsm.update();
 		keyboardManager.update();
 		gsm.input(keyboardManager);
+		gsm.update();
 	}
 
 	private void render() {
