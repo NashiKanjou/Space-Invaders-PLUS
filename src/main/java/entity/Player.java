@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
-import main.java.entity.Sprite;
 import main.java.util.Commons;
 /**
  *
@@ -41,9 +40,9 @@ public class Player extends Sprite implements Commons {
 		ShieldAmount=0;
 		width = ii.getImage().getWidth(null);
 		height = ii.getImage().getHeight(null);
-		maxhealth = default_maxhealth;
+		maxhealth = DEFAULT_MAX_HEALTH;
 		health = maxhealth;
-		cd_shot = default_shot_cd;
+		cd_shot = DEFAULT_SHOT_CD;
 		current_cd_shot = System.currentTimeMillis();
 		setImage(ii.getImage());
 		setX(START_X);
@@ -122,7 +121,7 @@ public class Player extends Sprite implements Commons {
 	}
 
 	public int getDefaultMaxhealth() {
-		return default_maxhealth;
+		return DEFAULT_MAX_HEALTH;
 	}
 
 	public int getMaxhealth() {
@@ -130,7 +129,7 @@ public class Player extends Sprite implements Commons {
 	}
 
 	public boolean setShotCD(long newCD){
-		if(newCD>min_shot_cd) {
+		if(newCD> MIN_SHOT_CD) {
 			this.cd_shot = newCD;
 			return true;
 		}else{
@@ -175,8 +174,8 @@ public class Player extends Sprite implements Commons {
 			x = BOARD_WIDTH - 2 * width;
 		if (y <= 2)
 			y = 2;
-		if (y >= BOARD_HEIGTH - 3 * height)
-			y = BOARD_HEIGTH - 3 * height;
+		if (y >= BOARD_HEIGHT - 3 * height)
+			y = BOARD_HEIGHT - 3 * height;
 
 	}
 

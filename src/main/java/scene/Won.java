@@ -53,7 +53,7 @@ public class Won extends BaseScene {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(sprite.getImage(), 0, 0, gsm.panel);
+        g.drawImage(sprite.getImage(), 0, 0, null);
     }
 
     @Override

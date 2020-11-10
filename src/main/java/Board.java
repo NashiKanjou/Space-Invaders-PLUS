@@ -9,7 +9,6 @@ package main.java;
 
 import main.java.entity.*;
 import main.java.util.Commons;
-import main.java.util.MapLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +58,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	public Board() {
 		addKeyListener(new TAdapter());
 		setFocusable(true);
-		d = new Dimension(BOARD_WIDTH, BOARD_HEIGTH);
+		d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
 		setBackground(Color.black);
 
 		gameInit();
@@ -205,7 +204,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		// vunnet = new Won();
 
 		// g.setColor(Color.black);
-		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
+		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 		if (havewon == true) {
 			// g.drawImage(vunnet.getImage(), 0, 0, this);
 		} else {

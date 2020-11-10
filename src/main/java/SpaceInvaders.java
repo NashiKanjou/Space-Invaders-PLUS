@@ -5,10 +5,10 @@ import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import javax.swing.SwingConstants;
 
 
 /**
- * 
+ *
  * @author
  */
 public class SpaceInvaders implements Commons {
@@ -32,6 +32,11 @@ public class SpaceInvaders implements Commons {
 	JFrame frame2;
 	JFrame frame3;
 	JFrame frame4;
+
+	private GameSceneManager gsm;
+	private KeyboardManager keyboardManager;
+	private Canvas gameCanvas;
+	private Thread gameThread;
 
 	/*
 	 * Constructor
@@ -53,8 +58,7 @@ public class SpaceInvaders implements Commons {
 
 	public static HashMap<String, Language> langs = new HashMap<String, Language>();
 
-	private GameSceneManager gsm;
-	private KeyboardManager keyboardManager;
+
 
 	public SpaceInvaders() {
 		lang = langs.get("default");
@@ -161,57 +165,90 @@ public class SpaceInvaders implements Commons {
 		frame3.dispose();
 
 		// begin the main game loop
-		gameLoop();
+		gameThread = new Thread("Game Thread"){
+			@Override
+			public void run() {
+				gameLoop();
+			}
+		};
+		gameThread.start();
 	}
 
 	public void closeHelp() {
 		frame3.dispose();
 	}
 
+
 	/**
 	 * The main game loop
 	 */
-	private void gameLoop() {
-		new Thread(() -> {
-			JPanel panel = new JPanel();
-			panel.setSize(BOARD_WIDTH, BOARD_HEIGTH);
-			panel.setFocusable(true);
-			panel.requestFocus();
+	public void gameLoop() {
+		gameCanvas = new Canvas();
+		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
 
-			gameFrame.setContentPane(panel);
-			// setup the GameSceneManager
+		gameFrame.add(gameCanvas);
+		gameFrame.pack();
 
-			gsm = new GameSceneManager(panel);
-			keyboardManager = new KeyboardManager(panel);
-			gsm.addScene(new MainGameScene(gsm));
+		keyboardManager = new KeyboardManager();
+		gameFrame.addKeyListener(keyboardManager);
 
-			long beforeTime, timeDiff, sleep;
+		gsm = new GameSceneManager();
+		gsm.ingame = true;
+		gsm.addScene(new MainGameScene(gsm));
 
-			while (gsm.isIngame()) {
-				beforeTime = System.currentTimeMillis();
+		long lastTime = System.nanoTime();
+		// used to reset fps and timer per second
+		long timer = System.currentTimeMillis();
+		final double ns = 1e9 / 60.0;
+		double delta = 0;
+		int fps = 0;
+		int updates = 0;
 
-				gsm.update();
-				keyboardManager.update();
-				gsm.input(keyboardManager);
-				gsm.draw(panel.getGraphics());
+		while (gsm.ingame) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
 
-				timeDiff = System.currentTimeMillis() - beforeTime;
-				sleep = DELAY - timeDiff;
-
-				if (sleep < 0)
-					sleep = 1;
-				try {
-					Thread.sleep(sleep);
-				} catch (InterruptedException e) {
-					System.out.println("interrupted");
-				}
-				beforeTime = System.currentTimeMillis();
+			while (delta >= 1) {
+				update();
+				updates++;
+				delta--;
 			}
-			System.out.println("game over");
-			gsm.dispose();
-			gameFrame.dispose();
-		}, "Game Loop").start();
+			render();
+			fps++;
+
+			if (System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				gameFrame.setTitle("Space Invaders  | " + " U: " + updates + " FPS: " + fps);
+				fps = 0;
+				updates = 0;
+			}
+		}
+		gsm.dispose();
+		gameFrame.dispose();
+		System.out.println("game over");
 	}
+
+	private void update() {
+		gsm.update();
+		keyboardManager.update();
+		gsm.input(keyboardManager);
+	}
+
+	private void render() {
+		BufferStrategy bs = gameCanvas.getBufferStrategy();
+		if (bs == null) {
+			gameCanvas.createBufferStrategy(3);
+			return;
+		}
+		Graphics g = bs.getDrawGraphics();
+		gsm.draw(g);
+
+		g.dispose();
+		// swap buffers
+		bs.show();
+	}
+
 
 	public void closeLangauageSelection() {
 		frame4.dispose();
@@ -234,7 +271,7 @@ public class SpaceInvaders implements Commons {
 
 		public void actionPerformed(ActionEvent event) {
 			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
+			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
 			gameFrame.setResizable(true);
 			gameFrame.setLocationRelativeTo(null);
 			gameFrame.setVisible(true);

@@ -39,9 +39,6 @@ public class KeyboardManager implements KeyListener {
         }
     }
 
-    public KeyboardManager(JPanel panel) {
-        panel.addKeyListener(this);
-    }
 
     public Key up = new Key();
     public Key down = new Key();

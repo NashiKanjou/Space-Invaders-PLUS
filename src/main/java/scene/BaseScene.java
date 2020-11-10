@@ -15,7 +15,7 @@ public abstract class BaseScene extends JPanel implements Commons, IScene {
     protected GameSceneManager gsm;
 
     public BaseScene(GameSceneManager gsm) {
-        d = new Dimension(BOARD_WIDTH, BOARD_HEIGTH);
+        d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
         this.gsm = gsm;
     }
 

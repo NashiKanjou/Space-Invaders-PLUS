@@ -80,9 +80,6 @@ public class MainGameScene extends BaseScene {
 
         // shoot the bullet
         if (keyboardManager.space.down) {
-//            if (!shot.isVisible())
-//                shot = new Shot(player.getX(), player.getY());
-
             if (player.canShoot()) {
                int m = player.getMultiTrajectoryProjectiles();
                 int i = m / 2;
@@ -334,7 +331,7 @@ public class MainGameScene extends BaseScene {
 
                     x += (int) (shotSpeed * Math.cos(rads));
                     y -= (int) (shotSpeed * Math.sin(rads));
-                    if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) {
+                    if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGHT) {
                         shot.die();
                         temp.add(shot);
                     } else {
