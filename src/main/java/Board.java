@@ -8,12 +8,12 @@ package main.java;
 */
 
 import main.java.entity.*;
+import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -56,7 +56,10 @@ public class Board extends JPanel implements Runnable, Commons {
 	 * Constructor
 	 */
 	public Board() {
+		// if (aimtype = 1)
 		addKeyListener(new TAdapter());
+		// if (aimtype = 0)
+		// addMouseListener(new MAdapter());
 		setFocusable(true);
 		d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
 		setBackground(Color.black);
@@ -409,7 +412,6 @@ public class Board extends JPanel implements Runnable, Commons {
 			if (ingame) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
-
 					if (player.canShoot()) {
 						int m = player.getMultiTrajectoryProjectiles();
 						int i = m / 2;
@@ -427,6 +429,54 @@ public class Board extends JPanel implements Runnable, Commons {
 						 */
 					}
 				}
+			}
+		}
+	}
+	private class MAdapter extends MouseAdapter {
+
+		public void mouseReleased(MouseEvent e) {
+			mouseReleased(e);
+		}
+
+		public void mouseClicked(MouseEvent e) {
+			mouseClicked(e);
+
+			int x = player.getX();
+			int y = player.getY();
+
+			if (ingame) {
+				int mouseKey = e.getButton();
+				if (mouseKey == MouseEvent.BUTTON1) {
+					if (player.canShoot()) {
+						int m = player.getMultiTrajectoryProjectiles();
+						int i = m / 2;
+						for (int a = 0; a < i; a++) {
+							int b = a - i;
+							shots.add(new Shot(x - 5 * b, y, angle));
+							shots.add(new Shot(x + 5 * b, y, angle));
+						}
+						if (m % 2 != 0) {
+							shots.add(new Shot(x, y, angle));
+						}
+						/*
+						 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
+						 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
+						 */
+					}
+				}
+			}
+		}
+
+		public void mouseMoved(MouseEvent e) {
+			mouseMoved(e);
+			if (ingame) {
+				int x = player.getX();
+				int y = player.getY();
+				int mouseX = e.getXOnScreen();
+				int mouseY = e.getYOnScreen();
+				int deltaX = mouseX - x;
+				int deltaY = mouseY - y;
+				angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package main.java.entity;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 
@@ -179,7 +180,7 @@ public class Player extends Sprite implements Commons {
 
 	}
 
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) { // SHOULD DO WASD OR ARROW KEYS
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
@@ -219,4 +220,5 @@ public class Player extends Sprite implements Commons {
 			dy = 0;
 		}
 	}
+
 }

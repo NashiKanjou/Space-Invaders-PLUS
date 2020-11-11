@@ -25,7 +25,7 @@ import javax.swing.*;
 public class SpaceInvaders implements Commons {
 	public static Language lang;
 	private JButton start, help, lang_sel;
-	private JComboBox<String> aimChoice;
+	public JComboBox<String> aimChoice;
 
 	JFrame gameFrame;
 	JFrame frame2;
@@ -104,13 +104,6 @@ public class SpaceInvaders implements Commons {
 		aimChoice = new JComboBox<String>();
 		aimChoice.addItem("Mouse");
 		aimChoice.addItem("Keys");
-
-
-		if (aimChoice.getSelectedItem() == "Mouse") {
-				aimType = 0;
-		} else if (aimChoice.getSelectedItem() == "Keys") {
-				aimType = 1;
-		}
 
 
 
@@ -197,6 +190,12 @@ public class SpaceInvaders implements Commons {
 	public void closeIntro() {
 		frame2.dispose();
 		frame3.dispose();
+
+		if (aimChoice.getSelectedItem() == "Mouse") {
+			aimType = 0;
+		} else if (aimChoice.getSelectedItem() == "Keys") {
+			aimType = 1;
+		}
 
 		// begin the main game loop
 		gameThread = new Thread("Game Thread"){
