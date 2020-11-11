@@ -1,7 +1,5 @@
 package main.java;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
@@ -265,7 +263,6 @@ public class SpaceInvaders implements Commons {
 	 * Main
 	 */
 	public static void main(String[] args) {
-		FlatDarkLaf.install();
 		loadLanguage();
 		new SpaceInvaders();
 	}
