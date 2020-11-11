@@ -32,6 +32,21 @@ public class Player extends Sprite implements Commons {
 	/*
 	 * Constructor
 	 */
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles) {
+		ii = new ImageIcon(this.getClass().getResource(player));
+		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+		setImage(ii.getImage());
+		setX(START_X);
+		setY(START_Y);
+	}
 	public Player() {
 		ii = new ImageIcon(this.getClass().getResource(player));
 		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
