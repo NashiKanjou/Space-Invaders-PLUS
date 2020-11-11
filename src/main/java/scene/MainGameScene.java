@@ -44,7 +44,7 @@ public class MainGameScene extends BaseScene {
 
     private void init() {
         // load the map
-        gameMap = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
+        gameMap = MapLoader.loadMap("resources\\levels\\testlevel.txt", 30, 18);
         // get a reference to the list of aliens
         aliens = gameMap.getSprites();
         player = new Player();

@@ -336,7 +336,7 @@ public class SpaceInvaders implements Commons {
 			frame3.add(toptekst, BorderLayout.PAGE_START);
 
 			frame3.add(close, BorderLayout.PAGE_END);
-			frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame3.setSize(250, 290);
 			frame3.setResizable(false);
 			frame3.setLocationRelativeTo(null);
@@ -363,7 +363,7 @@ public class SpaceInvaders implements Commons {
 			frame4.add(toptekst, BorderLayout.PAGE_START);
 			frame4.add(nedredel, BorderLayout.CENTER);
 			frame4.add(close, BorderLayout.PAGE_END);
-			frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			frame4.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame4.setSize(250, 290);
 			frame4.setResizable(false);
 			frame4.setLocationRelativeTo(null);
