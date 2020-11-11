@@ -147,6 +147,14 @@ public class SpaceInvaders implements Commons {
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
 
+		frame2.setBounds(0,0, 500, 200); // 500
+		ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"));
+		JLabel label = new JLabel(icon);
+		label.setVisible(true);
+		frame2.setVisible(true);
+		frame2.add(label);
+
+
 		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
 		String message = "<html>" + lang.getInitialMessage() + "</html>";
 
@@ -179,6 +187,7 @@ public class SpaceInvaders implements Commons {
 		nedredel.add(help);
 		nedredel.add(start);
 		nedredel.add(lang_sel);
+
 
 		frame2.add(nedredel, BorderLayout.PAGE_END);
 		frame2.setSize(500, 500);
