@@ -111,8 +111,8 @@ public class MainGameScene extends BaseScene {
 
         // check for quit
         //TODO Remove quit from game level and make into a paused screen that has an option to quit or resume
-        if (keyboardManager.escape.clicked)
-            gsm.ingame = false;
+//        if (keyboardManager.escape.clicked)
+//            gsm.ingame = false;
     }
 
     @Override

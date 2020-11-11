@@ -243,8 +243,8 @@ public class SpaceInvaders implements Commons {
 		}
 		Graphics g = bs.getDrawGraphics();
 		// clear the screen
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+//		g.setColor(Color.BLACK);
+//		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
 		// render the current screen
 		gsm.draw(g);

@@ -11,7 +11,7 @@ public class KeyboardManager implements KeyListener {
     public static List<Key> keys = new ArrayList<>();
 
     public class Key {
-        public int presses, absorbs;
+        private int presses, absorbs;
         public boolean down, clicked;
 
         public Key() {
@@ -44,7 +44,9 @@ public class KeyboardManager implements KeyListener {
     public Key down = new Key();
     public Key left = new Key();
     public Key right = new Key();
+    public Key quit = new Key();
     public Key escape = new Key();
+    public Key enter = new Key();
     public Key space = new Key();
     public Key angleDec = new Key();
     public Key angleInc = new Key();
@@ -66,8 +68,12 @@ public class KeyboardManager implements KeyListener {
             left.toggle(pressed);
         if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             right.toggle(pressed);
+        if (e.getKeyCode() == KeyEvent.VK_Q)
+            quit.toggle(pressed);
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
             escape.toggle(pressed);
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            enter.toggle(pressed);
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
             space.toggle(pressed);
         if (e.getKeyCode() == KeyEvent.VK_A)

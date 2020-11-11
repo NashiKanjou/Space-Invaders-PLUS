@@ -1,6 +1,7 @@
 package main.java.manager;
 
 import main.java.scene.IScene;
+import main.java.scene.PausedScene;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,8 +22,12 @@ public class GameSceneManager {
     }
 
     public void input(KeyboardManager keyboardManager) {
-        if (!scenes.empty())
-            scenes.peek().input(keyboardManager);
+        if (keyboardManager.escape.clicked) {
+            addScene(new PausedScene(this));
+        } else {
+            if (!scenes.empty())
+                scenes.peek().input(keyboardManager);
+        }
     }
 
     /**
