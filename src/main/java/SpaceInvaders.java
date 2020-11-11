@@ -1,56 +1,86 @@
+package main.java;
+
+import main.java.manager.GameSceneManager;
+import main.java.manager.KeyboardManager;
+import main.java.scene.MainGameScene;
+import main.java.util.Commons;
+
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 
 /**
- * 
- * @author 
-*/
-public class SpaceInvaders extends JFrame implements Commons {
+ *
+ * @author
+ */
+public class SpaceInvaders implements Commons {
+	public static Language lang;
+	private JButton start, help, lang_sel;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4905230094675077405L;
+	JFrame gameFrame;
+	JFrame frame2;
+	JFrame frame3;
+	JFrame frame4;
 
-	private JButton start, help;
-	
-	/*
-	 * Inicio
-	 */
-	private static final String TOP_MESSAGE = "Space Invaders <br> Java Version";
-	private static final String INITIAL_MESSAGE = "Ajude-nos, capitão impressionante!!"
-			+ "<br>Os alienígenas estão tentando invadir nosso planeta."
-			+ "<br><br><br>Sua missão:"
-			+ "<br><br>Matar todos os alienígenas invasores antes que eles consigam invadir o planeta Terra."
-			+ "<br>E, de preferência, não morra durante a batalha!"
-			+ "<br><br><br>BOA SORTE!!!";
-	/*
-	 * Ajuda
-	 */
-	private static final String HELP_TOP_MESSAGE = "Ajuda";
-	private static final String HELP_MESSAGE = "Controles: " 
-							+ "<br><br>Movimento à Esquerda: <br>Seta Esquerda do teclado"
-							+ "<br><br>Movimento à Direita: <br>Seta Direita do teclado"
-							+ "<br><br>Atirar: <br>Barra de espaço";
-
-	JFrame frame = new JFrame("Space Invaders");
-	JFrame frame2 = new JFrame("Space Invaders");
-	JFrame frame3 = new JFrame("Ajuda");
+	private GameSceneManager gsm;
+	private KeyboardManager keyboardManager;
+	private Canvas gameCanvas;
+	private Thread gameThread;
 
 	/*
 	 * Constructor
 	 */
-	public SpaceInvaders() {
-		String topmessage = "<html><br><br>" + TOP_MESSAGE + "</html>";
-		String message = "<html>" + INITIAL_MESSAGE + "</html>";
+	private static void listFilesForFolder(File folder) {
+		for (File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				listFilesForFolder(fileEntry);
+			} else {
+				try {
+					Language lang = new Language(fileEntry.getPath());
+					langs.put(lang.getLanguageName(), lang);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
-		start = new JButton("Iniciar Missão");
+	public static HashMap<String, Language> langs = new HashMap<String, Language>();
+
+
+
+	public SpaceInvaders() {
+		lang = langs.get("default");
+
+		gameFrame = new JFrame(lang.getTitle());
+		frame2 = new JFrame(lang.getTitle());
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame3 = new JFrame(lang.getHelpTopMessage());
+		frame4 = new JFrame(lang.getLanguageSelection());
+
+		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
+		String message = "<html>" + lang.getInitialMessage() + "</html>";
+
+		start = new JButton(lang.getStartMessage());
 		start.addActionListener(new ButtonListener());
 		start.setBounds(800, 800, 200, 100);
 
-		help = new JButton("Ajuda");
+		help = new JButton(lang.getHelpTopMessage());
 		help.addActionListener(new HelpButton());
+
+		lang_sel = new JButton(lang.getLanguageSelection());
+		lang_sel.addActionListener(new LanguageButton());
 
 		JLabel tekst = new JLabel(message, SwingConstants.CENTER);
 		JLabel toptekst = new JLabel(topmessage, SwingConstants.CENTER);
@@ -61,7 +91,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 		Font font2 = new Font("Helvetica", Font.BOLD, 20);
 		toptekst.setFont(font2);
 
-		frame2.setTitle("Space Invaders");
+		frame2.setTitle(lang.getTitle());
 
 		frame2.add(tekst);
 
@@ -69,6 +99,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 		JPanel nedredel = new JPanel();
 		nedredel.add(help);
 		nedredel.add(start);
+		nedredel.add(lang_sel);
 
 		frame2.add(nedredel, BorderLayout.PAGE_END);
 		frame2.setSize(500, 500);
@@ -78,32 +109,177 @@ public class SpaceInvaders extends JFrame implements Commons {
 
 	}
 
+	public void reloadLanguage() {
+		gameFrame.dispose();
+		frame2.dispose();
+		frame3.dispose();
+		frame4.dispose();
+
+		gameFrame = new JFrame(lang.getTitle());
+		frame2 = new JFrame(lang.getTitle());
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame3 = new JFrame(lang.getHelpTopMessage());
+		frame4 = new JFrame(lang.getLanguageSelection());
+
+		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
+		String message = "<html>" + lang.getInitialMessage() + "</html>";
+
+		start = new JButton(lang.getStartMessage());
+		start.addActionListener(new ButtonListener());
+		start.setBounds(800, 800, 200, 100);
+
+		help = new JButton(lang.getHelpTopMessage());
+		help.addActionListener(new HelpButton());
+
+		lang_sel = new JButton(lang.getLanguageSelection());
+		lang_sel.addActionListener(new LanguageButton());
+
+		JLabel tekst = new JLabel(message, SwingConstants.CENTER);
+		JLabel toptekst = new JLabel(topmessage, SwingConstants.CENTER);
+
+		Font font = new Font("Helvetica", Font.BOLD, 12);
+		tekst.setFont(font);
+
+		Font font2 = new Font("Helvetica", Font.BOLD, 20);
+		toptekst.setFont(font2);
+
+		frame2.setTitle(lang.getTitle());
+
+		frame2.add(tekst);
+
+		frame2.add(toptekst, BorderLayout.PAGE_START);
+		JPanel nedredel = new JPanel();
+		nedredel.add(help);
+		nedredel.add(start);
+		nedredel.add(lang_sel);
+
+		frame2.add(nedredel, BorderLayout.PAGE_END);
+		frame2.setSize(500, 500);
+		frame2.setLocationRelativeTo(null);
+		frame2.setVisible(true);
+		frame2.setResizable(false);
+	}
+
 	public void closeIntro() {
 		frame2.dispose();
 		frame3.dispose();
+
+		// begin the main game loop
+		gameThread = new Thread("Game Thread"){
+			@Override
+			public void run() {
+				gameLoop();
+			}
+		};
+		gameThread.start();
 	}
 
 	public void closeHelp() {
 		frame3.dispose();
 	}
 
+
+	/**
+	 * The main game loop
+	 */
+	public void gameLoop() {
+		gameCanvas = new Canvas();
+		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+
+		gameFrame.add(gameCanvas);
+		gameFrame.pack();
+
+		keyboardManager = new KeyboardManager();
+		gameFrame.addKeyListener(keyboardManager);
+
+		gsm = new GameSceneManager();
+		gsm.ingame = true;
+		gsm.addScene(new MainGameScene(gsm));
+
+		long lastTime = System.nanoTime();
+		// used to reset fps and timer per second
+		long timer = System.currentTimeMillis();
+		final double ns = 1e9 / UPDATE_PER_SECOND;
+		double delta = 0;
+		int fps = 0;
+		int updates = 0;
+
+		while (gsm.ingame) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+
+			while (delta >= 1) {
+				update();
+				updates++;
+				delta--;
+			}
+			render();
+			fps++;
+
+			if (System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				gameFrame.setTitle("Space Invaders  | " + " U: " + updates + " FPS: " + fps);
+				fps = 0;
+				updates = 0;
+			}
+		}
+		gsm.dispose();
+		gameFrame.dispose();
+		System.out.println("game over");
+	}
+
+	private void update() {
+		keyboardManager.update();
+		gsm.input(keyboardManager);
+		gsm.update();
+	}
+
+	private void render() {
+		BufferStrategy bs = gameCanvas.getBufferStrategy();
+		if (bs == null) {
+			gameCanvas.createBufferStrategy(3);
+			return;
+		}
+		Graphics g = bs.getDrawGraphics();
+		// clear the screen
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
+		// render the current screen
+		gsm.draw(g);
+
+		g.dispose();
+		// swap buffers
+		bs.show();
+	}
+
+
+	public void closeLangauageSelection() {
+		frame4.dispose();
+	}
+
 	/*
 	 * Main
 	 */
 	public static void main(String[] args) {
+		loadLanguage();
 		new SpaceInvaders();
+	}
+
+	public static void loadLanguage() {
+		final File folder = new File(Paths.get("").toAbsolutePath().toString() + File.separator + "lang");
+		listFilesForFolder(folder);
 	}
 
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
-			frame.getContentPane().add(new Board());
-			frame.setResizable(false);
-			frame.setLocationRelativeTo(null);
-			frame.setVisible(true);
+			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
+			gameFrame.setResizable(true);
+			gameFrame.setLocationRelativeTo(null);
+			gameFrame.setVisible(true);
 			closeIntro();
 
 		}
@@ -115,13 +291,34 @@ public class SpaceInvaders extends JFrame implements Commons {
 		}
 	}
 
+	private class CloseLangSelect implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			closeLangauageSelection();
+		}
+	}
+
+	private class LangSelect implements ActionListener {
+		private String language;
+
+		public LangSelect(String language) {
+			this.language = language;
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			lang = langs.get(language);
+			closeLangauageSelection();
+			reloadLanguage();
+		}
+
+	}
+
 	private class HelpButton implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			JButton close = new JButton("Fechar");
+			JButton close = new JButton(lang.getCloseMessage());
 			close.addActionListener(new CloseHelp());
 
-			String topmessage = "<html><br>" + HELP_TOP_MESSAGE + "</html>";
-			String message = "<html>" + HELP_MESSAGE + "</html> ";
+			String topmessage = "<html><br>" + lang.getHelpTopMessage() + "</html>";
+			String message = "<html>" + lang.getHelpMessage() + "</html> ";
 			JLabel tekst = new JLabel(message, SwingConstants.CENTER);
 			JLabel toptekst = new JLabel(topmessage, SwingConstants.CENTER);
 
@@ -141,6 +338,33 @@ public class SpaceInvaders extends JFrame implements Commons {
 			frame3.setResizable(false);
 			frame3.setLocationRelativeTo(null);
 			frame3.setVisible(true);
+		}
+	}
+
+	private class LanguageButton implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			JButton close = new JButton(lang.getCloseMessage());
+			close.addActionListener(new CloseLangSelect());
+
+			String topmessage = "<html><br>" + lang.getLanguageSelection() + "</html>";
+			JLabel toptekst = new JLabel(topmessage, SwingConstants.CENTER);
+			Font font2 = new Font("Helvetica", Font.BOLD, 18);
+			toptekst.setFont(font2);
+			JPanel nedredel = new JPanel();
+			for (String str : langs.keySet()) {
+				JButton button = new JButton(str);
+				button.addActionListener(new LangSelect(str));
+				nedredel.add(button);
+			}
+
+			frame4.add(toptekst, BorderLayout.PAGE_START);
+			frame4.add(nedredel, BorderLayout.CENTER);
+			frame4.add(close, BorderLayout.PAGE_END);
+			frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame4.setSize(250, 290);
+			frame4.setResizable(false);
+			frame4.setLocationRelativeTo(null);
+			frame4.setVisible(true);
 		}
 	}
 }

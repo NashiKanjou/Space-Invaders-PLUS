@@ -1,8 +1,10 @@
+package main.java.entity;
+
 import javax.swing.ImageIcon;
 
 /**
  * 
- * @author 
+ * @author
  */
 public class Alien extends Sprite {
 
@@ -29,9 +31,9 @@ public class Alien extends Sprite {
     /*
      * Getters & Setters
      */
-    
-	public Bomb getBomb() {
-		return bomb;
-	}
+
+    public Bomb getBomb() {
+        return bomb;
+    }
 
 }

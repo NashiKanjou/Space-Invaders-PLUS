@@ -1,8 +1,10 @@
+package main.java.entity;
+
 import javax.swing.ImageIcon;
 
 /**
  * 
- * @author 
+ * @author
  */
 public class Bomb extends Sprite {
 
