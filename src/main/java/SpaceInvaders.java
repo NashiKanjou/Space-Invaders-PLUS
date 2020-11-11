@@ -15,11 +15,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 
 /**
@@ -29,16 +25,21 @@ import javax.swing.SwingConstants;
 public class SpaceInvaders implements Commons {
 	public static Language lang;
 	private JButton start, help, lang_sel;
+	private JComboBox<String> aimChoice;
 
 	JFrame gameFrame;
 	JFrame frame2;
 	JFrame frame3;
 	JFrame frame4;
+	JFrame frame5;
+
+
 
 	private GameSceneManager gsm;
 	private KeyboardManager keyboardManager;
 	private Canvas gameCanvas;
 	private Thread gameThread;
+	protected int aimType;
 
 	/*
 	 * Constructor
@@ -66,10 +67,26 @@ public class SpaceInvaders implements Commons {
 		lang = langs.get("default");
 
 		gameFrame = new JFrame(lang.getTitle());
+		/*gameFrame = new JFrame();
+		ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"),BorderLayout.CENTER);
+		JLabel label = new JLabel(icon);
+		gameFrame.add(label);*/
+
+
 		frame2 = new JFrame(lang.getTitle());
 		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3 = new JFrame(lang.getHelpTopMessage());
 		frame4 = new JFrame(lang.getLanguageSelection());
+		frame5 = new JFrame();
+
+		//
+		frame2.setBounds(0,0, 500, 200); // 500
+		ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"));
+		JLabel label = new JLabel(icon);
+		label.setVisible(true);
+		frame2.setVisible(true);
+		frame2.add(label);
+		//
 
 		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
 		String message = "<html>" + lang.getInitialMessage() + "</html>";
@@ -83,6 +100,19 @@ public class SpaceInvaders implements Commons {
 
 		lang_sel = new JButton(lang.getLanguageSelection());
 		lang_sel.addActionListener(new LanguageButton());
+
+		aimChoice = new JComboBox<String>();
+		aimChoice.addItem("Mouse");
+		aimChoice.addItem("Keys");
+
+
+		if (aimChoice.getSelectedItem() == "Mouse") {
+				aimType = 0;
+		} else if (aimChoice.getSelectedItem() == "Keys") {
+				aimType = 1;
+		}
+
+
 
 		JLabel tekst = new JLabel(message, SwingConstants.CENTER);
 		JLabel toptekst = new JLabel(topmessage, SwingConstants.CENTER);
@@ -102,6 +132,7 @@ public class SpaceInvaders implements Commons {
 		nedredel.add(help);
 		nedredel.add(start);
 		nedredel.add(lang_sel);
+		nedredel.add(aimChoice);
 
 		frame2.add(nedredel, BorderLayout.PAGE_END);
 		frame2.setSize(500, 500);
@@ -149,7 +180,8 @@ public class SpaceInvaders implements Commons {
 
 		frame2.add(tekst);
 
-		frame2.add(toptekst, BorderLayout.PAGE_START);
+		frame2.add(toptekst);
+		frame2.setBounds(0,0,BOARD_WIDTH/2, 700);
 		JPanel nedredel = new JPanel();
 		nedredel.add(help);
 		nedredel.add(start);
