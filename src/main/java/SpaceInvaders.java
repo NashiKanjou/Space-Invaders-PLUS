@@ -333,8 +333,8 @@ public class SpaceInvaders implements Commons {
 		tekst.setHorizontalAlignment(SwingConstants.CENTER);
 		tekst.updateUI();
 
-		toptekst.setText(topmessage);
-		toptekst.setHorizontalAlignment(SwingConstants.CENTER);
+//		toptekst.setText(topmessage);
+//		toptekst.setHorizontalAlignment(SwingConstants.CENTER);
 //		toptekst = new JLabel(topmessage, SwingConstants.CENTER);
 
 //		Font font = new Font("Helvetica", Font.BOLD, 12);
