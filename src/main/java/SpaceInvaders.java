@@ -41,6 +41,9 @@ public class SpaceInvaders implements Commons {
 	private Thread gameThread;
 	protected int aimType;
 
+	private JLabel tekst,toptekst;
+	private JPanel nedredel;
+
 	/*
 	 * Constructor
 	 */
@@ -107,8 +110,8 @@ public class SpaceInvaders implements Commons {
 
 
 
-		JLabel tekst = new JLabel(message, SwingConstants.CENTER);
-		JLabel toptekst = new JLabel(topmessage, SwingConstants.CENTER);
+		tekst = new JLabel(message, SwingConstants.CENTER);
+		toptekst = new JLabel(topmessage, SwingConstants.CENTER);
 
 		Font font = new Font("Helvetica", Font.BOLD, 12);
 		tekst.setFont(font);
@@ -121,7 +124,7 @@ public class SpaceInvaders implements Commons {
 		frame2.add(tekst);
 
 		frame2.add(toptekst, BorderLayout.PAGE_START);
-		JPanel nedredel = new JPanel();
+		nedredel = new JPanel();
 		nedredel.add(help);
 		nedredel.add(start);
 		nedredel.add(lang_sel);
@@ -301,6 +304,64 @@ public class SpaceInvaders implements Commons {
 		frame4.dispose();
 	}
 
+	private void updateText() {
+
+		frame2.setTitle(lang.getTitle());
+
+//		frame3 = new JFrame(lang.getHelpTopMessage());
+		frame3.setTitle(lang.getHelpTopMessage());
+//		frame4 = new JFrame(lang.getLanguageSelection());
+		frame4.setTitle(lang.getLanguageSelection());
+//		frame5 = new JFrame();
+
+
+
+		String topmessage = "<html><br><br>" + lang.getTopMessage() + "</html>";
+		String message = "<html>" + lang.getInitialMessage() + "</html>";
+
+//		start = new JButton(lang.getStartMessage());
+		start.setText(lang.getStartMessage());
+
+		help.setText(lang.getHelpTopMessage());
+
+		lang_sel.setText(lang.getLanguageSelection());
+
+
+
+//		tekst = new JLabel(message, SwingConstants.CENTER);
+		tekst.setText(message);
+		tekst.setHorizontalAlignment(SwingConstants.CENTER);
+		tekst.updateUI();
+
+		toptekst.setText(topmessage);
+		toptekst.setHorizontalAlignment(SwingConstants.CENTER);
+//		toptekst = new JLabel(topmessage, SwingConstants.CENTER);
+
+//		Font font = new Font("Helvetica", Font.BOLD, 12);
+//		tekst.setFont(font);
+//
+//		Font font2 = new Font("Helvetica", Font.BOLD, 20);
+//		toptekst.setFont(font2);
+//
+//		frame2.setTitle(lang.getTitle());
+//
+//		frame2.add(tekst);
+//
+//		frame2.add(toptekst, BorderLayout.PAGE_START);
+//		nedredel = new JPanel();
+//		nedredel.add(help);
+//		nedredel.add(start);
+//		nedredel.add(lang_sel);
+//		nedredel.add(aimChoice);
+//
+//		frame2.add(nedredel, BorderLayout.PAGE_END);
+//		frame2.setSize(500, 500);
+//		frame2.setLocationRelativeTo(null);
+//		frame2.setVisible(true);
+//		frame2.setResizable(false);
+
+	}
+
 	/*
 	 * Main
 	 */
@@ -337,6 +398,8 @@ public class SpaceInvaders implements Commons {
 	private class CloseLangSelect implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			closeLangauageSelection();
+			System.out.println("repaint 2");
+			updateText();
 		}
 	}
 
@@ -349,8 +412,10 @@ public class SpaceInvaders implements Commons {
 
 		public void actionPerformed(ActionEvent event) {
 			lang = langs.get(language);
-			closeLangauageSelection();
-			reloadLanguage();
+			//closeLangauageSelection();
+//			frame4.repaint();
+//			reloadLanguage();
+
 		}
 
 	}
