@@ -47,7 +47,8 @@ public class MainGameScene extends BaseScene {
         gameMap = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
         // get a reference to the list of aliens
         aliens = gameMap.getSprites();
-        player = new Player();
+        //player = new Player();
+        player = new Player(1,5,500,3);
         shots = new ArrayList<>();
 //        shot = new Shot();
     }
@@ -411,8 +412,11 @@ public class MainGameScene extends BaseScene {
                 if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
                         && bombY <= (playerY + PLAYER_HEIGHT)) {
                     ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
-                    player.setImage(ii.getImage());
-                    player.setDying(true);
+                    int hp = player.damage();
+                    if(hp<=0) {
+                        player.setImage(ii.getImage());
+                        player.setDying(true);
+                    }
                     b.setDestroyed(true);
                 }
             }
