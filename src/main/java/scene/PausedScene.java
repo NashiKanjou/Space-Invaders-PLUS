@@ -18,7 +18,7 @@ public class PausedScene extends BaseScene {
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.WHITE);
-        g.drawString("GAME PAUSED", (BOARD_WIDTH / 2 ) - 32, (BOARD_HEIGHT / 2 ) + 20);
+        g.drawString("GAME PAUSED", (BOARD_WIDTH / 2 ) - 32, (BOARD_HEIGHT / 2 ) - 32);
         g.drawString("PRESS ENTER TO RESUME", (BOARD_WIDTH / 2 ) - 32, (BOARD_HEIGHT / 2 ) + 52);
         g.drawString("PRESS Q TO QUIT", (BOARD_WIDTH / 2 ) - 32, (BOARD_HEIGHT / 2 ) + 72);
     }
@@ -32,6 +32,7 @@ public class PausedScene extends BaseScene {
     public void input(KeyboardManager keyboardManager) {
         if (keyboardManager.enter.clicked) {
             gsm.removeCurrentScene();
+            gsm.paused = false;
         }
         if (keyboardManager.quit.clicked) {
             gsm.ingame = false;

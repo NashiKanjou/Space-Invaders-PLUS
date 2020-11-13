@@ -54,7 +54,7 @@ public class GameOver extends BaseScene {
 
 	@Override
 	public void input(KeyboardManager keyboardManager) {
-		if (keyboardManager.escape.down)
+		if (keyboardManager.quit.down)
 			gsm.ingame = false;
 
 	}
@@ -67,7 +67,7 @@ public class GameOver extends BaseScene {
 	public void draw(Graphics g) {
 		g.drawImage(sprite.getImage(), 0, 0, null);
 		g.setColor(Color.WHITE);
-		g.drawString("Press ESCAPE to quit or SPACE(not working yet) to play again", 200, 340);
+		g.drawString("Press Q to quit or SPACE(not working yet) to play again", 200, 340);
 		// TODO implement the ability for the game to be restarted
 	}
 

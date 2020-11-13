@@ -14,16 +14,22 @@ import javax.swing.JPanel;
 public class GameSceneManager {
     private Stack<IScene> scenes;
 
+    public boolean paused;
     public boolean ingame;
 
     public GameSceneManager() {
-        ingame = false;
+        ingame = paused = false;
         scenes = new Stack<>();
     }
 
     public void input(KeyboardManager keyboardManager) {
         if (keyboardManager.escape.clicked) {
-            addScene(new PausedScene(this));
+            if (!paused) {
+                paused = true;
+                addScene(new PausedScene(this));
+            } else {
+                System.out.println("game is already paused. do nothing");
+            }
         } else {
             if (!scenes.empty())
                 scenes.peek().input(keyboardManager);

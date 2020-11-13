@@ -3,12 +3,16 @@ package main.java;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
+import main.java.scene.AnimationTestScene;
 import main.java.util.Commons;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -191,10 +195,24 @@ public class SpaceInvaders implements Commons {
 
 		keyboardManager = new KeyboardManager();
 		gameFrame.addKeyListener(keyboardManager);
+		gameFrame.setFocusable(true);
+
+		// makes sure the frame regains focus when the user clicks back on the frame
+		gameFrame.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				e.getComponent().requestFocus();
+			}
+		});
 
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
-		gsm.addScene(new MainGameScene(gsm));
+		gsm.addScene(new AnimationTestScene(gsm));
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
@@ -243,8 +261,8 @@ public class SpaceInvaders implements Commons {
 		}
 		Graphics g = bs.getDrawGraphics();
 		// clear the screen
-//		g.setColor(Color.BLACK);
-//		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
 		// render the current screen
 		gsm.draw(g);
