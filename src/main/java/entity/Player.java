@@ -1,10 +1,9 @@
 package main.java.entity;
 
-import java.awt.event.KeyEvent;
-
-import javax.swing.ImageIcon;
-
 import main.java.util.Commons;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
 /**
  *
  * @author
@@ -180,6 +179,14 @@ public class Player extends Sprite implements Commons {
 		}
 		return health;
 	}
+
+	public int getWidth(){
+		return this.width;
+	}
+	public int getHeight(){
+		return this.height;
+	}
+
 	public void act() {
 		x += dx;
 		y += dy;

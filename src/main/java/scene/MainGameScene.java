@@ -191,16 +191,16 @@ public class MainGameScene extends BaseScene {
         if (gsm.ingame) {
             g.setColor(Color.WHITE);
 
-            g.drawLine(player.getX() + PLAYER_WIDTH / 2, player.getY() + PLAYER_HEIGHT / 2, // from the center of the
+            g.drawLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, // from the center of the
                                                                                             // player
-                    (int) (player.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
+                    (int) (player.getX() + player.getWidth() / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
                                                                                                         // line x a
                                                                                                         // distance of
                                                                                                         // 20 adj. for
                                                                                                         // angle from
                                                                                                         // center of
                                                                                                         // player
-                    (int) (player.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
+                    (int) (player.getY() + player.getHeight() / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
                                                                                                          // line y a
                                                                                                          // distance of
                                                                                                          // 20 adj. for
