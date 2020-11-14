@@ -6,15 +6,11 @@ import main.java.manager.KeyboardManager;
 import main.java.util.Map;
 import main.java.util.MapLoader;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.MouseInfo;
-import java.awt.Point;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
-import javax.swing.ImageIcon;
 
 
 
@@ -48,7 +44,7 @@ public class MainGameScene extends BaseScene {
         // get a reference to the list of aliens
         aliens = gameMap.getSprites();
         //player = new Player();
-        player = new Player(1,5,500,3);
+        player = new Player(5,5,500,3);
         shots = new ArrayList<>();
 //        shot = new Shot();
     }
@@ -57,6 +53,24 @@ public class MainGameScene extends BaseScene {
     public void update() {
         player.act();
         animationCycle();
+    }
+
+    @Override
+    public void drawHealth(Graphics g) {
+        int max = player.getMaxhealth();
+        int hp = player.getHealth();
+        g.setColor(Color.black);
+        g.fillRect(0, 450, 200, 20);
+        g.setColor(Color.red);
+        g.fillRect(0, 450, 200/max*hp, 20);
+
+        int shield = player.getShield();
+        g.setColor(Color.cyan);
+        int s = -200/max*shield;
+        if(s<-200){
+            s=-200;
+        }
+        g.fillRect(200, 450, s, 20);
     }
 
     @Override
@@ -128,6 +142,7 @@ public class MainGameScene extends BaseScene {
         drawShot(g);
         drawBombing(g);
         drawAim(g);
+        drawHealth(g);
     }
 
     public void drawAliens(Graphics g) {
@@ -193,6 +208,10 @@ public class MainGameScene extends BaseScene {
                                                                                                          // center of
                                                                                                          // player
         }
+    }
+
+    public Player getPlayer(){
+        return this.player;
     }
 
     @Override
