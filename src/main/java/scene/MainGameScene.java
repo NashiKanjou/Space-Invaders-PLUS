@@ -98,8 +98,14 @@ public class MainGameScene extends BaseScene {
             if (player.canShoot()) {
                int m = player.getMultiTrajectoryProjectiles();
                 int i = m / 2;
-                var x = player.getX();
-                var y = player.getY();
+                int x,y;
+                if(player.getShield()>0){
+                    x = player.getX() + (player.getWidth() / 5);
+                    y = player.getY() + (player.getHeight() / 5);
+                }else{
+                    x = player.getX();
+                    y = player.getY();
+                }
 
                 for (int a = 0; a < i; a++) {
                     int b = a - i;
@@ -428,8 +434,8 @@ public class MainGameScene extends BaseScene {
             int playerY = player.getY();
 
             if (player.isVisible() && !b.isDestroyed()) {
-                if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
-                        && bombY <= (playerY + PLAYER_HEIGHT)) {
+                if (bombX >= (playerX) && bombX <= (playerX + player.getWidth()) && bombY >= (playerY)
+                        && bombY <= (playerY + player.getHeight())) {
                     ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
                     int hp = player.damage();
                     if(hp<=0) {
