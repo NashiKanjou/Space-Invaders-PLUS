@@ -5,6 +5,7 @@ import main.java.entity.Sprite;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -43,8 +44,8 @@ public class MapLoader {
         // attempt to load the text file
         Scanner in = null;
         try {
-            in = new Scanner(new File(filepath));
-        } catch (FileNotFoundException e) {
+            in = new Scanner(new File(MapLoader.class.getResource(filepath).toURI()));
+        } catch (FileNotFoundException | URISyntaxException e) {
             System.out.println("Map file not found:");
             e.printStackTrace();
         }
