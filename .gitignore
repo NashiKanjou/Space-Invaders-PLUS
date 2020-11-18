@@ -3,3 +3,4 @@
 /.vscode
 /.gradle
 /build
+*.iml
