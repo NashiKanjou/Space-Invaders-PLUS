@@ -217,7 +217,7 @@ public class MainGameScene extends BaseScene {
             // player won
             // TODO add message to the Won scene
             // message = SpaceInvaders.lang.getEndingWinMessage();
-            gsm.addScene(new Won(gsm), true);
+            gsm.addScene(new MainGameScene(gsm));
         }
 
         // player
