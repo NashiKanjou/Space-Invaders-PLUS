@@ -2,7 +2,7 @@ package main.java;
 
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
-import main.java.scene.VSGameScene;
+import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
 import javax.swing.*;
@@ -194,8 +194,8 @@ public class SpaceInvaders implements Commons {
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
 
-		gsm.addScene(new VSGameScene(gsm,true,"localhost",25570)); //for VS mode still having some small bug and need to get the User input for IP and port
-		//gsm.addScene(new MainGameScene(gsm));
+		//gsm.addScene(new VSGameScene(gsm,true,"localhost",25570)); //for VS mode still having some small bug and need to get the User input for IP and port
+		gsm.addScene(new MainGameScene(gsm));
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
