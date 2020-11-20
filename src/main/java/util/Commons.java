@@ -6,9 +6,10 @@ package main.java.util;
  */
 public interface Commons {
 
-    public static final int BOARD_WIDTH = 640;
-    public static final int BOARD_HEIGHT = 480;
-    public static final int GROUND = 440;
+    public static final int BOARD_WIDTH = 300;
+    public static final int BOARD_HEIGHT = 500;
+    public static final int SCALE = 2;
+    public static final int GROUND = BOARD_HEIGHT - 30;
     public static final int BOMB_HEIGHT = 5;
     public static final int ALIEN_HEIGHT = 25;
     public static final int ALIEN_WIDTH = 25;

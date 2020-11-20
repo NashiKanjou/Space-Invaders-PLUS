@@ -190,7 +190,7 @@ public class SpaceInvaders implements Commons {
 	 */
 	public void gameLoop() {
 		gameCanvas = new Canvas();
-		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH * SCALE, BOARD_HEIGHT * SCALE));
 
 		gameFrame.add(gameCanvas);
 		gameFrame.pack();
@@ -214,7 +214,7 @@ public class SpaceInvaders implements Commons {
 
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
-		gsm.addScene(new AnimationTestScene(gsm));
+		gsm.addScene(new MainGameScene(gsm));
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
@@ -261,15 +261,17 @@ public class SpaceInvaders implements Commons {
 			gameCanvas.createBufferStrategy(3);
 			return;
 		}
-		Graphics g = bs.getDrawGraphics();
+		Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
+		g2d.scale(SCALE, SCALE);
+
 		// clear the screen
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
 		// render the current screen
-		gsm.draw(g);
+		gsm.draw(g2d);
 
-		g.dispose();
+		g2d.dispose();
 		// swap buffers
 		bs.show();
 	}
