@@ -30,6 +30,8 @@ import javax.swing.SwingConstants;
  */
 public class SpaceInvaders implements Commons {
 	public static Language lang;
+	public static double delta = 0;
+
 	private JButton start, help, lang_sel;
 
 	JFrame gameFrame;
@@ -218,7 +220,7 @@ public class SpaceInvaders implements Commons {
 		// used to reset fps and timer per second
 		long timer = System.currentTimeMillis();
 		final double ns = 1e9 / UPDATE_PER_SECOND;
-		double delta = 0;
+//		double delta = 0;
 		int fps = 0;
 		int updates = 0;
 

@@ -1,5 +1,6 @@
 package main.java.graphics;
 
+import main.java.SpaceInvaders;
 import main.java.util.Pair;
 
 import java.awt.image.BufferedImage;
@@ -12,7 +13,7 @@ public class AnimatedSprite {
     // animation interval in seconds
     private float interval, count;
     private final SpriteSheet spriteSheet;
-    private final ArrayList<Pair> frames;
+    private ArrayList<Pair> frames;
     private BufferedImage image;
     public Sprite sprite;
 
@@ -54,7 +55,7 @@ public class AnimatedSprite {
             return;
         }
         //TODO change to use a timer that takes into account the time to run the whole animation like the main game loop
-        count++;
+        count += SpaceInvaders.delta;
     }
 
     public BufferedImage getImage() {
@@ -63,5 +64,9 @@ public class AnimatedSprite {
 
     public Sprite getSprite() {
         return sprite;
+    }
+
+    public void setFrames(ArrayList<Pair> frames) {
+        this.frames = frames;
     }
 }
