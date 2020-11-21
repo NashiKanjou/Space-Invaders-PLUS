@@ -32,6 +32,7 @@ public class Player extends Sprite implements Commons {
 	private int width_min;
 	private int height_min;
 
+	private int damage;
 	private int MultiTrajectoryProjectiles;
 
 	/*
@@ -80,6 +81,31 @@ public class Player extends Sprite implements Commons {
 		setImage(ii.getImage());
 
 	}
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles,int damage,boolean isEnemy) {
+		if(isEnemy) {
+			ii = new ImageIcon(this.getClass().getResource(enemy));
+			ii_shield = new ImageIcon(this.getClass().getResource(enemy_shield));
+			setX(Enemy_START_X);
+			setY(Enemy_START_Y);
+		}else{
+			ii = new ImageIcon(this.getClass().getResource(player));
+			ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+			setX(START_X);
+			setY(START_Y);
+		}
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+		setImage(ii.getImage());
+		this.damage=damage;
+	}
 
 	public Player() {
 		ii = new ImageIcon(this.getClass().getResource(player));
@@ -122,7 +148,12 @@ public class Player extends Sprite implements Commons {
 		height = ii_shield.getImage().getHeight(null);
 		setImage(ii_shield.getImage());
 	}
-
+	public void setDamage(int damage){
+		this.damage=damage;
+	}
+	public int getDamage(){
+		return this.damage;
+	}
 	/*
 	public void setDoubleTrajectoryProjectiles(boolean b){
 		this.isDoubleTrajectoryProjectiles=b;
@@ -155,6 +186,7 @@ public class Player extends Sprite implements Commons {
 		}
 		return health;
 	}
+
 	public boolean canShoot(){
 		long time = System.currentTimeMillis();
 		if(time>current_cd_shot){
@@ -187,6 +219,10 @@ public class Player extends Sprite implements Commons {
 		}else{
 			return false;
 		}
+	}
+
+	public long getShooingCD(){
+		return this.cd_shot;
 	}
 
 	public int addHealth(){

@@ -1,6 +1,7 @@
 package main.java.scene;
 
 import main.java.entity.Player;
+import main.java.entity.PowerUps;
 import main.java.entity.Shot;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class VSGameScene extends BaseScene {
@@ -20,6 +22,9 @@ public class VSGameScene extends BaseScene {
     private static ArrayList<Shot> shots;
     private static ArrayList<Shot> addShots;
     private static ArrayList<Shot> enemy_shots;
+    private static ArrayList<PowerUps> powerups;
+    private static ArrayList<PowerUps> addpowerups;
+    private static ArrayList<PowerUps.PowerUp> allpowerups;
     private static Player player;
     private static Player enemy;
 
@@ -29,13 +34,18 @@ public class VSGameScene extends BaseScene {
     private int deaths = 0;
 
     private double angle = 0; // aiming angle for shooting, default straight
-    private static final int offsetY=70;
+    private static final int offsetY=60;//57
     private String IP;
     private int Port;
     private ServerSocket ss;
     private Socket s;
     private Thread ComRThread;
     private Thread ComSThread;
+
+    private final static long eventtime = 10000;
+    private static long lastcheck = System.currentTimeMillis();
+    private static final int rate = 100;
+    private static Random random = new Random();
 
     public VSGameScene(GameSceneManager gsm,boolean isHost,String ip_address,int port) throws IOException {
         super(gsm);
@@ -53,24 +63,30 @@ public class VSGameScene extends BaseScene {
         int playery;
         int health;
         int shield;
+        int damage;
         ArrayList<Shot> shots;
+        ArrayList<PowerUps> powerups;
 
-        public Package(int playerx,int playery,int health,int shield,ArrayList<Shot> shots){
+        public Package(int playerx,int playery,int damage,int health,int shield,ArrayList<Shot> shots,ArrayList<PowerUps> powerups){
+            this.damage=damage;
             this.playerx=playerx;
             this.playery=playery;
             this.health=health;
             this.shield=shield;
             this.shots=shots;
+            this.powerups=powerups;
         }
 
-        public Package(String raw){
+        public Package(String raw,boolean isHost){
             String[] str = raw.split("#");
             this.playerx=Integer.parseInt(str[0]);
             this.playery=Integer.parseInt(str[1]);
-            this.health=Integer.parseInt(str[2]);
-            this.shield=Integer.parseInt(str[3]);
-            if(str.length>=5){
-                String[] rawshot = str[4].split(";");
+            this.damage=Integer.parseInt(str[2]);
+            this.health=Integer.parseInt(str[3]);
+            this.shield=Integer.parseInt(str[4]);
+            String[] rawshot = str[5].split(";");
+            shots = new ArrayList<>();
+            try{
                 for(String rs:rawshot){
                     String[] info = rs.split(",");
                     int x;
@@ -83,23 +99,49 @@ public class VSGameScene extends BaseScene {
                     double a=Double.parseDouble(info[2])+180;
                     VSGameScene.enemy_shots.add(new Shot(x,y,a));
                 }
-            }else{
-                shots = new ArrayList<>();
-            }
+            }catch(Exception e){}
+
+            powerups = new ArrayList<>();
+            try {
+                String[] rawpowerup = str[6].split(";");
+                for (String rp : rawpowerup) {
+                    String[] infor = rp.split(",");
+                    int x = (BOARD_WIDTH - Integer.parseInt(infor[0]));
+                    int y = BOARD_HEIGHT - offsetY+19 - Integer.parseInt(infor[1]);
+                    if (!isHost) {
+                        VSGameScene.powerups.add(new PowerUps(x, y, PowerUps.PowerUp.valueOf(infor[2])));
+                    }
+                    powerups.add(new PowerUps(x, y, PowerUps.PowerUp.valueOf(infor[2])));
+                }
+            }catch(Exception e){}
         }
 
         public String toString(){
             String str = "";
-            str+=playerx+"#"+playery+"#"+health+"#"+shield;//x,y,a;x,y,a
+            str+=playerx+"#"+playery+"#"+damage+"#"+health+"#"+shield+"#";//x,y,a;x,y,a
+            if(shots.size()<=0){
+                str+=BOARD_WIDTH+100+","+BOARD_HEIGHT+100+","+0;
+            }
             for(int i = 0;i<shots.size();i++){
                 if(i!=0){
                     str+=";";
-                }else{
-                    str+="#";
                 }
                 Shot s = shots.get(i);
                 str+=s.getX()+","+s.getY()+","+s.getAngle();
             }
+            str+="#";
+
+            if(powerups.size()<=0){
+                str+="none";
+            }
+            for(int i = 0;i<powerups.size();i++){
+                if(i!=0){
+                    str+=";";
+                }
+                PowerUps p = powerups.get(i);
+                str+=p.getX()+","+p.getY()+","+p.getType().name();
+            }
+            str+="#";
             return str;
         }
     }
@@ -119,11 +161,13 @@ public class VSGameScene extends BaseScene {
                 while(gsm.isIngame()){
                     try{
                         String str = dis.readUTF();
-                        Package p = new Package(str);
+                        Package p = new Package(str,isHost);
+                        enemy.setMaxhealth(p.health,false);
                         enemy.setHealth(p.health);
+                        enemy.setDamage(p.damage);
                         enemy.setShieldAmount(p.shield);
                         enemy.setX(BOARD_WIDTH-p.playerx);
-                        enemy.setY(BOARD_HEIGHT-offsetY-p.playery);
+                        enemy.setY(BOARD_HEIGHT-offsetY+8-p.playery);
                         if(enemy.getHealth()<=0){
                             enemy.setDying(true);
                         }
@@ -139,14 +183,22 @@ public class VSGameScene extends BaseScene {
             public void run() {
                 while(gsm.isIngame()){
                     try{
-                        Package p = new Package(player.getX(),player.getY(),player.getHealth(),player.getShield(),addShots);
+                        if(isHost) {
+                            createPowerUps();
+                        }
+                        Package p = new Package(player.getX(),player.getY(),player.getDamage(),player.getHealth(),player.getShield(),addShots,addpowerups);
                         String data = p.toString();
                         addShots.clear();
+                        addpowerups.clear();
                         dout.writeUTF(data);
                     }catch(Exception e){
 
                     }
-
+                    try {
+                        sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
@@ -155,12 +207,17 @@ public class VSGameScene extends BaseScene {
     }
 
     private void init() {
-        enemy = new Player(5,5,500,3,true);
-        //player = new Player();
-        player = new Player(5,0,500,3);
+        enemy = new Player(3,0,1000,1,true);
+        player = new Player(3,0,1000,1);
         shots = new ArrayList<>();
         enemy_shots = new ArrayList<>();
         addShots=new ArrayList<>();
+        powerups=new ArrayList<>();
+        addpowerups=new ArrayList<>();
+        allpowerups=new ArrayList<>();
+        for(PowerUps.PowerUp pw: PowerUps.PowerUp.values()){
+            allpowerups.add(pw);
+        }
     }
 
     @Override
@@ -238,10 +295,25 @@ public class VSGameScene extends BaseScene {
         drawPlayer(g);
         drawEnemy(g);
         drawShot(g);
+        drawPowerUps(g);
         drawAim(g);
         drawHealth(g);
     }
 
+    public void drawPowerUps(Graphics g) {
+//        if (shot.isVisible())
+//            g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+        for (int i = 0; i < powerups.size(); i++) {
+            try {
+                PowerUps pw = powerups.get(i);
+                if (pw.isVisible() && !pw.isDying()) {
+                    g.drawImage(pw.getImage(), pw.getX(), pw.getY(), this);
+                }
+            } catch (Exception e) {
+                // porb null, current modify, out of bound
+            }
+        }
+    }
 
     public void drawShot(Graphics g) {
 //        if (shot.isVisible())
@@ -319,6 +391,85 @@ public class VSGameScene extends BaseScene {
          */
     }
 
+
+    private void createPowerUps(){
+        // this should only be called by server
+        if(lastcheck<=System.currentTimeMillis()){
+            lastcheck=System.currentTimeMillis()+eventtime;
+            if(random.nextInt(100)<rate){
+                PowerUps pw = new PowerUps(random.nextInt(BOARD_WIDTH-100)+50,random.nextInt(BOARD_HEIGHT-100)+50,getRandomPowerUp());
+                powerups.add(pw);
+                addpowerups.add(pw);
+            }
+        }
+    }
+
+    private PowerUps.PowerUp getRandomPowerUp(){
+        try {
+            return allpowerups.get(random.nextInt(allpowerups.size()+1));
+        }catch(Exception e) {
+            return null;
+        }
+    }
+    private void checkPowerUps(){
+        ArrayList<PowerUps> temp = new ArrayList<>();
+        for (int i = 0; i < powerups.size(); i++) {
+            try {
+                PowerUps p = powerups.get(i);
+                if (p.isVisible()) {
+                    int pX = p.getX();
+                    int pY = p.getY();
+
+                    int enemyX = enemy.getX();
+                    int enemyY = enemy.getY();
+
+                    if (enemy.isVisible() && !p.isDying()&&p.isVisible() && !enemy.isDying()) {
+                        if (pX >= (enemyX-enemy.getWidth()-1) && pX <= (enemyX + enemy.getWidth()+1) && pY >= (enemyY-enemy.getHeight()-1)
+                                && pY <= (enemyY + enemy.getHeight()-1)) {
+                            p.die();
+                            temp.add(p);
+                        }
+                    }
+
+                    int playerX = player.getX();
+                    int playerY = player.getY();
+                    if (player.isVisible() && !p.isDying()&&p.isVisible() && !player.isDying()) {
+                        if (pX >= (playerX-player.getWidth()/2) && pX <= (playerX + player.getWidth()/2) && pY >= (playerY-player.getHeight()/2)
+                                && pY <= (playerY + player.getHeight()/2)) {
+                            p.die();
+                            temp.add(p);
+                            PowerUps.PowerUp type = p.getType();
+                            switch(type){
+                                case MaxHealth:
+                                    player.setMaxhealth(player.getMaxhealth(),true);
+                                    break;
+                                case Shield:
+                                    player.addShieldAmount(1);
+                                    break;
+                                case HealthRecovery:
+                                    player.addHealth(1);
+                                    break;
+                                case MultiProjectile:
+                                    player.setMultiTrajectoryProjectiles(player.getMultiTrajectoryProjectiles()+1);
+                                    break;
+                                case ShootingCooldown:
+                                    player.setShotCD(player.getShooingCD()-200);
+                                    break;
+                                case Damage:
+                                    player.setDamage(player.getDamage()+1);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }catch (Exception e){}
+        }
+        powerups.removeAll(temp);
+        temp.clear();
+    }
+
     @Override
     public void dispose() {
     }
@@ -348,12 +499,21 @@ public class VSGameScene extends BaseScene {
         }
     }
     public void animationCycle() {
+        if(enemy.getHealth()<=0){
+            ImageIcon ii = new ImageIcon(getClass().getResource(expl));
+            enemy.setImage(ii.getImage());
+            enemy.setDying(true);
+            deaths++;
+        }
+
         if (deaths == 1) {
             // player won
             // TODO add message to the Won scene
             // message = SpaceInvaders.lang.getEndingWinMessage();
             gsm.addScene(new Won(gsm), true);
         }
+        //powerup
+        checkPowerUps();
 
         // player
 
@@ -387,12 +547,6 @@ public class VSGameScene extends BaseScene {
                                 && shotY <= (enemyY + enemy.getHeight())) {
                             shot.die();
                             temp.add(shot);
-                            if(enemy.damage()<=0){
-                                ImageIcon ii = new ImageIcon(getClass().getResource(expl));
-                                enemy.setImage(ii.getImage());
-                                enemy.setDying(true);
-                                deaths++;
-                            }
                         }
                     }
 
@@ -444,11 +598,10 @@ public class VSGameScene extends BaseScene {
                     int playerY = player.getY();
 
                     if (player.isVisible() && !shot.isDying()) {
-                        if (shotX >= (playerX-player.getWidth()/2) && shotX <= (playerX + player.getWidth()/2) && shotY >= (playerY)//test
-                                && shotY <= (playerY + player.getHeight())) {
+                        if (shotX >= (playerX-player.getWidth()/2) && shotX <= (playerX + player.getWidth()/2) && shotY >= (playerY- player.getHeight()/3)//test
+                                && shotY <= (playerY + player.getHeight()/3)) {
                             ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
-                            int hp = player.damage();
-                            if(hp<=0) {
+                            if(player.damage()<=0) {
                                 player.setImage(ii.getImage());
                                 player.setDying(true);
                             }
