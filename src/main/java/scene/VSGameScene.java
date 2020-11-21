@@ -397,7 +397,7 @@ public class VSGameScene extends BaseScene {
         if(lastcheck<=System.currentTimeMillis()){
             lastcheck=System.currentTimeMillis()+eventtime;
             if(random.nextInt(100)<rate){
-                PowerUps pw = new PowerUps(random.nextInt(BOARD_WIDTH-100)+50,random.nextInt(BOARD_HEIGHT-100)-50,getRandomPowerUp());
+                PowerUps pw = new PowerUps(random.nextInt(BOARD_WIDTH-100)+50,random.nextInt(BOARD_HEIGHT-100),getRandomPowerUp());
                 powerups.add(pw);
                 addpowerups.add(pw);
             }
