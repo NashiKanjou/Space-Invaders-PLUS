@@ -397,7 +397,7 @@ public class VSGameScene extends BaseScene {
         if(lastcheck<=System.currentTimeMillis()){
             lastcheck=System.currentTimeMillis()+eventtime;
             if(random.nextInt(100)<rate){
-                PowerUps pw = new PowerUps(random.nextInt(BOARD_WIDTH-100)+50,random.nextInt(BOARD_HEIGHT-100)+100,getRandomPowerUp());
+                PowerUps pw = new PowerUps(random.nextInt(BOARD_WIDTH-100)+50,random.nextInt(BOARD_HEIGHT-100)-50,getRandomPowerUp());
                 powerups.add(pw);
                 addpowerups.add(pw);
             }
@@ -425,7 +425,7 @@ public class VSGameScene extends BaseScene {
 
                     if (enemy.isVisible() && !p.isDying()&&p.isVisible() && !enemy.isDying()) {
                         if (pX >= (enemyX-enemy.getWidth()-1) && pX <= (enemyX + enemy.getWidth()+1) && pY >= (enemyY-enemy.getHeight()-1)
-                                && pY <= (enemyY + enemy.getHeight()-1)) {
+                                && pY <= (enemyY-1)) {
                             p.die();
                             temp.add(p);
                         }
@@ -435,7 +435,7 @@ public class VSGameScene extends BaseScene {
                     int playerY = player.getY();
                     if (player.isVisible() && !p.isDying()&&p.isVisible() && !player.isDying()) {
                         if (pX >= (playerX-player.getWidth()/2) && pX <= (playerX + player.getWidth()/2) && pY >= (playerY-player.getHeight()/2)
-                                && pY <= (playerY + player.getHeight()/2)) {
+                                && pY <= (playerY)) {
                             p.die();
                             temp.add(p);
                             PowerUps.PowerUp type = p.getType();
