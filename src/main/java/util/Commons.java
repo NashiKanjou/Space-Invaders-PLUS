@@ -19,10 +19,11 @@ public interface Commons {
     public static final int NUMBER_OF_ALIENS_TO_DESTROY = 24;
     public static final int CHANCE = 5;
     public static final int DELAY = 17;
-    public static final int PLAYER_WIDTH = 25;
-    public static final int PLAYER_HEIGHT = 25;
+    public static final int PLAYER_WIDTH = 32;
+    public static final int PLAYER_HEIGHT = 32;
     public static final int DEFAULT_MAX_HEALTH = 5;
     public static final long DEFAULT_SHOT_CD = 1000;
     public static final long MIN_SHOT_CD = 100; //recommended
     public static final double UPDATE_PER_SECOND = 60.0;
+    public static final double MAX_FRAME_LIMIT = 144.0;
 }

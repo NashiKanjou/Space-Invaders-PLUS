@@ -3,6 +3,7 @@ package main.java.scene;
 import main.java.entity.Sprite;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
+import main.java.util.Commons;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,7 +15,7 @@ import javax.swing.ImageIcon;
  * 
  * @author
  */
-public class GameOver extends BaseScene {
+public class GameOver extends BaseScene implements Commons {
 
 	/**
 	 *
@@ -23,6 +24,7 @@ public class GameOver extends BaseScene {
 	private final String gameOver = "/img/gameover.png";
 	private Sprite sprite;
 	private int width;
+	private String gameOveMsg;
 
 	/*
 	 * Constructor
@@ -36,8 +38,10 @@ public class GameOver extends BaseScene {
 		setWidth(ii.getImage().getWidth(null));
 
 		sprite.setImage(ii.getImage());
-		sprite.setX(0);
-		sprite.setY(0);
+		sprite.setX((BOARD_WIDTH - ii.getIconWidth()) / 2);
+		sprite.setY((BOARD_HEIGHT - (ii.getIconHeight() * SCALE)) / 2);
+
+		gameOveMsg = "Press Q to quit or ENTER to play again";
 	}
 
 	/*
@@ -54,9 +58,11 @@ public class GameOver extends BaseScene {
 
 	@Override
 	public void input(KeyboardManager keyboardManager) {
-		if (keyboardManager.quit.down)
+		if (keyboardManager.quit.clicked)
 			gsm.ingame = false;
 
+		if (keyboardManager.enter.clicked)
+			gsm.addScene(new MainGameScene(gsm), true);
 	}
 
 	@Override
@@ -65,9 +71,9 @@ public class GameOver extends BaseScene {
 
 	@Override
 	public void draw(Graphics g) {
-		g.drawImage(sprite.getImage(), 0, 0, null);
+		g.drawImage(sprite.getImage(), sprite.getX(), sprite.getY(), null);
 		g.setColor(Color.WHITE);
-		g.drawString("Press Q to quit or SPACE(not working yet) to play again", 200, 340);
+		g.drawString(gameOveMsg, gameOveMsg.length() * 3 / 2, 340);
 		// TODO implement the ability for the game to be restarted
 	}
 

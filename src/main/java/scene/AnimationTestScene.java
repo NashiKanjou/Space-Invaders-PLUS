@@ -35,7 +35,7 @@ public class AnimationTestScene extends BaseScene {
         leftFrame.add(new Pair<Integer, Integer>(3,1));
 
         animatedSprite = new AnimatedSprite(frames, spriteSheet, 5f);
-        sprite = animatedSprite.getSprite();
+        sprite = animatedSprite;
     }
 
     @Override

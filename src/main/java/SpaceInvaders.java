@@ -1,7 +1,10 @@
 package main.java;
 
+import main.java.graphics.SpriteSheet;
+import main.java.manager.AssetManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
+import main.java.scene.GameOver;
 import main.java.scene.MainGameScene;
 import main.java.scene.AnimationTestScene;
 import main.java.util.Commons;
@@ -192,7 +195,7 @@ public class SpaceInvaders implements Commons {
 		gameCanvas = new Canvas();
 		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH * SCALE, BOARD_HEIGHT * SCALE));
 
-		gameFrame.add(gameCanvas);
+		gameFrame.add(gameCanvas, BorderLayout.CENTER);
 		gameFrame.pack();
 
 		keyboardManager = new KeyboardManager();
@@ -211,10 +214,16 @@ public class SpaceInvaders implements Commons {
 				e.getComponent().requestFocus();
 			}
 		});
+		gameFrame.setVisible(true);
+
+		// setup the asset manager
+		AssetManager.getInstance().load(new SpriteSheet("/img/sprite_sheet.png", 32));;
 
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
 		gsm.addScene(new MainGameScene(gsm));
+
+
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
@@ -225,6 +234,7 @@ public class SpaceInvaders implements Commons {
 		int updates = 0;
 
 		while (gsm.ingame) {
+			var shouldUpdate = false;
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
@@ -233,9 +243,13 @@ public class SpaceInvaders implements Commons {
 				update();
 				updates++;
 				delta--;
+				shouldUpdate = true;
 			}
-			render();
-			fps++;
+
+			if (shouldUpdate) {
+				render();
+				fps++;
+			}
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
@@ -251,6 +265,7 @@ public class SpaceInvaders implements Commons {
 
 	private void update() {
 		keyboardManager.update();
+		AssetManager.getInstance().update();
 		gsm.input(keyboardManager);
 		gsm.update();
 	}
@@ -298,10 +313,9 @@ public class SpaceInvaders implements Commons {
 
 		public void actionPerformed(ActionEvent event) {
 			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
-			gameFrame.setResizable(true);
+			gameFrame.setResizable(false);
 			gameFrame.setLocationRelativeTo(null);
-			gameFrame.setVisible(true);
+			gameFrame.setLayout(new BorderLayout());
 			closeIntro();
 
 		}

@@ -1,6 +1,7 @@
 package main.java.scene;
 
 import main.java.entity.*;
+import main.java.manager.AssetManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.util.Map;
@@ -49,7 +50,6 @@ public class MainGameScene extends BaseScene {
         aliens = gameMap.getSprites();
         player = new Player();
         shots = new ArrayList<>();
-//        shot = new Shot();
     }
 
     @Override
@@ -60,22 +60,26 @@ public class MainGameScene extends BaseScene {
 
     @Override
     public void input(KeyboardManager keyboardManager) {
+        var playerSprite = player.getAnimatedSprite();
 
         // update the player movement on key events
         if (keyboardManager.left.down) {
-            player.setDx(-2);
+            playerSprite.setFrames(AssetManager.getInstance().getFrames(AssetManager.Assets.PLAYER_LEFT));
+            playerSprite.setDx(-2);
         } else if (keyboardManager.right.down) {
-            player.setDx(2);
+            playerSprite.setFrames(AssetManager.getInstance().getFrames(AssetManager.Assets.PLAYER_RIGHT));
+            playerSprite.setDx(2);
         } else {
-            player.setDx(0);
+            playerSprite.setDx(0);
+            playerSprite.setFrames(AssetManager.getInstance().getFrames(AssetManager.Assets.PLAYER_IDLE));
         }
 
         if (keyboardManager.up.down) {
-            player.setDy(-2);
+            playerSprite.setDy(-2);
         } else if (keyboardManager.down.down) {
-            player.setDy(2);
+            playerSprite.setDy(2);
         } else {
-            player.setDy(0);
+            playerSprite.setDy(0);
         }
 
         // shoot the bullet
@@ -83,8 +87,8 @@ public class MainGameScene extends BaseScene {
             if (player.canShoot()) {
                int m = player.getMultiTrajectoryProjectiles();
                 int i = m / 2;
-                var x = player.getX();
-                var y = player.getY();
+                var x = playerSprite.getX();
+                var y = playerSprite.getY();
 
                 for (int a = 0; a < i; a++) {
                     int b = a - i;
@@ -117,8 +121,6 @@ public class MainGameScene extends BaseScene {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.black);
-        g.fillRect(0, 0, d.width, d.height);
         g.setColor(Color.green);
 
         g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
@@ -172,19 +174,21 @@ public class MainGameScene extends BaseScene {
     }
 
     public void drawAim(Graphics g) {
+        var playerSprite = player.getAnimatedSprite();
+
         if (gsm.ingame) {
             g.setColor(Color.WHITE);
 
-            g.drawLine(player.getX() + PLAYER_WIDTH / 2, player.getY() + PLAYER_HEIGHT / 2, // from the center of the
+            g.drawLine(playerSprite.getX() + PLAYER_WIDTH / 2, playerSprite.getY() + PLAYER_HEIGHT / 2, // from the center of the
                                                                                             // player
-                    (int) (player.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
+                    (int) (playerSprite.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
                                                                                                         // line x a
                                                                                                         // distance of
                                                                                                         // 20 adj. for
                                                                                                         // angle from
                                                                                                         // center of
                                                                                                         // player
-                    (int) (player.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
+                    (int) (playerSprite.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
                                                                                                          // line y a
                                                                                                          // distance of
                                                                                                          // 20 adj. for
@@ -199,12 +203,14 @@ public class MainGameScene extends BaseScene {
     }
 
     public void drawPlayer(Graphics g) {
-        if (player.isVisible()) {
-            g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+        var playerSprite = player.getAnimatedSprite();
+
+        if (playerSprite.isVisible()) {
+            g.drawImage(player.getAnimatedSprite().getImage(), player.getAnimatedSprite().getX(), player.getAnimatedSprite().getY(), null);
         }
 
-        if (player.isDying()) {
-            player.die();
+        if (playerSprite.isDying()) {
+            playerSprite.die();
             havewon = false;
             // TODO go to the game over screen when the player dies
             gsm.addScene(new GameOver(gsm), true);
@@ -212,6 +218,8 @@ public class MainGameScene extends BaseScene {
     }
 
     public void animationCycle() {
+        var playerSprite = player.getSprite();
+
         if (deaths == gameMap.getNumberOfEnemies()) {
             // player won
             // TODO add message to the Won scene
@@ -404,15 +412,15 @@ public class MainGameScene extends BaseScene {
 
             int bombX = b.getX();
             int bombY = b.getY();
-            int playerX = player.getX();
-            int playerY = player.getY();
+            int playerX = playerSprite.getX();
+            int playerY = playerSprite.getY();
 
-            if (player.isVisible() && !b.isDestroyed()) {
+            if (playerSprite.isVisible() && !b.isDestroyed()) {
                 if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
                         && bombY <= (playerY + PLAYER_HEIGHT)) {
                     ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
-                    player.setImage(ii.getImage());
-                    player.setDying(true);
+                    playerSprite.setImage(ii.getImage());
+                    playerSprite.setDying(true);
                     b.setDestroyed(true);
                 }
             }

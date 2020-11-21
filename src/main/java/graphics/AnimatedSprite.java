@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class AnimatedSprite {
+public class AnimatedSprite extends Sprite {
     // the start and end tiles to use in the sprite sheet
     private int currentRow, currentCol, currentIndex;
     // animation interval in seconds
@@ -15,7 +15,7 @@ public class AnimatedSprite {
     private final SpriteSheet spriteSheet;
     private ArrayList<Pair> frames;
     private BufferedImage image;
-    public Sprite sprite;
+//    public Sprite sprite;
 
 
     public AnimatedSprite(ArrayList<Pair> frames, SpriteSheet spriteSheet, float interval) {
@@ -25,9 +25,11 @@ public class AnimatedSprite {
         this.frames = frames;
         currentIndex = 0;
 
-
+        setX(0);
+        setY(0);
+        setVisible(true);
         getCurrentSprite();
-        sprite = new Sprite(0, 0, image);
+//        sprite = new Sprite(0, 0, image);
     }
 
     private void getCurrentSprite() {
@@ -35,14 +37,15 @@ public class AnimatedSprite {
         currentCol = (Integer)this.frames.get(currentIndex).getY();
 
         image = spriteSheet.getImage(currentRow, currentCol);
-        if (sprite == null)
-            sprite = new Sprite(0, 0, image);
-        else
-            sprite.setImage(image);
+        setImage(image);
+//        if (sprite == null)
+//            sprite = new Sprite(0, 0, image);
+//        else
+//            sprite.setImage(image);
     }
 
     public void update() {
-        sprite.act();
+//        act();
         if (count >= interval) {
             // switch to the next image
             if (currentIndex + 1 >= frames.size())
@@ -62,11 +65,27 @@ public class AnimatedSprite {
         return image;
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
+//    public Sprite getSprite() {
+//        return sprite;
+//    }
 
     public void setFrames(ArrayList<Pair> frames) {
         this.frames = frames;
     }
+
+//    public int getX() {
+//        return sprite.getX();
+//    }
+//
+//    public int getY() {
+//        return sprite.getY();
+//    }
+//
+//    public void setX(int x) {
+//        sprite.setX(x);
+//    }
+//
+//    public void setY(int y) {
+//        sprite.setY(y);
+//    }
 }
