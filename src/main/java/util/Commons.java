@@ -8,7 +8,7 @@ import java.awt.*;
  */
 public interface Commons {
 
-    int BOARD_WIDTH = 400;
+    int BOARD_WIDTH = 300;
     int BOARD_HEIGHT = BOARD_WIDTH / 4 * 5; // a 4/5 aspect ratio
     int GRAPHICS_SCALE = 2;
     int GROUND = BOARD_HEIGHT - 30;
