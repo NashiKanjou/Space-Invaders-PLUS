@@ -5,10 +5,8 @@ import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.util.Commons;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -67,6 +65,11 @@ public class GameOver extends BaseScene implements Commons {
 
 	@Override
 	public void update() {
+	}
+
+	@Override
+	public void drawHealth(Graphics g) {
+
 	}
 
 	@Override

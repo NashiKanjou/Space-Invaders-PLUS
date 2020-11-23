@@ -3,10 +3,8 @@ package main.java.scene;
 import main.java.manager.GameSceneManager;
 import main.java.util.Commons;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 
 public abstract class BaseScene extends JPanel implements Commons, IScene {
@@ -24,6 +22,12 @@ public abstract class BaseScene extends JPanel implements Commons, IScene {
      * frame
      */
     public abstract void update();
+
+    /**
+     * Is responsible for rendering player health that is called each
+     * frame
+     */
+    public abstract void drawHealth(Graphics g);
 
     /**
      * Is responsible for rendering what is viewed by the user that is called each

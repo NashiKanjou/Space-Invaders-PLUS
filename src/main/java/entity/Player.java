@@ -1,5 +1,6 @@
 package main.java.entity;
 
+
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
@@ -8,6 +9,9 @@ import main.java.graphics.AnimatedSprite;
 import main.java.graphics.Sprite;
 import main.java.manager.AnimationManager;
 import main.java.util.Commons;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
 /**
  *
  * @author
@@ -17,9 +21,13 @@ public class Player implements Commons {
 	// Test Commit
 	private final int START_Y = 400;
 	private final int START_X = (BOARD_WIDTH - PLAYER_WIDTH) / 2;
+	private final int Enemy_START_Y = 0;
+	private final int Enemy_START_X = 270;
 
 	private final String player = "/img/craft.png";
 	private final String player_shield = "/img/craft_shield.png";
+	private final String enemy = "/img/enemy.png";
+	private final String enemy_shield = "/img/enemy_shield.png";
 	private int width;
 	private int height;
 	private int maxhealth;
@@ -29,7 +37,10 @@ public class Player implements Commons {
 	private int ShieldAmount;
 	private ImageIcon ii;
 	private ImageIcon ii_shield;
+	private int width_min;
+	private int height_min;
 
+	private int damage;
 	private int MultiTrajectoryProjectiles;
 
 	private AnimatedSprite animatedSprite;
@@ -37,6 +48,81 @@ public class Player implements Commons {
 	/*
 	 * Constructor
 	 */
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles) {
+		ii = new ImageIcon(this.getClass().getResource(player));
+		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+//		setImage(ii.getImage());
+//		setX(START_X);
+//		setY(START_Y);
+
+		animatedSprite = AnimationManager.getInstance().get(AnimationManager.Assets.PLAYER_IDLE);
+		animatedSprite.setX(START_X);
+		animatedSprite.setY(START_Y);
+		animatedSprite.setDying(false);
+		animatedSprite.setVisible(true);
+	}
+
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles, boolean isEnemy) {
+		if(isEnemy) {
+			ii = new ImageIcon(this.getClass().getResource(enemy));
+			ii_shield = new ImageIcon(this.getClass().getResource(enemy_shield));
+//			setX(Enemy_START_X);
+//			setY(Enemy_START_Y);
+		}else{
+			ii = new ImageIcon(this.getClass().getResource(player));
+			ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+//			setX(START_X);
+//			setY(START_Y);
+		}
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+//		setImage(ii.getImage());
+
+	}
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles,int damage,boolean isEnemy) {
+		if(isEnemy) {
+			ii = new ImageIcon(this.getClass().getResource(enemy));
+			ii_shield = new ImageIcon(this.getClass().getResource(enemy_shield));
+//			setX(Enemy_START_X);
+//			setY(Enemy_START_Y);
+		}else{
+			ii = new ImageIcon(this.getClass().getResource(player));
+			ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+//			setX(START_X);
+//			setY(START_Y);
+		}
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+//		setImage(ii.getImage());
+		this.damage=damage;
+	}
+
 	public Player() {
 		ii = new ImageIcon(this.getClass().getResource(player));
 		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
@@ -45,6 +131,8 @@ public class Player implements Commons {
 		ShieldAmount=0;
 		width = ii.getImage().getWidth(null);
 		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
 		maxhealth = DEFAULT_MAX_HEALTH;
 		health = maxhealth;
 		cd_shot = DEFAULT_SHOT_CD;
@@ -87,6 +175,12 @@ public class Player implements Commons {
 		height = ii_shield.getImage().getHeight(null);
 		animatedSprite.setImage(ii_shield.getImage());
 	}
+	public void setDamage(int damage){
+		this.damage=damage;
+	}
+	public int getDamage(){
+		return this.damage;
+	}
 	/*
 	public void setDoubleTrajectoryProjectiles(boolean b){
 		this.isDoubleTrajectoryProjectiles=b;
@@ -119,6 +213,7 @@ public class Player implements Commons {
 		}
 		return health;
 	}
+
 	public boolean canShoot(){
 		long time = System.currentTimeMillis();
 		if(time>current_cd_shot){
@@ -153,6 +248,10 @@ public class Player implements Commons {
 		}
 	}
 
+	public long getShooingCD(){
+		return this.cd_shot;
+	}
+
 	public int addHealth(){
 		health++;
 		if(health>maxhealth){
@@ -164,7 +263,9 @@ public class Player implements Commons {
 	public int getHealth(){
 		return health;
 	}
-
+	public void setHealth(int newhealth){
+		health = newhealth;
+	}
 	public int addHealth(int i){
 		health+=i;
 		if(health>maxhealth){
@@ -181,6 +282,14 @@ public class Player implements Commons {
 		}
 		return health;
 	}
+
+	public int getWidth(){
+		return this.width;
+	}
+	public int getHeight(){
+		return this.height;
+	}
+
 	public void act() {
 		var x = animatedSprite.getX();
 		var y = animatedSprite.getY();
@@ -214,6 +323,7 @@ public class Player implements Commons {
 	public Sprite getSprite() {
 		return animatedSprite;
 	}
+
 
 	public AnimatedSprite getAnimatedSprite() {
 		return animatedSprite;

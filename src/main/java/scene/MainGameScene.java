@@ -9,14 +9,10 @@ import main.java.manager.KeyboardManager;
 import main.java.util.Map;
 import main.java.util.MapLoader;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.MouseInfo;
-import java.awt.Point;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import javax.swing.ImageIcon;
 
 
 
@@ -50,7 +46,8 @@ public class MainGameScene extends BaseScene {
         gameMap = MapLoader.loadMap("levels\\testlevel.txt", 30, 18);
         // get a reference to the list of aliens
         aliens = gameMap.getSprites();
-        player = new Player();
+        //player = new Player();
+        player = new Player(5,5,500,3);
         shots = new ArrayList<>();
         alienAnimationCycle = new AlienAnimationCycle(aliens, player.getAnimatedSprite(), 10);
     }
@@ -68,8 +65,24 @@ public class MainGameScene extends BaseScene {
         }
         alienAnimationCycle.animate();
         preformShooting();
+    }
 
-//        animationCycle();
+    @Override
+    public void drawHealth(Graphics g) {
+        int max = player.getMaxhealth();
+        int hp = player.getHealth();
+        g.setColor(Color.black);
+        g.fillRect(0, 450, 200, 20);
+        g.setColor(Color.red);
+        g.fillRect(0, 450, 200/max*hp, 20);
+
+        int shield = player.getShield();
+        g.setColor(Color.cyan);
+        int s = -200/max*shield;
+        if(s<-200){
+            s=-200;
+        }
+        g.fillRect(200, 450, s, 20);
     }
 
     @Override
@@ -101,8 +114,19 @@ public class MainGameScene extends BaseScene {
             if (player.canShoot()) {
                int m = player.getMultiTrajectoryProjectiles();
                 int i = m / 2;
-                var x = playerSprite.getX();
-                var y = playerSprite.getY();
+
+//                var x = playerSprite.getX();
+//                var y = playerSprite.getY();
+
+                int x,y;
+                if(player.getShield()>0){
+                    x = playerSprite.getX() + (player.getWidth() / 5);
+                    y = playerSprite.getY() + (player.getHeight() / 5);
+                }else{
+                    x = playerSprite.getX();
+                    y = playerSprite.getY();
+                }
+
 
                 for (int a = 0; a < i; a++) {
                     int b = a - i;
@@ -143,6 +167,7 @@ public class MainGameScene extends BaseScene {
         drawShot(g);
         drawBombing(g);
         drawAim(g);
+        drawHealth(g);
     }
 
     public void drawAliens(Graphics g) {
@@ -193,23 +218,17 @@ public class MainGameScene extends BaseScene {
         if (gsm.ingame) {
             g.setColor(Color.WHITE);
 
-            g.drawLine(playerSprite.getX() + PLAYER_WIDTH / 2, playerSprite.getY() + PLAYER_HEIGHT / 2, // from the center of the
-                                                                                            // player
-                    (int) (playerSprite.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
-                                                                                                        // line x a
-                                                                                                        // distance of
-                                                                                                        // 20 adj. for
-                                                                                                        // angle from
-                                                                                                        // center of
-                                                                                                        // player
-                    (int) (playerSprite.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
-                                                                                                         // line y a
-                                                                                                         // distance of
-                                                                                                         // 20 adj. for
-                                                                                                         // angle from
-                                                                                                         // center of
-                                                                                                         // player
+            // from the center of the player
+            g.drawLine(playerSprite.getX() + PLAYER_WIDTH / 2, playerSprite.getY() + PLAYER_HEIGHT / 2,
+                    // draw end of line x a distance of 20 adj. for angle from center of player
+                    (int) (playerSprite.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)),
+                    // draw end of line y a distance of 20 adj. for angle from center of player
+                    (int) (playerSprite.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0)));
         }
+    }
+
+    public Player getPlayer(){
+        return this.player;
     }
 
     @Override
