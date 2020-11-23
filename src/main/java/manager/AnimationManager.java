@@ -7,11 +7,11 @@ import main.java.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AssetManager {
+public class AnimationManager {
     private HashMap<Assets, AnimatedSprite> map;
     private HashMap<Assets, ArrayList<Pair>> frames;
     private boolean wasLoaded;
-    private static AssetManager instance;
+    private static AnimationManager instance;
 
     public enum Assets {
         PLAYER_IDLE,
@@ -20,7 +20,7 @@ public class AssetManager {
         ALIEN
     }
 
-    private AssetManager() {
+    private AnimationManager() {
         map = new HashMap<>();
         frames = new HashMap<>();
         wasLoaded = false;
@@ -86,8 +86,8 @@ public class AssetManager {
         return frames.get(type);
     }
 
-    public static AssetManager getInstance() {
-        if (instance == null) instance = new AssetManager();
+    public static AnimationManager getInstance() {
+        if (instance == null) instance = new AnimationManager();
 
         return instance;
     }

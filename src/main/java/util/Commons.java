@@ -21,7 +21,7 @@ public interface Commons {
     public static final int DELAY = 17;
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 32;
-    public static final int PLAYER_SPEED = 200;
+    public static final int PLAYER_SPEED = 2;
     public static final int DEFAULT_MAX_HEALTH = 5;
     public static final long DEFAULT_SHOT_CD = 1000;
     public static final long MIN_SHOT_CD = 100; //recommended

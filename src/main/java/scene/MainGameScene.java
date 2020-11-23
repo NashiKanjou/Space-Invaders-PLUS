@@ -3,7 +3,7 @@ package main.java.scene;
 import main.java.entity.*;
 import main.java.graphics.AlienAnimationCycle;
 import main.java.graphics.Sprite;
-import main.java.manager.AssetManager;
+import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.util.Map;
@@ -15,7 +15,6 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 
@@ -79,14 +78,14 @@ public class MainGameScene extends BaseScene {
 
         // update the player movement on key events
         if (keyboardManager.left.down) {
-            playerSprite.setFrames(AssetManager.getInstance().getFrames(AssetManager.Assets.PLAYER_LEFT));
+            playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
             playerSprite.setDx(-2);
         } else if (keyboardManager.right.down) {
-            playerSprite.setFrames(AssetManager.getInstance().getFrames(AssetManager.Assets.PLAYER_RIGHT));
+            playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT));
             playerSprite.setDx(2);
         } else {
             playerSprite.setDx(0);
-            playerSprite.setFrames(AssetManager.getInstance().getFrames(AssetManager.Assets.PLAYER_IDLE));
+            playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
         }
 
         if (keyboardManager.up.down) {

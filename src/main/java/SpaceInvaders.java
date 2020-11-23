@@ -1,7 +1,7 @@
 package main.java;
 
 import main.java.graphics.SpriteSheet;
-import main.java.manager.AssetManager;
+import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
@@ -218,14 +218,13 @@ public class SpaceInvaders implements Commons {
 		});
 		gameFrame.setVisible(true);
 
-		// setup the asset manager
-		AssetManager.getInstance().load(new SpriteSheet("/img/sprite_sheet.png", 32));;
+		// load the main sprite sheet for all future levels
+		AnimationManager.getInstance().load(new SpriteSheet("/img/sprite_sheet.png", 32));;
 
+		// setup the GameSceneManager
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
 		gsm.addScene(new MainGameScene(gsm));
-
-
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
@@ -248,6 +247,7 @@ public class SpaceInvaders implements Commons {
 				shouldUpdate = true;
 			}
 
+			// rendering is currently fixed to the monitor refresh rate
 			if (shouldUpdate) {
 				render();
 				fps++;
@@ -267,8 +267,8 @@ public class SpaceInvaders implements Commons {
 
 	private void update() {
 		keyboardManager.update();
-		AssetManager.getInstance().update();
 		gsm.input(keyboardManager);
+		AnimationManager.getInstance().update();
 		gsm.update();
 	}
 

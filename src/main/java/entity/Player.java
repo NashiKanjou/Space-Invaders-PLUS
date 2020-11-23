@@ -1,14 +1,12 @@
 package main.java.entity;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
 import main.java.graphics.AnimatedSprite;
 import main.java.graphics.Sprite;
-import main.java.graphics.SpriteSheet;
-import main.java.manager.AssetManager;
+import main.java.manager.AnimationManager;
 import main.java.util.Commons;
 /**
  *
@@ -57,7 +55,7 @@ public class Player implements Commons {
 
 
 //		sprite = assetManager.get(AssetManager.Assets.PLAYER_IDLE);
-		animatedSprite = AssetManager.getInstance().get(AssetManager.Assets.PLAYER_IDLE);
+		animatedSprite = AnimationManager.getInstance().get(AnimationManager.Assets.PLAYER_IDLE);
 		if (animatedSprite == null) {
 			System.out.println("no animated sprite");
 		}
@@ -187,8 +185,8 @@ public class Player implements Commons {
 		var x = animatedSprite.getX();
 		var y = animatedSprite.getY();
 
-		x += animatedSprite.getDx();
-		y += animatedSprite.getDy();
+		x += animatedSprite.getDx() * PLAYER_SPEED;
+		y += animatedSprite.getDy() * PLAYER_SPEED;
 
 		animatedSprite.setX(x);
 		animatedSprite.setY(y);

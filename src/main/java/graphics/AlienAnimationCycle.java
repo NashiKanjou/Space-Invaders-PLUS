@@ -35,7 +35,7 @@ public class AlienAnimationCycle implements Commons {
     public void animate() {
         for (Sprite sprite : aliens) {
             Alien a1 = (Alien) sprite;
-            int x = a1.getX();
+            var x = a1.getX();
 
             if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
                 direction = -1;
@@ -59,15 +59,11 @@ public class AlienAnimationCycle implements Commons {
             Alien alien = (Alien) sprite;
             if (alien.isVisible()) {
 
-                int y = alien.getY();
+                var y = alien.getY();
 
                 if (y > GROUND - ALIEN_HEIGHT) {
                     // player lost
                     gameLost = true;
-//                    havewon = false;
-//                    gsm.addScene(new GameOver(gsm), true);
-                    // ingame = false;
-                    // message = "Aliens estão invadindo a galáxia!";
                 }
 
                 alien.act(direction);
@@ -89,10 +85,10 @@ public class AlienAnimationCycle implements Commons {
                 b.setY(a.getY());
             }
 
-            int bombX = b.getX();
-            int bombY = b.getY();
-            int playerX = playerSprite.getX();
-            int playerY = playerSprite.getY();
+            var bombX = b.getX();
+            var bombY = b.getY();
+            var playerX = playerSprite.getX();
+            var playerY = playerSprite.getY();
 
             if (playerSprite.isVisible() && !b.isDestroyed()) {
                 if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
