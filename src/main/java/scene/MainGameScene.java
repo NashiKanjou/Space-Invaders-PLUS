@@ -67,7 +67,7 @@ public class MainGameScene extends BaseScene {
         preformShooting();
     }
 
-    @Override
+
     public void drawHealth(Graphics g) {
         int max = player.getMaxhealth();
         int hp = player.getHealth();

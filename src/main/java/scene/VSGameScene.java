@@ -162,14 +162,16 @@ public class VSGameScene extends BaseScene {
                     try{
                         String str = dis.readUTF();
                         Package p = new Package(str,isHost);
+
+                        var enemySprite = enemy.getAnimatedSprite();
                         enemy.setMaxhealth(p.health,false);
                         enemy.setHealth(p.health);
                         enemy.setDamage(p.damage);
                         enemy.setShieldAmount(p.shield);
-                        enemy.setX(BOARD_WIDTH-p.playerx);
-                        enemy.setY(BOARD_HEIGHT-offsetY+8-p.playery);
+                        enemySprite.setX(BOARD_WIDTH-p.playerx);
+                        enemySprite.setY(BOARD_HEIGHT-offsetY+8-p.playery);
                         if(enemy.getHealth()<=0){
-                            enemy.setDying(true);
+                            enemySprite.setDying(true);
                         }
                     }catch(Exception e){
                         e.printStackTrace();
@@ -186,7 +188,8 @@ public class VSGameScene extends BaseScene {
                         if(isHost) {
                             createPowerUps();
                         }
-                        Package p = new Package(player.getX(),player.getY(),player.getDamage(),player.getHealth(),player.getShield(),addShots,addpowerups);
+                        var playerSprite = player.getAnimatedSprite();
+                        Package p = new Package(playerSprite.getX(),playerSprite.getY(),player.getDamage(),player.getHealth(),player.getShield(),addShots,addpowerups);
                         String data = p.toString();
                         addShots.clear();
                         addpowerups.clear();
@@ -226,7 +229,7 @@ public class VSGameScene extends BaseScene {
         animationCycle();
     }
 
-    @Override
+
     public void drawHealth(Graphics g) {
         int max = player.getMaxhealth();
         int hp = player.getHealth();
@@ -246,22 +249,22 @@ public class VSGameScene extends BaseScene {
 
     @Override
     public void input(KeyboardManager keyboardManager) {
-
+        var playerSprite = player.getAnimatedSprite();
         // update the player movement on key events
         if (keyboardManager.left.down) {
-            player.setDx(-2);
+            playerSprite.setDx(-2);
         } else if (keyboardManager.right.down) {
-            player.setDx(2);
+            playerSprite.setDx(2);
         } else {
-            player.setDx(0);
+            playerSprite.setDx(0);
         }
 
         if (keyboardManager.up.down) {
-            player.setDy(-2);
+            playerSprite.setDy(-2);
         } else if (keyboardManager.down.down) {
-            player.setDy(2);
+            playerSprite.setDy(2);
         } else {
-            player.setDy(0);
+            playerSprite.setDy(0);
         }
 
         // shoot the bullet
@@ -339,19 +342,20 @@ public class VSGameScene extends BaseScene {
     }
 
     public void drawAim(Graphics g) {
+        var playerSprite = player.getAnimatedSprite();
         if (gsm.ingame) {
             g.setColor(Color.WHITE);
 
-            g.drawLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, // from the center of the
+            g.drawLine(playerSprite.getX() + player.getWidth() / 2, playerSprite.getY() + player.getHeight() / 2, // from the center of the
                     // player
-                    (int) (player.getX() + player.getWidth() / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
+                    (int) (playerSprite.getX() + player.getWidth() / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
                     // line x a
                     // distance of
                     // 20 adj. for
                     // angle from
                     // center of
                     // player
-                    (int) (player.getY() + player.getHeight() / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
+                    (int) (playerSprite.getY() + player.getHeight() / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
             // line y a
             // distance of
             // 20 adj. for
@@ -362,16 +366,17 @@ public class VSGameScene extends BaseScene {
     }
 
     public void PlayerShoot(Player player,double angle){
+        var playerSprite = player.getAnimatedSprite();
         int m = player.getMultiTrajectoryProjectiles();
         int i = m / 2;
         int x,y;
 
         if(player.getShield()>0){
-            x = player.getX() + (player.getWidth() / 5);
-            y = player.getY() + (player.getHeight() / 5);
+            x = playerSprite.getX() + (player.getWidth() / 5);
+            y = playerSprite.getY() + (player.getHeight() / 5);
         }else{
-            x = player.getX();
-            y = player.getY();
+            x = playerSprite.getX();
+            y = playerSprite.getY();
         }
 
         for (int a = 0; a < i; a++) {
@@ -413,6 +418,7 @@ public class VSGameScene extends BaseScene {
     }
     private void checkPowerUps(){
         ArrayList<PowerUps> temp = new ArrayList<>();
+        var enemySprite = enemy.getAnimatedSprite();
         for (int i = 0; i < powerups.size(); i++) {
             try {
                 PowerUps p = powerups.get(i);
@@ -420,10 +426,10 @@ public class VSGameScene extends BaseScene {
                     int pX = p.getX();
                     int pY = p.getY();
 
-                    int enemyX = enemy.getX();
-                    int enemyY = enemy.getY();
+                    int enemyX = enemySprite.getX();
+                    int enemyY = enemySprite.getY();
 
-                    if (enemy.isVisible() && !p.isDying()&&p.isVisible() && !enemy.isDying()) {
+                    if (enemySprite.isVisible() && !p.isDying()&&p.isVisible() && !enemySprite.isDying()) {
                         if (pX >= (enemyX-enemy.getWidth()-1) && pX <= (enemyX + enemy.getWidth()+1) && pY >= (enemyY-enemy.getHeight()-1)
                                 && pY <= (enemyY-1)) {
                             p.die();
@@ -431,9 +437,10 @@ public class VSGameScene extends BaseScene {
                         }
                     }
 
-                    int playerX = player.getX();
-                    int playerY = player.getY();
-                    if (player.isVisible() && !p.isDying()&&p.isVisible() && !player.isDying()) {
+                    var playerSprite = player.getAnimatedSprite();
+                    int playerX = playerSprite.getX();
+                    int playerY = playerSprite.getY();
+                    if (playerSprite.isVisible() && !p.isDying()&&p.isVisible() && !playerSprite.isDying()) {
                         if (pX >= (playerX-player.getWidth()/2) && pX <= (playerX + player.getWidth()/2) && pY >= (playerY-player.getHeight()/2)
                                 && pY <= (playerY)) {
                             p.die();
@@ -475,34 +482,37 @@ public class VSGameScene extends BaseScene {
     }
 
     public void drawPlayer(Graphics g) {
-        if (player.isVisible()) {
-            g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+        var playerSprite = player.getAnimatedSprite();
+        if (playerSprite.isVisible()) {
+            g.drawImage(playerSprite.getImage(), playerSprite.getX(), playerSprite.getY(), null);
         }
 
-        if (player.isDying()) {
-            player.die();
+        if (playerSprite.isDying()) {
+            playerSprite.die();
             havewon = false;
             // TODO go to the game over screen when the player dies
             gsm.addScene(new GameOver(gsm), true);
         }
     }
     public void drawEnemy(Graphics g) {
-        if (enemy.isVisible()) {
-            g.drawImage(enemy.getImage(), enemy.getX(), enemy.getY(), this);
+        var enemySprite = enemy.getAnimatedSprite();
+        if (enemySprite.isVisible()) {
+            g.drawImage(enemySprite.getImage(), enemySprite.getX(), enemySprite.getY(), this);
         }
 
-        if (enemy.isDying()) {
-            enemy.die();
+        if (enemySprite.isDying()) {
+            enemySprite.die();
             havewon = true;
             // TODO go to the game over screen when the enemy dies
             gsm.addScene(new Won(gsm), true);
         }
     }
     public void animationCycle() {
+        var enemySprite = enemy.getAnimatedSprite();
         if(enemy.getHealth()<=0){
             ImageIcon ii = new ImageIcon(getClass().getResource(expl));
-            enemy.setImage(ii.getImage());
-            enemy.setDying(true);
+            enemySprite.setImage(ii.getImage());
+            enemySprite.setDying(true);
             deaths++;
         }
 
@@ -539,10 +549,10 @@ public class VSGameScene extends BaseScene {
                     int shotX = shot.getX();
                     int shotY = shot.getY();
 
-                    int enemyX = enemy.getX();
-                    int enemyY = enemy.getY();
+                    int enemyX = enemySprite.getX();
+                    int enemyY = enemySprite.getY();
 
-                    if (enemy.isVisible() && shot.isVisible() && !enemy.isDying()) {
+                    if (enemySprite.isVisible() && shot.isVisible() && !enemySprite.isDying()) {
                         if (shotX >= (enemyX) && shotX <= (enemyX + enemy.getWidth()) && shotY >= (enemyY)
                                 && shotY <= (enemyY + enemy.getHeight())) {
                             shot.die();
@@ -587,6 +597,7 @@ public class VSGameScene extends BaseScene {
         shots.removeAll(temp);
 
         temp.clear();
+        var playerSprite = player.getAnimatedSprite();
         for (int i = 0; i < enemy_shots.size(); i++) {
             try {
                 Shot shot = enemy_shots.get(i);
@@ -594,16 +605,16 @@ public class VSGameScene extends BaseScene {
                     int shotX = shot.getX();
                     int shotY = shot.getY();
 
-                    int playerX = player.getX();
-                    int playerY = player.getY();
+                    int playerX = playerSprite.getX();
+                    int playerY = playerSprite.getY();
 
-                    if (player.isVisible() && !shot.isDying()) {
+                    if (playerSprite.isVisible() && !shot.isDying()) {
                         if (shotX >= (playerX-player.getWidth()/2) && shotX <= (playerX + player.getWidth()/2) && shotY >= (playerY- player.getHeight()/3)//test
                                 && shotY <= (playerY + player.getHeight()/3)) {
                             ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
                             if(player.damage()<=0) {
-                                player.setImage(ii.getImage());
-                                player.setDying(true);
+                                playerSprite.setImage(ii.getImage());
+                                playerSprite.setDying(true);
                             }
                             shot.die();
                             temp.add(shot);

@@ -50,11 +50,6 @@ public class Won extends BaseScene {
     }
 
     @Override
-    public void drawHealth(Graphics g) {
-
-    }
-
-    @Override
     public void draw(Graphics g) {
         g.drawImage(sprite.getImage(), 0, 0, null);
     }

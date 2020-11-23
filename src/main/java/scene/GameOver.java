@@ -68,11 +68,6 @@ public class GameOver extends BaseScene implements Commons {
 	}
 
 	@Override
-	public void drawHealth(Graphics g) {
-
-	}
-
-	@Override
 	public void draw(Graphics g) {
 		g.drawImage(sprite.getImage(), sprite.getX(), sprite.getY(), null);
 		g.setColor(Color.WHITE);

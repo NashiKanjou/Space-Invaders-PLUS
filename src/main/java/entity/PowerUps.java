@@ -1,5 +1,7 @@
 package main.java.entity;
 
+import main.java.graphics.Sprite;
+
 import javax.swing.*;
 
 public class PowerUps extends Sprite {

@@ -27,7 +27,7 @@ public abstract class BaseScene extends JPanel implements Commons, IScene {
      * Is responsible for rendering player health that is called each
      * frame
      */
-    public abstract void drawHealth(Graphics g);
+//    public abstract void drawHealth(Graphics g);
 
     /**
      * Is responsible for rendering what is viewed by the user that is called each
