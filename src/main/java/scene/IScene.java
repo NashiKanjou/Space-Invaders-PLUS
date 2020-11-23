@@ -29,5 +29,5 @@ public interface IScene {
      * Gives the current scene access to the KeyboardManager to preform any input
      * actions
      */
-    public void input(KeyboardManager keyboardManager);
+    void input(KeyboardManager keyboardManager);
 }

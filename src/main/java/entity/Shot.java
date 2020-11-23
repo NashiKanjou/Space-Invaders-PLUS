@@ -1,5 +1,7 @@
 package main.java.entity;
 
+import main.java.graphics.Sprite;
+
 import javax.swing.ImageIcon;
 
 public class Shot extends Sprite {

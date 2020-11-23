@@ -6,7 +6,8 @@ package main.java.util;
 * instead of a global constant.
 * */
 
-import main.java.entity.Sprite;
+
+import main.java.graphics.Sprite;
 
 import java.util.ArrayList;
 
