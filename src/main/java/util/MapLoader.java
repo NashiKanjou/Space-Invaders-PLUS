@@ -46,7 +46,6 @@ public class MapLoader implements Commons {
         Scanner in = null;
         try {
             var res = MapLoader.class.getClassLoader().getResource(filepath);
-//            var file = Paths.get(res.toURI()).toFile();
             in = new Scanner(Paths.get(res.toURI()).toFile());
         } catch (FileNotFoundException | URISyntaxException e) {
             System.out.println("Map file not found:");
