@@ -1,6 +1,6 @@
 package main.java.scene;
 
-import main.java.entity.Sprite;
+import main.java.graphics.Sprite;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.util.Commons;
@@ -39,7 +39,7 @@ public class GameOver extends BaseScene implements Commons {
 
 		sprite.setImage(ii.getImage());
 		sprite.setX((BOARD_WIDTH - ii.getIconWidth()) / 2);
-		sprite.setY((BOARD_HEIGHT - (ii.getIconHeight() * SCALE)) / 2);
+		sprite.setY((BOARD_HEIGHT - (ii.getIconHeight() * GRAPHICS_SCALE)) / 2);
 
 		gameOveMsg = "Press Q to quit or ENTER to play again";
 	}

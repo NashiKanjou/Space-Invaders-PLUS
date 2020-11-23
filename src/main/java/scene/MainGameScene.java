@@ -1,6 +1,8 @@
 package main.java.scene;
 
 import main.java.entity.*;
+import main.java.graphics.AlienAnimationCycle;
+import main.java.graphics.Sprite;
 import main.java.manager.AssetManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
@@ -32,8 +34,9 @@ public class MainGameScene extends BaseScene {
     private boolean havewon = true;
     private final String expl = "/img/explosion.png";
     private final String alienpix = "/img/alien.png";
+    private AlienAnimationCycle alienAnimationCycle;
 
-    private int direction = -1;
+//    private int direction = -1;
     private int deaths = 0;
 
     private double angle = 0; // aiming angle for shooting, default straight
@@ -50,12 +53,24 @@ public class MainGameScene extends BaseScene {
         aliens = gameMap.getSprites();
         player = new Player();
         shots = new ArrayList<>();
+        alienAnimationCycle = new AlienAnimationCycle(aliens, player.getAnimatedSprite(), 10);
     }
 
     @Override
     public void update() {
         player.act();
-        animationCycle();
+
+        // check for game over
+        if (deaths == gameMap.getNumberOfEnemies()) {
+            // player won
+            // TODO add message to the Won scene
+            // message = SpaceInvaders.lang.getEndingWinMessage();
+            gsm.addScene(new Won(gsm), true);
+        }
+        alienAnimationCycle.animate();
+        preformShooting();
+
+//        animationCycle();
     }
 
     @Override
@@ -217,78 +232,7 @@ public class MainGameScene extends BaseScene {
         }
     }
 
-    public void animationCycle() {
-        var playerSprite = player.getSprite();
-
-        if (deaths == gameMap.getNumberOfEnemies()) {
-            // player won
-            // TODO add message to the Won scene
-            // message = SpaceInvaders.lang.getEndingWinMessage();
-            gsm.addScene(new Won(gsm), true);
-        }
-
-        // player
-
-        player.act();
-        if(player.getShield()>0) {
-            player.setShielded();
-        }else{
-            player.setUnShielded();
-        }
-        // shot
-/*
-         if (shot.isVisible()) {
-         Iterator<Sprite> it = aliens.iterator();
-         int shotX = shot.getX();
-         int shotY = shot.getY();
-
-         while (it.hasNext()) {
-         Alien alien = (Alien) it.next();
-         int alienX = alien.getX();
-         int alienY = alien.getY();
-
-         if (alien.isVisible() && shot.isVisible()) {
-         if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
-         && shotY <= (alienY + ALIEN_HEIGHT)) {
-         ImageIcon ii = new ImageIcon(getClass().getResource(expl));
-         alien.setImage(ii.getImage());
-         alien.setDying(true);
-         deaths++;
-         shot.die();
-         }
-         }
-         }
-         // do aiming code here
-         // do shot.setY and .setX to fit position of aiming place
-         // using mouse or keyboard.
-
-         Point p = MouseInfo.getPointerInfo().getLocation();
-         int mouseX = p.x;
-         int mouseY = p.y;
-         // do trig between mouse and spaceship to know trajectory
-         // include to update X as well
-         // SHOT POSITION UPDATING LINE
-         int y = shot.getY();
-         int x = shot.getX();
-         // shooting angle
-
-         double rads = angle * Math.PI / 180.0;
-
-         // SHOT TRAVEL SPEED
-         int shotSpeed = 8;
-         // shot direction in x and y coordinates
-
-         x += (int) (shotSpeed * Math.cos(rads));
-         y -= (int) (shotSpeed * Math.sin(rads));
-
-         if (y < 0 || x < 0 || x > BOARD_WIDTH || y > BOARD_HEIGTH) // if shot hits borders
-         shot.die(); // shot dies
-         else { // else keep shot moving
-         shot.setY(y);
-         shot.setX(x);
-         }
-         }
-*/
+    private void preformShooting() {
         // new shooting
         ArrayList<Shot> temp = new ArrayList<>();
         for (int i = 0; i < shots.size(); i++) {
@@ -351,86 +295,5 @@ public class MainGameScene extends BaseScene {
             }
         }
         shots.removeAll(temp);
-
-        // aliens
-
-        for (Sprite sprite : aliens) {
-            Alien a1 = (Alien) sprite;
-            int x = a1.getX();
-
-            if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
-                direction = -1;
-                for (Sprite alien : aliens) {
-                    Alien a2 = (Alien) alien;
-                    a2.setY(a2.getY() + GO_DOWN);
-                }
-            }
-
-            if (x <= BORDER_LEFT && direction != 1) {
-                direction = 1;
-
-                for (Sprite alien : aliens) {
-                    Alien a = (Alien) alien;
-                    a.setY(a.getY() + GO_DOWN);
-                }
-            }
-        }
-
-        for (Sprite sprite : aliens) {
-            Alien alien = (Alien) sprite;
-            if (alien.isVisible()) {
-
-                int y = alien.getY();
-
-                if (y > GROUND - ALIEN_HEIGHT) {
-                    // player lost
-                    havewon = false;
-                    gsm.addScene(new GameOver(gsm), true);
-                    // ingame = false;
-                    // message = "Aliens estão invadindo a galáxia!";
-                }
-
-                alien.act(direction);
-            }
-        }
-
-        // bombs
-
-        Iterator<Sprite> i3 = aliens.iterator();
-        Random generator = new Random();
-
-        while (i3.hasNext()) {
-            int shot = generator.nextInt(15);
-            Alien a = (Alien) i3.next();
-            Bomb b = a.getBomb();
-            if (shot == CHANCE && a.isVisible() && b.isDestroyed()) {
-
-                b.setDestroyed(false);
-                b.setX(a.getX());
-                b.setY(a.getY());
-            }
-
-            int bombX = b.getX();
-            int bombY = b.getY();
-            int playerX = playerSprite.getX();
-            int playerY = playerSprite.getY();
-
-            if (playerSprite.isVisible() && !b.isDestroyed()) {
-                if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
-                        && bombY <= (playerY + PLAYER_HEIGHT)) {
-                    ImageIcon ii = new ImageIcon(this.getClass().getResource(expl));
-                    playerSprite.setImage(ii.getImage());
-                    playerSprite.setDying(true);
-                    b.setDestroyed(true);
-                }
-            }
-
-            if (!b.isDestroyed()) {
-                b.setY(b.getY() + 1);
-                if (b.getY() >= GROUND - BOMB_HEIGHT) {
-                    b.setDestroyed(true);
-                }
-            }
-        }
     }
 }

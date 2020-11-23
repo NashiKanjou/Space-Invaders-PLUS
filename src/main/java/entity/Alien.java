@@ -1,5 +1,7 @@
 package main.java.entity;
 
+import main.java.graphics.Sprite;
+
 import javax.swing.ImageIcon;
 
 /**
@@ -15,8 +17,8 @@ public class Alien extends Sprite {
      * Constructor
      */
     public Alien(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.setX(x);
+        this.setY(y);
 
         bomb = new Bomb(x, y);
         ImageIcon ii = new ImageIcon(this.getClass().getResource(alien));
@@ -25,7 +27,7 @@ public class Alien extends Sprite {
     }
 
     public void act(int direction) {
-        this.x += direction;
+        this.setX(this.getX() + direction);
     }
 
     /*

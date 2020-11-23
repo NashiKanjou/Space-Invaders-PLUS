@@ -4,9 +4,7 @@ import main.java.graphics.SpriteSheet;
 import main.java.manager.AssetManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
-import main.java.scene.GameOver;
 import main.java.scene.MainGameScene;
-import main.java.scene.AnimationTestScene;
 import main.java.util.Commons;
 
 import java.awt.*;
@@ -15,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -193,10 +190,15 @@ public class SpaceInvaders implements Commons {
 	 */
 	public void gameLoop() {
 		gameCanvas = new Canvas();
-		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH * SCALE, BOARD_HEIGHT * SCALE));
+		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH * GRAPHICS_SCALE, BOARD_HEIGHT * GRAPHICS_SCALE));
 
 		gameFrame.add(gameCanvas, BorderLayout.CENTER);
 		gameFrame.pack();
+
+		var dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		var x = (int)((dimension.getWidth() - gameFrame.getWidth()) / 2);
+		var y = (int)((dimension.getHeight() - gameFrame.getHeight()) / 2);
+		gameFrame.setLocation(x, y);
 
 		keyboardManager = new KeyboardManager();
 		gameFrame.addKeyListener(keyboardManager);
@@ -277,11 +279,11 @@ public class SpaceInvaders implements Commons {
 			return;
 		}
 		Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
-		g2d.scale(SCALE, SCALE);
+		g2d.scale(GRAPHICS_SCALE, GRAPHICS_SCALE);
 
 		// clear the screen
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g2d.fillRect(0, 0, BOARD_WIDTH * GRAPHICS_SCALE, BOARD_HEIGHT * GRAPHICS_SCALE);
 
 		// render the current screen
 		gsm.draw(g2d);
@@ -316,6 +318,8 @@ public class SpaceInvaders implements Commons {
 			gameFrame.setResizable(false);
 			gameFrame.setLocationRelativeTo(null);
 			gameFrame.setLayout(new BorderLayout());
+//			gameFrame.setSize(BOARD_WIDTH * 2, BOARD_HEIGHT * 2);
+
 			closeIntro();
 
 		}
