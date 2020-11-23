@@ -17,6 +17,9 @@ public class AnimationManager {
         PLAYER_IDLE,
         PLAYER_LEFT,
         PLAYER_RIGHT,
+        PLAYER_IDLE_SHIELD,
+        PLAYER_LEFT_SHIELD,
+        PLAYER_RIGHT_SHIELD,
         ALIEN
     }
 
@@ -39,6 +42,9 @@ public class AnimationManager {
             var idleAnimatedSprite = new AnimatedSprite(frames.get(Assets.PLAYER_IDLE), spriteSheet, 5f);
             map.put(Assets.PLAYER_IDLE, idleAnimatedSprite);
 
+            var idleShieldAnimatedSprite = new AnimatedSprite(frames.get(Assets.PLAYER_IDLE_SHIELD), spriteSheet, 5f);
+            map.put(Assets.PLAYER_IDLE_SHIELD, idleShieldAnimatedSprite);
+
             var playerLeftAnimateSprite = new AnimatedSprite(frames.get(Assets.PLAYER_LEFT), spriteSheet, 5f);
             map.put(Assets.PLAYER_LEFT, playerLeftAnimateSprite);
 
@@ -60,8 +66,24 @@ public class AnimationManager {
 
         // player ship move to the right
         var rightFrame = new ArrayList<Pair>();
-        rightFrame.add(new Pair<Integer, Integer>(3,1));
+        rightFrame.add(new Pair<Integer, Integer>(4,1));
         frames.put(Assets.PLAYER_RIGHT, rightFrame);
+
+        // player idle with shield
+        var idleShieldFrames = new ArrayList<Pair>();
+        idleShieldFrames.add(new Pair<Integer, Integer>(1, 2));
+        idleShieldFrames.add(new Pair<Integer, Integer>(2, 2));
+        frames.put(Assets.PLAYER_IDLE_SHIELD, idleShieldFrames);
+
+        // player left with shield
+        var leftShieldFrame = new ArrayList<Pair>();
+        leftShieldFrame.add(new Pair<Integer, Integer>(3, 2));
+        frames.put(Assets.PLAYER_LEFT_SHIELD, leftShieldFrame);
+
+        // player right with shield
+        var rightShieldFrame = new ArrayList<Pair>();
+        rightShieldFrame.add(new Pair<Integer, Integer>(4,2));
+        frames.put(Assets.PLAYER_RIGHT_SHIELD, rightShieldFrame);
     }
 
     public void update() {

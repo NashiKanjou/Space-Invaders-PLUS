@@ -1,5 +1,6 @@
 package main.java.scene;
 
+import jdk.jshell.SourceCodeAnalysis;
 import main.java.entity.*;
 import main.java.graphics.AlienAnimationCycle;
 import main.java.graphics.Sprite;
@@ -49,7 +50,7 @@ public class MainGameScene extends BaseScene {
         //player = new Player();
         player = new Player(5,5,500,3);
         shots = new ArrayList<>();
-        alienAnimationCycle = new AlienAnimationCycle(aliens, player.getAnimatedSprite(), 10);
+        alienAnimationCycle = new AlienAnimationCycle(aliens, player, 10);
     }
 
     @Override
@@ -65,6 +66,15 @@ public class MainGameScene extends BaseScene {
         }
         alienAnimationCycle.animate();
         preformShooting();
+
+        if (player.getShield() > 0) {
+            player.setShielded();
+        } else {
+            player.setUnShielded();
+        }
+        if (alienAnimationCycle.isGameLost()) {
+            gsm.addScene(new GameOver(gsm), true);
+        }
     }
 
 
@@ -72,17 +82,18 @@ public class MainGameScene extends BaseScene {
         int max = player.getMaxhealth();
         int hp = player.getHealth();
         g.setColor(Color.black);
-        g.fillRect(0, 450, 200, 20);
+        g.fillRect(0, BOARD_HEIGHT - 20, 200, 10);
         g.setColor(Color.red);
-        g.fillRect(0, 450, 200/max*hp, 20);
+        g.fillRect(0, BOARD_HEIGHT - 20, 200/max*hp, 10);
 
         int shield = player.getShield();
         g.setColor(Color.cyan);
-        int s = -200/max*shield;
-        if(s<-200){
-            s=-200;
+        int s = 200/max*shield;
+        if(s<0){
+            s=0;
         }
-        g.fillRect(200, 450, s, 20);
+
+        g.fillRect(0, BOARD_HEIGHT - 20, s, 10);
     }
 
     @Override
@@ -91,14 +102,23 @@ public class MainGameScene extends BaseScene {
 
         // update the player movement on key events
         if (keyboardManager.left.down) {
-            playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
+            if (player.getShield() > 0)
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT_SHIELD));
+            else
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
             playerSprite.setDx(-2);
         } else if (keyboardManager.right.down) {
-            playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT));
+            if (player.getShield() > 0)
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT_SHIELD));
+            else
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT));
             playerSprite.setDx(2);
         } else {
             playerSprite.setDx(0);
-            playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
+            if (player.getShield() > 0)
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE_SHIELD));
+            else
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
         }
 
         if (keyboardManager.up.down) {
@@ -159,6 +179,8 @@ public class MainGameScene extends BaseScene {
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, BOARD_WIDTH * GRAPHICS_SCALE, BOARD_HEIGHT * GRAPHICS_SCALE);
         g.setColor(Color.green);
 
         g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
@@ -225,10 +247,6 @@ public class MainGameScene extends BaseScene {
                     // draw end of line y a distance of 20 adj. for angle from center of player
                     (int) (playerSprite.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0)));
         }
-    }
-
-    public Player getPlayer(){
-        return this.player;
     }
 
     @Override

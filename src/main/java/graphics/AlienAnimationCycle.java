@@ -2,6 +2,7 @@ package main.java.graphics;
 
 import main.java.entity.Alien;
 import main.java.entity.Bomb;
+import main.java.entity.Player;
 import main.java.util.Commons;
 
 import javax.imageio.ImageIO;
@@ -17,18 +18,18 @@ public class AlienAnimationCycle implements Commons {
     private ArrayList<Sprite> aliens;
     private int direction;
     private boolean gameLost;
-    private Sprite playerSprite;
+    private Player player;
     private int dropSpeed = 0;
 
-    public AlienAnimationCycle(ArrayList<Sprite> aliens, Sprite playerSprite) {
+    public AlienAnimationCycle(ArrayList<Sprite> aliens, Player player) {
         this.aliens = aliens;
-        this.playerSprite = playerSprite;
+        this.player = player;
         gameLost = false;
         direction = -1;
     }
 
-    public AlienAnimationCycle(ArrayList<Sprite> aliens, Sprite playerSprite, int dropSpeed) {
-        this(aliens, playerSprite);
+    public AlienAnimationCycle(ArrayList<Sprite> aliens, Player player, int dropSpeed) {
+        this(aliens, player);
         this.dropSpeed = dropSpeed;
     }
 
@@ -74,6 +75,8 @@ public class AlienAnimationCycle implements Commons {
         Iterator<Sprite> aliensIterator = aliens.iterator();
         Random generator = new Random();
 
+        var playerSprite = player.getAnimatedSprite();
+
         while (aliensIterator.hasNext()) {
             int shot = generator.nextInt(15);
             Alien a = (Alien) aliensIterator.next();
@@ -100,8 +103,13 @@ public class AlienAnimationCycle implements Commons {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    playerSprite.setImage(explosionImage);
-                    playerSprite.setDying(true);
+
+                    var hp = player.damage();
+                    if (hp <= 0) {
+                        playerSprite.setImage(explosionImage);
+                        playerSprite.setDying(true);
+                    }
+
                     b.setDestroyed(true);
                 }
             }
