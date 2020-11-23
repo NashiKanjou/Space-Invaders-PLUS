@@ -1,10 +1,9 @@
 package main.java.entity;
 
-import java.awt.event.KeyEvent;
-
-import javax.swing.ImageIcon;
-
 import main.java.util.Commons;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
 /**
  *
  * @author
@@ -14,9 +13,13 @@ public class Player extends Sprite implements Commons {
 	// Test Commit
 	private final int START_Y = 400;
 	private final int START_X = 270;
+	private final int Enemy_START_Y = 0;
+	private final int Enemy_START_X = 270;
 
 	private final String player = "/img/craft.png";
 	private final String player_shield = "/img/craft_shield.png";
+	private final String enemy = "/img/enemy.png";
+	private final String enemy_shield = "/img/enemy_shield.png";
 	private int width;
 	private int height;
 	private int maxhealth;
@@ -26,7 +29,10 @@ public class Player extends Sprite implements Commons {
 	private int ShieldAmount;
 	private ImageIcon ii;
 	private ImageIcon ii_shield;
+	private int width_min;
+	private int height_min;
 
+	private int damage;
 	private int MultiTrajectoryProjectiles;
 
 	/*
@@ -39,6 +45,8 @@ public class Player extends Sprite implements Commons {
 		ShieldAmount=shield;
 		width = ii.getImage().getWidth(null);
 		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
 		maxhealth = health;
 		this.health = maxhealth;
 		cd_shot = shooting_cooldown;
@@ -47,6 +55,58 @@ public class Player extends Sprite implements Commons {
 		setX(START_X);
 		setY(START_Y);
 	}
+
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles,boolean isEnemy) {
+		if(isEnemy) {
+			ii = new ImageIcon(this.getClass().getResource(enemy));
+			ii_shield = new ImageIcon(this.getClass().getResource(enemy_shield));
+			setX(Enemy_START_X);
+			setY(Enemy_START_Y);
+		}else{
+			ii = new ImageIcon(this.getClass().getResource(player));
+			ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+			setX(START_X);
+			setY(START_Y);
+		}
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+		setImage(ii.getImage());
+
+	}
+	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles,int damage,boolean isEnemy) {
+		if(isEnemy) {
+			ii = new ImageIcon(this.getClass().getResource(enemy));
+			ii_shield = new ImageIcon(this.getClass().getResource(enemy_shield));
+			setX(Enemy_START_X);
+			setY(Enemy_START_Y);
+		}else{
+			ii = new ImageIcon(this.getClass().getResource(player));
+			ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
+			setX(START_X);
+			setY(START_Y);
+		}
+		MultiTrajectoryProjectiles=MultiProjectiles;
+		ShieldAmount=shield;
+		width = ii.getImage().getWidth(null);
+		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
+		maxhealth = health;
+		this.health = maxhealth;
+		cd_shot = shooting_cooldown;
+		current_cd_shot = System.currentTimeMillis();
+		setImage(ii.getImage());
+		this.damage=damage;
+	}
+
 	public Player() {
 		ii = new ImageIcon(this.getClass().getResource(player));
 		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
@@ -55,6 +115,8 @@ public class Player extends Sprite implements Commons {
 		ShieldAmount=0;
 		width = ii.getImage().getWidth(null);
 		height = ii.getImage().getHeight(null);
+		height_min = ii.getImage().getHeight(null);
+		width_min=ii.getImage().getWidth(null);
 		maxhealth = DEFAULT_MAX_HEALTH;
 		health = maxhealth;
 		cd_shot = DEFAULT_SHOT_CD;
@@ -85,6 +147,12 @@ public class Player extends Sprite implements Commons {
 		width = ii_shield.getImage().getWidth(null);
 		height = ii_shield.getImage().getHeight(null);
 		setImage(ii_shield.getImage());
+	}
+	public void setDamage(int damage){
+		this.damage=damage;
+	}
+	public int getDamage(){
+		return this.damage;
 	}
 	/*
 	public void setDoubleTrajectoryProjectiles(boolean b){
@@ -118,6 +186,7 @@ public class Player extends Sprite implements Commons {
 		}
 		return health;
 	}
+
 	public boolean canShoot(){
 		long time = System.currentTimeMillis();
 		if(time>current_cd_shot){
@@ -152,6 +221,10 @@ public class Player extends Sprite implements Commons {
 		}
 	}
 
+	public long getShooingCD(){
+		return this.cd_shot;
+	}
+
 	public int addHealth(){
 		health++;
 		if(health>maxhealth){
@@ -163,7 +236,9 @@ public class Player extends Sprite implements Commons {
 	public int getHealth(){
 		return health;
 	}
-
+	public void setHealth(int newhealth){
+		health = newhealth;
+	}
 	public int addHealth(int i){
 		health+=i;
 		if(health>maxhealth){
@@ -180,17 +255,25 @@ public class Player extends Sprite implements Commons {
 		}
 		return health;
 	}
+
+	public int getWidth(){
+		return this.width;
+	}
+	public int getHeight(){
+		return this.height;
+	}
+
 	public void act() {
 		x += dx;
 		y += dy;
 		if (x <= 2)
 			x = 2;
-		if (x >= BOARD_WIDTH - 2 * width)
-			x = BOARD_WIDTH - 2 * width;
+		if (x >= BOARD_WIDTH - 2 * width_min)
+			x = BOARD_WIDTH - 2 * width_min;
 		if (y <= 2)
 			y = 2;
-		if (y >= BOARD_HEIGHT - 3 * height)
-			y = BOARD_HEIGHT - 3 * height;
+		if (y >= BOARD_HEIGHT - 3 * height_min)
+			y = BOARD_HEIGHT - 3 * height_min;
 
 	}
 

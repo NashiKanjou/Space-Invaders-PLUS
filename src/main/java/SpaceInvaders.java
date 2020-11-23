@@ -5,19 +5,15 @@ import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 
 /**
@@ -168,7 +164,11 @@ public class SpaceInvaders implements Commons {
 		gameThread = new Thread("Game Thread"){
 			@Override
 			public void run() {
-				gameLoop();
+				try {
+					gameLoop();
+				} catch (IOException | InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		};
 		gameThread.start();
@@ -182,10 +182,9 @@ public class SpaceInvaders implements Commons {
 	/**
 	 * The main game loop
 	 */
-	public void gameLoop() {
+	public void gameLoop() throws IOException, InterruptedException {
 		gameCanvas = new Canvas();
 		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
-
 		gameFrame.add(gameCanvas);
 		gameFrame.pack();
 
@@ -194,6 +193,8 @@ public class SpaceInvaders implements Commons {
 
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
+
+		//gsm.addScene(new VSGameScene(gsm,true,"localhost",25570)); //for VS mode still having some small bug and need to get the User input for IP and port
 		gsm.addScene(new MainGameScene(gsm));
 
 		long lastTime = System.nanoTime();

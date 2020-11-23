@@ -1,11 +1,11 @@
 package main.java;
-/** 
- * 
+/**
+ *
  * The MainGameScene file is being used now instead of this one. Most
  * changes are already in the new file, but there are still some that need
  * to be brought over and tested.
- * 
-*/
+ *
+ */
 
 import main.java.entity.*;
 import main.java.util.Commons;
@@ -142,23 +142,23 @@ public class Board extends JPanel implements Runnable, Commons {
 			g.setColor(Color.WHITE);
 
 			g.drawLine(player.getX() + PLAYER_WIDTH / 2, player.getY() + PLAYER_HEIGHT / 2, // from the center of the
-																							// player
+					// player
 					(int) (player.getX() + PLAYER_WIDTH / 2 - 20 * -Math.cos(angle * Math.PI / 180.0)), // draw end of
-																										// line x a
-																										// distance of
-																										// 20 adj. for
-																										// angle from
-																										// center of
-																										// player
+					// line x a
+					// distance of
+					// 20 adj. for
+					// angle from
+					// center of
+					// player
 					(int) (player.getY() + PLAYER_HEIGHT / 2 - 20 * Math.sin(angle * Math.PI / 180.0))); // draw end of
-																											// line y a
-																											// distance
-																											// of 20
-																											// adj. for
-																											// angle
-																											// from
-																											// center of
-																											// player
+			// line y a
+			// distance
+			// of 20
+			// adj. for
+			// angle
+			// from
+			// center of
+			// player
 		}
 	}
 

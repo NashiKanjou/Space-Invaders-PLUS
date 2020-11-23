@@ -4,10 +4,8 @@ import main.java.entity.Sprite;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 
-import java.awt.Graphics;
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -49,6 +47,11 @@ public class Won extends BaseScene {
 
     @Override
     public void update() {
+    }
+
+    @Override
+    public void drawHealth(Graphics g) {
+
     }
 
     @Override
