@@ -12,6 +12,8 @@ public class AnimationManager {
     private HashMap<Assets, ArrayList<Pair>> frames;
     private boolean wasLoaded;
     private static AnimationManager instance;
+    public static final float INTERVAL = 5;
+    private final SpriteSheet spriteSheet;
 
     public enum Assets {
         PLAYER_IDLE,
@@ -23,13 +25,14 @@ public class AnimationManager {
         ALIEN
     }
 
-    private AnimationManager() {
+    private AnimationManager(SpriteSheet spriteSheet) {
         map = new HashMap<>();
         frames = new HashMap<>();
         wasLoaded = false;
+        this.spriteSheet = spriteSheet;
     }
 
-    public void load(SpriteSheet spriteSheet) {
+    public void load() {
         if (wasLoaded) {
             System.out.println("Assets all ready loaded");
         } else if (spriteSheet == null) {
@@ -39,14 +42,17 @@ public class AnimationManager {
             // setup the idle player sprites
             createFrames();
 
-            var idleAnimatedSprite = new AnimatedSprite(frames.get(Assets.PLAYER_IDLE), spriteSheet, 5f);
+            var idleAnimatedSprite = new AnimatedSprite(frames.get(Assets.PLAYER_IDLE), spriteSheet, INTERVAL);
             map.put(Assets.PLAYER_IDLE, idleAnimatedSprite);
 
-            var idleShieldAnimatedSprite = new AnimatedSprite(frames.get(Assets.PLAYER_IDLE_SHIELD), spriteSheet, 5f);
+            var idleShieldAnimatedSprite = new AnimatedSprite(frames.get(Assets.PLAYER_IDLE_SHIELD), spriteSheet, INTERVAL);
             map.put(Assets.PLAYER_IDLE_SHIELD, idleShieldAnimatedSprite);
 
-            var playerLeftAnimateSprite = new AnimatedSprite(frames.get(Assets.PLAYER_LEFT), spriteSheet, 5f);
+            var playerLeftAnimateSprite = new AnimatedSprite(frames.get(Assets.PLAYER_LEFT), spriteSheet, INTERVAL);
             map.put(Assets.PLAYER_LEFT, playerLeftAnimateSprite);
+
+            var basicAlienAnimateSprite = new AnimatedSprite(frames.get(Assets.ALIEN), spriteSheet, 35f);
+            map.put(Assets.ALIEN, basicAlienAnimateSprite);
 
             wasLoaded = true;
         }
@@ -84,6 +90,12 @@ public class AnimationManager {
         var rightShieldFrame = new ArrayList<Pair>();
         rightShieldFrame.add(new Pair<Integer, Integer>(4,2));
         frames.put(Assets.PLAYER_RIGHT_SHIELD, rightShieldFrame);
+
+        // main alien
+        var alienFrame = new ArrayList<Pair>();
+        alienFrame.add(new Pair<Integer, Integer>(1,3));
+        alienFrame.add(new Pair<Integer, Integer>(2,3));
+        frames.put(Assets.ALIEN, alienFrame);
     }
 
     public void update() {
@@ -109,8 +121,12 @@ public class AnimationManager {
     }
 
     public static AnimationManager getInstance() {
-        if (instance == null) instance = new AnimationManager();
+        if (instance == null) instance = new AnimationManager(new SpriteSheet("/img/sprite_sheet.png", 32));
 
         return instance;
+    }
+
+    public SpriteSheet getSpriteSheet() {
+        return spriteSheet;
     }
 }

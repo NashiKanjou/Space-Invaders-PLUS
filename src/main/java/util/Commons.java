@@ -13,8 +13,8 @@ public interface Commons {
     int GRAPHICS_SCALE = 2;
     int GROUND = BOARD_HEIGHT - 30;
     int BOMB_HEIGHT = 5;
-    int ALIEN_HEIGHT = 25;
-    int ALIEN_WIDTH = 25;
+    int ALIEN_HEIGHT = 32;
+    int ALIEN_WIDTH = 32;
     int BORDER_RIGHT = 30;
     int BORDER_LEFT = 30;
     int ALIEN_DROP_SPEED = 25;

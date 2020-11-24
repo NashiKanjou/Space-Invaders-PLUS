@@ -219,7 +219,7 @@ public class SpaceInvaders implements Commons {
 		gameFrame.setVisible(true);
 
 		// load the main sprite sheet for all future levels
-		AnimationManager.getInstance().load(new SpriteSheet("/img/sprite_sheet.png", 32));;
+		AnimationManager.getInstance().load();;
 
 		// setup the GameSceneManager
 		gsm = new GameSceneManager();

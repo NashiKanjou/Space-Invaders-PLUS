@@ -1,6 +1,7 @@
 package main.java.graphics;
 
 import main.java.SpaceInvaders;
+import main.java.manager.AnimationManager;
 import main.java.util.Pair;
 
 import java.awt.image.BufferedImage;
