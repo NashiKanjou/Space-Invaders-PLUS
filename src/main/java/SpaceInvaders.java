@@ -225,7 +225,6 @@ public class SpaceInvaders implements Commons {
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
 
-		//gsm.addScene(new VSGameScene(gsm,true,"localhost",25570)); //for VS mode still having some small bug and need to get the User input for IP and port
 		gsm.addScene(new MainGameScene(gsm));
 
 		long lastTime = System.nanoTime();
@@ -249,7 +248,7 @@ public class SpaceInvaders implements Commons {
 				shouldUpdate = true;
 			}
 
-			// rendering is currently fixed to the monitor refresh rate
+			// rendering is currently fixed to the 60 FPS
 			if (shouldUpdate) {
 				render();
 				fps++;
@@ -320,10 +319,8 @@ public class SpaceInvaders implements Commons {
 			gameFrame.setResizable(false);
 			gameFrame.setLocationRelativeTo(null);
 			gameFrame.setLayout(new BorderLayout());
-//			gameFrame.setSize(BOARD_WIDTH * 2, BOARD_HEIGHT * 2);
 
 			closeIntro();
-
 		}
 	}
 

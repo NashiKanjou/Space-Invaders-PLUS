@@ -35,8 +35,6 @@ public class Player implements Commons {
 	private long cd_shot;
 	private long current_cd_shot;
 	private int ShieldAmount;
-//	private ImageIcon ii;
-//	private ImageIcon ii_shield;
 	private int width_min;
 	private int height_min;
 
@@ -55,8 +53,6 @@ public class Player implements Commons {
 		animatedSprite.setDying(false);
 		animatedSprite.setVisible(true);
 
-//		ii = new ImageIcon(this.getClass().getResource(player));
-//		ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
 		MultiTrajectoryProjectiles=MultiProjectiles;
 		ShieldAmount=shield;
 		width = animatedSprite.getImage().getWidth();
@@ -67,9 +63,6 @@ public class Player implements Commons {
 		this.health = maxhealth;
 		cd_shot = shooting_cooldown;
 		current_cd_shot = System.currentTimeMillis();
-//		setImage(ii.getImage());
-//		setX(START_X);
-//		setY(START_Y);
 
 
 	}
@@ -77,27 +70,12 @@ public class Player implements Commons {
 	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles, boolean isEnemy) {
 		this(health, shield, shooting_cooldown, MultiProjectiles);
 		if(isEnemy) {
-//			ii = new ImageIcon(this.getClass().getResource(enemy));
-//			ii_shield = new ImageIcon(this.getClass().getResource(enemy_shield));
 			animatedSprite.setX(Enemy_START_X);
 			animatedSprite.setY(Enemy_START_Y);
 		}else{
-//			ii = new ImageIcon(this.getClass().getResource(player));
-//			ii_shield = new ImageIcon(this.getClass().getResource(player_shield));
 			animatedSprite.setX(Enemy_START_X);
 			animatedSprite.setY(Enemy_START_Y);
 		}
-//		MultiTrajectoryProjectiles=MultiProjectiles;
-//		ShieldAmount=shield;
-//		width = ii.getImage().getWidth(null);
-//		height = ii.getImage().getHeight(null);
-//		height_min = ii.getImage().getHeight(null);
-//		width_min=ii.getImage().getWidth(null);
-//		maxhealth = health;
-//		this.health = maxhealth;
-//		cd_shot = shooting_cooldown;
-//		current_cd_shot = System.currentTimeMillis();
-//		setImage(ii.getImage());
 
 	}
 	public Player(int health, int shield, long shooting_cooldown, int MultiProjectiles,int damage,boolean isEnemy) {
@@ -119,12 +97,7 @@ public class Player implements Commons {
 		health = maxhealth;
 		cd_shot = DEFAULT_SHOT_CD;
 		current_cd_shot = System.currentTimeMillis();
-//		setImage(ii.getImage());
-//		setX(START_X);
-//		setY(START_Y);
 
-
-//		sprite = assetManager.get(AssetManager.Assets.PLAYER_IDLE);
 		animatedSprite = AnimationManager.getInstance().get(AnimationManager.Assets.PLAYER_IDLE);
 		if (animatedSprite == null) {
 			System.out.println("no animated sprite");
@@ -150,12 +123,10 @@ public class Player implements Commons {
 	public void setUnShielded(){
 		width = animatedSprite.getImage().getWidth(null);
 		height = animatedSprite.getImage().getHeight(null);
-//		animatedSprite.setImage(ii.getImage());
 	}
 	public void setShielded(){
 		width = animatedSprite.getImage().getWidth();
 		height = animatedSprite.getImage().getHeight();
-//		animatedSprite.setImage(ii_shield.getImage());
 	}
 	public void setDamage(int damage){
 		this.damage=damage;

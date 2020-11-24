@@ -198,7 +198,7 @@ public class MainGameScene extends BaseScene {
             Alien alien = (Alien) sprite;
 
             if (alien.isVisible()) {
-                g.drawImage(alien.animatedSprite.getImage(), alien.getX(), alien.getY(), null);
+                g.drawImage(alien.getAnimatedSprite().getImage(), alien.getX(), alien.getY(), null);
             }
 
             if (alien.isDying()) {

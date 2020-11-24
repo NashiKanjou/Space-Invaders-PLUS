@@ -14,13 +14,12 @@ public class Alien extends AnimatedSprite {
 
     private Bomb bomb;
     private final String alien = "/img/alien.png";
-    public AnimatedSprite animatedSprite;
+    private AnimatedSprite animatedSprite;
 
     /*
      * Constructor
      */
     public Alien(int x, int y) {
-//        var animationManager = AnimationManager.getInstance();
         super(AnimationManager.getInstance().getFrames(AnimationManager.Assets.ALIEN), AnimationManager.getInstance().getSpriteSheet(), 5f);
         animatedSprite = AnimationManager.getInstance().get(AnimationManager.Assets.ALIEN);
         setX(x);
@@ -29,8 +28,6 @@ public class Alien extends AnimatedSprite {
         animatedSprite.setY(y);
 
         bomb = new Bomb(x, y);
-//        ImageIcon ii = new ImageIcon(this.getClass().getResource(alien));
-//        setImage(ii.getImage());
 
     }
 
