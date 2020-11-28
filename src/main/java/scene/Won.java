@@ -1,13 +1,11 @@
 package main.java.scene;
 
-import main.java.entity.Sprite;
+import main.java.graphics.Sprite;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 
-import java.awt.Graphics;
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
 
 /**

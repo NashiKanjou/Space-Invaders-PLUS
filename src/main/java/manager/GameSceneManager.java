@@ -1,6 +1,7 @@
 package main.java.manager;
 
 import main.java.scene.IScene;
+import main.java.scene.PausedScene;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -13,16 +14,26 @@ import javax.swing.JPanel;
 public class GameSceneManager {
     private Stack<IScene> scenes;
 
+    public boolean paused;
     public boolean ingame;
 
     public GameSceneManager() {
-        ingame = false;
+        ingame = paused = false;
         scenes = new Stack<>();
     }
 
     public void input(KeyboardManager keyboardManager) {
-        if (!scenes.empty())
-            scenes.peek().input(keyboardManager);
+        if (keyboardManager.escape.clicked) {
+            if (!paused) {
+                paused = true;
+                addScene(new PausedScene(this));
+            } else {
+                System.out.println("game is already paused. do nothing");
+            }
+        } else {
+            if (!scenes.empty())
+                scenes.peek().input(keyboardManager);
+        }
     }
 
     /**

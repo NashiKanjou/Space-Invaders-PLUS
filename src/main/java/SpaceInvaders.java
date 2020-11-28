@@ -1,23 +1,23 @@
 package main.java;
 
+import main.java.graphics.SpriteSheet;
+import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.KeyboardManager;
 import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferStrategy;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 
 /**
@@ -26,6 +26,8 @@ import javax.swing.SwingConstants;
  */
 public class SpaceInvaders implements Commons {
 	public static Language lang;
+	public static double delta = 0;
+
 	private JButton start, help, lang_sel;
 
 	JFrame gameFrame;
@@ -168,7 +170,11 @@ public class SpaceInvaders implements Commons {
 		gameThread = new Thread("Game Thread"){
 			@Override
 			public void run() {
-				gameLoop();
+				try {
+					gameLoop();
+				} catch (IOException | InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		};
 		gameThread.start();
@@ -182,29 +188,55 @@ public class SpaceInvaders implements Commons {
 	/**
 	 * The main game loop
 	 */
-	public void gameLoop() {
+	public void gameLoop() throws IOException, InterruptedException {
 		gameCanvas = new Canvas();
-		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+		gameCanvas.setPreferredSize(new Dimension(BOARD_WIDTH * GRAPHICS_SCALE, BOARD_HEIGHT * GRAPHICS_SCALE));
 
-		gameFrame.add(gameCanvas);
+		gameFrame.add(gameCanvas, BorderLayout.CENTER);
 		gameFrame.pack();
+
+		var dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		var x = (int)((dimension.getWidth() - gameFrame.getWidth()) / 2);
+		var y = (int)((dimension.getHeight() - gameFrame.getHeight()) / 2);
+		gameFrame.setLocation(x, y);
 
 		keyboardManager = new KeyboardManager();
 		gameFrame.addKeyListener(keyboardManager);
+		gameFrame.setFocusable(true);
 
+		// makes sure the frame regains focus when the user clicks back on the frame
+		gameFrame.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				e.getComponent().requestFocus();
+			}
+		});
+		gameFrame.setVisible(true);
+
+		// load the main sprite sheet for all future levels
+		AnimationManager.getInstance().load();;
+
+		// setup the GameSceneManager
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
+
 		gsm.addScene(new MainGameScene(gsm));
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
 		long timer = System.currentTimeMillis();
 		final double ns = 1e9 / UPDATE_PER_SECOND;
-		double delta = 0;
+//		double delta = 0;
 		int fps = 0;
 		int updates = 0;
 
 		while (gsm.ingame) {
+			var shouldUpdate = false;
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
@@ -213,9 +245,14 @@ public class SpaceInvaders implements Commons {
 				update();
 				updates++;
 				delta--;
+				shouldUpdate = true;
 			}
-			render();
-			fps++;
+
+			// rendering is currently fixed to the 60 FPS
+			if (shouldUpdate) {
+				render();
+				fps++;
+			}
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
@@ -232,6 +269,7 @@ public class SpaceInvaders implements Commons {
 	private void update() {
 		keyboardManager.update();
 		gsm.input(keyboardManager);
+		AnimationManager.getInstance().update();
 		gsm.update();
 	}
 
@@ -241,15 +279,17 @@ public class SpaceInvaders implements Commons {
 			gameCanvas.createBufferStrategy(3);
 			return;
 		}
-		Graphics g = bs.getDrawGraphics();
+		Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
+		g2d.scale(GRAPHICS_SCALE, GRAPHICS_SCALE);
+
 		// clear the screen
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, BOARD_WIDTH * GRAPHICS_SCALE, BOARD_HEIGHT * GRAPHICS_SCALE);
 
 		// render the current screen
-		gsm.draw(g);
+		gsm.draw(g2d);
 
-		g.dispose();
+		g2d.dispose();
 		// swap buffers
 		bs.show();
 	}
@@ -276,12 +316,11 @@ public class SpaceInvaders implements Commons {
 
 		public void actionPerformed(ActionEvent event) {
 			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			gameFrame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
-			gameFrame.setResizable(true);
+			gameFrame.setResizable(false);
 			gameFrame.setLocationRelativeTo(null);
-			gameFrame.setVisible(true);
-			closeIntro();
+			gameFrame.setLayout(new BorderLayout());
 
+			closeIntro();
 		}
 	}
 

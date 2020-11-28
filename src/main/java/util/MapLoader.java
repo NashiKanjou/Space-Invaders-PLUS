@@ -1,17 +1,18 @@
 package main.java.util;
 
 import main.java.entity.Alien;
-import main.java.entity.Sprite;
+import main.java.graphics.Sprite;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 
-public class MapLoader {
+public class MapLoader implements Commons {
 
     enum Types {
         UNKNOWN_TYPE(-1), ALIEN(0), MEDIUM_ENEMY(1), HARD_ENEMY(2);
@@ -44,7 +45,8 @@ public class MapLoader {
         // attempt to load the text file
         Scanner in = null;
         try {
-            in = new Scanner(new File(MapLoader.class.getResource(filepath).toURI()));
+            var res = MapLoader.class.getClassLoader().getResource(filepath);
+            in = new Scanner(Paths.get(res.toURI()).toFile());
         } catch (FileNotFoundException | URISyntaxException e) {
             System.out.println("Map file not found:");
             e.printStackTrace();
@@ -52,8 +54,8 @@ public class MapLoader {
 
         var sprites = new ArrayList<Sprite>();
         var readFirstLine = false;
-        var x = 150;
-        var y = 50;
+        var x = ALIEN_START_X_POSITION;
+        var y = ALIEN_START_Y_POSITION;
 
         var rowSize = 0;
         var colSize = 0;

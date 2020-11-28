@@ -1,26 +1,39 @@
-package main.java.entity;
+package main.java.graphics;
 
-import java.awt.Image;
+import java.awt.*;
 
-/**
- * 
- * @author
- */
 public class Sprite {
-
-    private boolean visible;
+    private int x, y, dx, dy;
+    private SpriteSheet spriteSheet;
     private Image image;
-    protected int x;
-    protected int y;
-    protected boolean dying;
-    protected int dx;
-    protected int dy;
+    private boolean dying, visible;
 
-    /*
-     * Constructor
-     */
     public Sprite() {
         visible = true;
+        dying = false;
+    }
+
+    public Sprite(int x, int y, Image image) {
+        this();
+
+        dx = 0;
+        dy = 0;
+        this.x = x;
+        this.y = y;
+        this.image = image;
+    }
+
+
+    public void act() {
+        x += dx;
+        y += dy;
+    }
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public void die() {
@@ -31,17 +44,10 @@ public class Sprite {
         return visible;
     }
 
-    protected void setVisible(boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public Image getImage() {
-        return image;
-    }
 
     public void setX(int x) {
         this.x = x;

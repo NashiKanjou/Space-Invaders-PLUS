@@ -1,5 +1,7 @@
 package main.java.entity;
 
+import main.java.graphics.Sprite;
+
 import javax.swing.ImageIcon;
 
 /**
@@ -16,8 +18,8 @@ public class Bomb extends Sprite {
 	 */
 	public Bomb(int x, int y) {
 		setDestroyed(true);
-		this.x = x;
-		this.y = y;
+		this.setX(x);
+		this.setY(y);
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(bomb));
 		setImage(ii.getImage());
 	}
