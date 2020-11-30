@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class MediumLevel extends BaseScene {
+public class HardLevel extends BaseScene {
     private static final long serialVersionUID = 1L;
 
     private ArrayList<Sprite> aliens;
@@ -34,14 +34,14 @@ public class MediumLevel extends BaseScene {
 
     private double angle = 0; // aiming angle for shooting, default straight
 
-    public MediumLevel(GameSceneManager gsm) {
+    public HardLevel(GameSceneManager gsm) {
         super(gsm);
         init();
     }
 
     private void init() {
         // load the map
-        gameMap = MapLoader.loadMap("\\levels\\mediumlevel.txt", 30, 18);
+        gameMap = MapLoader.loadMap("\\levels\\hardlevel.txt", 30, 18);
         // get a reference to the list of aliens
         aliens = gameMap.getSprites();
         //player = new Player();
@@ -59,7 +59,7 @@ public class MediumLevel extends BaseScene {
             // player won
             // TODO add message to the Won scene
             // message = SpaceInvaders.lang.getEndingWinMessage();
-            gsm.addScene(new HardLevel(gsm), true);
+            gsm.addScene(new Won(gsm), true);
         }
         alienAnimationCycle.animate();
         preformShooting();
@@ -329,5 +329,4 @@ public class MediumLevel extends BaseScene {
 //        if (keyboardManager.escape.clicked)
 //            gsm.ingame = false;
     }
-
 }
