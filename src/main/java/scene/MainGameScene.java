@@ -61,7 +61,7 @@ public class MainGameScene extends BaseScene {
         if (deaths == gameMap.getNumberOfEnemies()) {
             // player won
             // TODO add message to the Won scene
-            // message = SpaceInvaders.lang.getEndingWinMessage();
+            // After defeating the first set of aliens the medium level scene will be called
             gsm.addScene(new MediumLevel(gsm), true);
         }
         alienAnimationCycle.animate();
