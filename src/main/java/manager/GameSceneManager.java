@@ -3,12 +3,8 @@ package main.java.manager;
 import main.java.scene.IScene;
 import main.java.scene.PausedScene;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.util.Stack;
-
-import javax.swing.JPanel;
 
 
 public class GameSceneManager {
@@ -22,17 +18,19 @@ public class GameSceneManager {
         scenes = new Stack<>();
     }
 
-    public void input(KeyboardManager keyboardManager) {
-        if (keyboardManager.escape.clicked) {
+    public void input(InputManager inputManager) {
+        if (inputManager.escape.clicked) {
             if (!paused) {
                 paused = true;
                 addScene(new PausedScene(this));
             } else {
-                System.out.println("game is already paused. do nothing");
+                System.out.println("game is already paused. un-pause");
+                this.removeCurrentScene();
+                paused = false;
             }
         } else {
             if (!scenes.empty())
-                scenes.peek().input(keyboardManager);
+                scenes.peek().input(inputManager);
         }
     }
 

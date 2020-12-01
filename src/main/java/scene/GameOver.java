@@ -2,7 +2,7 @@ package main.java.scene;
 
 import main.java.graphics.Sprite;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 import main.java.util.Commons;
 
 import javax.swing.*;
@@ -55,11 +55,11 @@ public class GameOver extends BaseScene implements Commons {
 	}
 
 	@Override
-	public void input(KeyboardManager keyboardManager) {
-		if (keyboardManager.quit.clicked)
+	public void input(InputManager inputManager) {
+		if (inputManager.quit.clicked)
 			gsm.ingame = false;
 
-		if (keyboardManager.enter.clicked)
+		if (inputManager.enter.clicked)
 			gsm.addScene(new MainGameScene(gsm), true);
 	}
 

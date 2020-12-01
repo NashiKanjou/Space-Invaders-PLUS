@@ -1,12 +1,11 @@
 package main.java.scene;
 
-import jdk.jshell.SourceCodeAnalysis;
 import main.java.entity.*;
 import main.java.graphics.AlienAnimationCycle;
 import main.java.graphics.Sprite;
 import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 import main.java.util.Map;
 import main.java.util.MapLoader;
 
@@ -31,6 +30,8 @@ public class MainGameScene extends BaseScene {
     private final String expl = "/img/explosion.png";
     private final String alienpix = "/img/alien.png";
     private AlienAnimationCycle alienAnimationCycle;
+
+    private InputManager inputManager;
 
 //    private int direction = -1;
     private int deaths = 0;
@@ -97,17 +98,18 @@ public class MainGameScene extends BaseScene {
     }
 
     @Override
-    public void input(KeyboardManager keyboardManager) {
+    public void input(InputManager inputManager) {
+        alienAnimationCycle.input(inputManager);
         var playerSprite = player.getAnimatedSprite();
 
         // update the player movement on key events
-        if (keyboardManager.left.down) {
+        if (inputManager.left.down) {
             if (player.getShield() > 0)
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT_SHIELD));
             else
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
             playerSprite.setDx(-2);
-        } else if (keyboardManager.right.down) {
+        } else if (inputManager.right.down) {
             if (player.getShield() > 0)
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT_SHIELD));
             else
@@ -121,16 +123,16 @@ public class MainGameScene extends BaseScene {
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
         }
 
-        if (keyboardManager.up.down) {
+        if (inputManager.up.down) {
             playerSprite.setDy(-2);
-        } else if (keyboardManager.down.down) {
+        } else if (inputManager.down.down) {
             playerSprite.setDy(2);
         } else {
             playerSprite.setDy(0);
         }
 
         // shoot the bullet
-        if (keyboardManager.space.down) {
+        if (inputManager.space.down) {
             if (player.canShoot()) {
                int m = player.getMultiTrajectoryProjectiles();
                 int i = m / 2;
@@ -164,10 +166,10 @@ public class MainGameScene extends BaseScene {
         }
 
         // change the shot angle
-        if (keyboardManager.angleDec.clicked) {
+        if (inputManager.angleDec.clicked) {
             angle += 15;
         }
-        if (keyboardManager.angleInc.clicked) {
+        if (inputManager.angleInc.clicked) {
             angle -= 15;
         }
 

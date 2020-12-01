@@ -3,6 +3,7 @@ package main.java.graphics;
 import main.java.entity.Alien;
 import main.java.entity.Bomb;
 import main.java.entity.Player;
+import main.java.manager.InputManager;
 import main.java.util.Commons;
 
 import javax.imageio.ImageIO;
@@ -20,6 +21,8 @@ public class AlienAnimationCycle implements Commons {
     private boolean gameLost;
     private Player player;
     private int dropSpeed = 0;
+    private InputManager inputManager;
+    private boolean wasHit = false;
 
     public AlienAnimationCycle(ArrayList<Sprite> aliens, Player player) {
         this.aliens = aliens;
@@ -82,7 +85,6 @@ public class AlienAnimationCycle implements Commons {
             Alien a = (Alien) aliensIterator.next();
             Bomb b = a.getBomb();
             if (shot == CHANCE && a.isVisible() && b.isDestroyed()) {
-
                 b.setDestroyed(false);
                 b.setX(a.getX());
                 b.setY(a.getY());
@@ -110,6 +112,7 @@ public class AlienAnimationCycle implements Commons {
                         playerSprite.setDying(true);
                     }
 
+                    wasHit = true;
                     b.setDestroyed(true);
                 }
             }
@@ -120,6 +123,13 @@ public class AlienAnimationCycle implements Commons {
                     b.setDestroyed(true);
                 }
             }
+        }
+    }
+
+    public void input(InputManager inputManager) {
+        if (wasHit) {
+            inputManager.setControllerShouldRumble(true);
+            wasHit = false;
         }
     }
 

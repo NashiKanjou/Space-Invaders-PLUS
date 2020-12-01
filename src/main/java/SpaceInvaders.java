@@ -1,9 +1,8 @@
 package main.java;
 
-import main.java.graphics.SpriteSheet;
 import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 import main.java.scene.MainGameScene;
 import main.java.util.Commons;
 
@@ -36,7 +35,7 @@ public class SpaceInvaders implements Commons {
 	JFrame frame4;
 
 	private GameSceneManager gsm;
-	private KeyboardManager keyboardManager;
+	private InputManager inputManager;
 	private Canvas gameCanvas;
 	private Thread gameThread;
 
@@ -200,8 +199,8 @@ public class SpaceInvaders implements Commons {
 		var y = (int)((dimension.getHeight() - gameFrame.getHeight()) / 2);
 		gameFrame.setLocation(x, y);
 
-		keyboardManager = new KeyboardManager();
-		gameFrame.addKeyListener(keyboardManager);
+		inputManager = new InputManager();
+		gameFrame.addKeyListener(inputManager);
 		gameFrame.setFocusable(true);
 
 		// makes sure the frame regains focus when the user clicks back on the frame
@@ -267,8 +266,8 @@ public class SpaceInvaders implements Commons {
 	}
 
 	private void update() {
-		keyboardManager.update();
-		gsm.input(keyboardManager);
+		inputManager.update();
+		gsm.input(inputManager);
 		AnimationManager.getInstance().update();
 		gsm.update();
 	}

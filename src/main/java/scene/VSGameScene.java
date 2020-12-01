@@ -4,7 +4,7 @@ import main.java.entity.Player;
 import main.java.entity.PowerUps;
 import main.java.entity.Shot;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -248,43 +248,43 @@ public class VSGameScene extends BaseScene {
     }
 
     @Override
-    public void input(KeyboardManager keyboardManager) {
+    public void input(InputManager inputManager) {
         var playerSprite = player.getAnimatedSprite();
         // update the player movement on key events
-        if (keyboardManager.left.down) {
+        if (inputManager.left.down) {
             playerSprite.setDx(-2);
-        } else if (keyboardManager.right.down) {
+        } else if (inputManager.right.down) {
             playerSprite.setDx(2);
         } else {
             playerSprite.setDx(0);
         }
 
-        if (keyboardManager.up.down) {
+        if (inputManager.up.down) {
             playerSprite.setDy(-2);
-        } else if (keyboardManager.down.down) {
+        } else if (inputManager.down.down) {
             playerSprite.setDy(2);
         } else {
             playerSprite.setDy(0);
         }
 
         // shoot the bullet
-        if (keyboardManager.space.down) {
+        if (inputManager.space.down) {
             if (player.canShoot()) {
                 PlayerShoot(player,angle);
             }
         }
 
         // change the shot angle
-        if (keyboardManager.angleDec.clicked) {
+        if (inputManager.angleDec.clicked) {
             angle += 15;
         }
-        if (keyboardManager.angleInc.clicked) {
+        if (inputManager.angleInc.clicked) {
             angle -= 15;
         }
 
         // check for quit
         //TODO Remove quit from game level and make into a paused screen that has an option to quit or resume
-        if (keyboardManager.escape.clicked)
+        if (inputManager.escape.clicked)
             gsm.ingame = false;
     }
 

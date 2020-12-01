@@ -2,7 +2,7 @@ package main.java.scene;
 
 import main.java.graphics.Sprite;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,8 +59,8 @@ public class Won extends BaseScene {
     }
 
     @Override
-    public void input(KeyboardManager keyboardManager) {
-        if (keyboardManager.escape.down) {
+    public void input(InputManager inputManager) {
+        if (inputManager.escape.down) {
             gsm.ingame = false;
         }
 

@@ -1,6 +1,6 @@
 package main.java.scene;
 
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 
 import java.awt.Graphics;
 
@@ -29,5 +29,5 @@ public interface IScene {
      * Gives the current scene access to the KeyboardManager to preform any input
      * actions
      */
-    void input(KeyboardManager keyboardManager);
+    void input(InputManager inputManager);
 }
