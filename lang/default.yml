@@ -5,7 +5,7 @@ close: Close
 top_message: Space Invaders <br> Java Version
 initial_message: Help us, awesome captain !! <br> The aliens are trying to invade our planet.<br> <br> <br> Your mission:<br> <br> Kill all invading aliens before they can invade planet Earth.<br> And, preferably, don't die during the battle!<br> <br> <br> GOOD LUCK !!!
 help_top_message: Help
-help_message: Controls:<br> <br> Move Left: <br> Left Arrow on Keyboard<br> <br> Right Movement: <br> Right Arrow on Keyboard<br> <br> Shoot: <br> Spacebar
+help_message: Controls:<br><br> Keyboard:<br><br> Move Left:<br> Left Arrow<br><br> Shoot:<br> Spacebar<br><br> Pause:<br> Escape<br><br> Controller:<br><br> Movement:<br> Left Thumbstick<br><br> Shoot:<br> A<br><br> Pause:<br> Start
 ending_win: Congratulations! You saved the galaxy!
 ending_lose: Your planet belongs to us now ...
 invade: Aliens are invading the galaxy!
