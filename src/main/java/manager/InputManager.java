@@ -34,7 +34,6 @@ public class InputManager implements KeyListener {
 
     private final ControllerManager controllerManager;
     private ControllerState controllerState;
-    private final float DEADZONE = 0.5f;
     private InputSource currentInputSource;
     private boolean controllerShouldRumble;
     private boolean printedControllerMsg = false;
@@ -184,6 +183,7 @@ public class InputManager implements KeyListener {
     private void handleController() {
         controllerState = controllerManager.getState(0);
         if (!controllerState.isConnected) {
+            currentInputSource = InputSource.KEYBOARD;
             if (wasControllerConnected) {
                 SpaceInvaders.debugMessage = "Controller Disconnected";
                 wasControllerConnected = false;
@@ -202,6 +202,7 @@ public class InputManager implements KeyListener {
         controllerToggle(TKey.SPACE, controllerState.a);
 
         // check the position of the controller left stick
+        float DEADZONE = 0.5f;
         controllerToggle(TKey.LEFT, controllerState.leftStickX < -DEADZONE);
         controllerToggle(TKey.RIGHT, controllerState.leftStickX > DEADZONE);
         controllerToggle(TKey.UP, controllerState.leftStickY > DEADZONE);
