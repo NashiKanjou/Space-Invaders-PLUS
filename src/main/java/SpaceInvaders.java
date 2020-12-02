@@ -110,6 +110,7 @@ public class SpaceInvaders implements Commons {
 		frame2.setVisible(true);
 		frame2.setResizable(false);
 
+		frame3.pack();
 	}
 
 	public void reloadLanguage() {
@@ -388,7 +389,7 @@ public class SpaceInvaders implements Commons {
 
 			frame3.add(close, BorderLayout.PAGE_END);
 			frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame3.setSize(250, 290);
+			frame3.setSize(350, 480);
 			frame3.setResizable(false);
 			frame3.setLocationRelativeTo(null);
 			frame3.setVisible(true);
