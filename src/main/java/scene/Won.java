@@ -18,6 +18,7 @@ public class Won extends BaseScene {
     private final String won = "/img/won.jpg";
     private int width;
     private Image image;
+    private String gameWonMsg;
 
     /*
      * Constructor
@@ -32,26 +33,24 @@ public class Won extends BaseScene {
 
         sprite.setX(0);
         sprite.setY(0);
-    }
-
-    /*
-     * Getters & Setters
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
+        gameWonMsg = "Press ENTER to play again or Q to quit";
     }
 
     @Override
     public void update() {
+        if (inputSource == null || inputSource == InputManager.InputSource.KEYBOARD) {
+            gameWonMsg = "Press ENTER to play again or Q to quit";
+        } else {
+            gameWonMsg = "PRESS Y to play again or SELECT to quit";
+        }
     }
 
     @Override
     public void draw(Graphics g) {
         g.drawImage(sprite.getImage(), 0, 0, null);
+        g.setColor(Color.WHITE);
+
+        g.drawString(gameWonMsg, 39, 340);
     }
 
     @Override
@@ -60,9 +59,11 @@ public class Won extends BaseScene {
 
     @Override
     public void input(InputManager inputManager) {
-        if (inputManager.escape.down) {
+        super.input(inputManager);
+        if (inputManager.quit.clicked)
             gsm.ingame = false;
-        }
 
+        if (inputManager.enter.clicked)
+            gsm.addScene(new MainGameScene(gsm), true, true);
     }
 }

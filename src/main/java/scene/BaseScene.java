@@ -1,16 +1,18 @@
 package main.java.scene;
 
 import main.java.manager.GameSceneManager;
+import main.java.manager.InputManager;
 import main.java.util.Commons;
 
 import javax.swing.*;
 import java.awt.*;
 
 
-public abstract class BaseScene extends JPanel implements Commons, IScene {
+public abstract class BaseScene implements Commons, IScene {
     private static final long serialVersionUID = 1L;
     protected Dimension d;
     protected GameSceneManager gsm;
+    protected InputManager.InputSource inputSource = null;
 
     public BaseScene(GameSceneManager gsm) {
         d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
@@ -40,4 +42,9 @@ public abstract class BaseScene extends JPanel implements Commons, IScene {
      * images
      */
     public abstract void dispose();
+
+    @Override
+    public void input(InputManager inputManager) {
+        this.inputSource = inputManager.getCurrentInputSource();
+    }
 }

@@ -310,7 +310,7 @@ public class VSGameScene extends BaseScene {
             try {
                 PowerUps pw = powerups.get(i);
                 if (pw.isVisible() && !pw.isDying()) {
-                    g.drawImage(pw.getImage(), pw.getX(), pw.getY(), this);
+                    g.drawImage(pw.getImage(), pw.getX(), pw.getY(), null);
                 }
             } catch (Exception e) {
                 // porb null, current modify, out of bound
@@ -325,7 +325,7 @@ public class VSGameScene extends BaseScene {
             try {
                 Shot shot = shots.get(i);
                 if (shot.isVisible() && !shot.isDying())
-                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), null);
             } catch (Exception e) {
                 // porb null, current modify, out of bound
             }
@@ -334,7 +334,7 @@ public class VSGameScene extends BaseScene {
             try {
                 Shot shot = enemy_shots.get(i);
                 if (shot.isVisible() && !shot.isDying())
-                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), null);
             } catch (Exception e) {
                 // porb null, current modify, out of bound
             }
@@ -491,20 +491,20 @@ public class VSGameScene extends BaseScene {
             playerSprite.die();
             havewon = false;
             // TODO go to the game over screen when the player dies
-            gsm.addScene(new GameOver(gsm), true);
+            gsm.addScene(new GameOver(gsm), true, false);
         }
     }
     public void drawEnemy(Graphics g) {
         var enemySprite = enemy.getAnimatedSprite();
         if (enemySprite.isVisible()) {
-            g.drawImage(enemySprite.getImage(), enemySprite.getX(), enemySprite.getY(), this);
+            g.drawImage(enemySprite.getImage(), enemySprite.getX(), enemySprite.getY(), null);
         }
 
         if (enemySprite.isDying()) {
             enemySprite.die();
             havewon = true;
             // TODO go to the game over screen when the enemy dies
-            gsm.addScene(new Won(gsm), true);
+            gsm.addScene(new Won(gsm), true, false);
         }
     }
     public void animationCycle() {
@@ -520,7 +520,7 @@ public class VSGameScene extends BaseScene {
             // player won
             // TODO add message to the Won scene
             // message = SpaceInvaders.lang.getEndingWinMessage();
-            gsm.addScene(new Won(gsm), true);
+            gsm.addScene(new Won(gsm), true, false);
         }
         //powerup
         checkPowerUps();

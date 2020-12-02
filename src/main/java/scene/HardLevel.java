@@ -47,7 +47,7 @@ public class HardLevel extends BaseScene {
         //player = new Player();
         player = new Player(5,5,500,3);
         shots = new ArrayList<>();
-        alienAnimationCycle = new AlienAnimationCycle(aliens, player, 20);
+        alienAnimationCycle = new AlienAnimationCycle(aliens, player, 30);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class HardLevel extends BaseScene {
             // player won
             // TODO add message to the Won scene
             // message = SpaceInvaders.lang.getEndingWinMessage();
-            gsm.addScene(new Won(gsm), true);
+            gsm.addScene(new Won(gsm), true, false);
         }
         alienAnimationCycle.animate();
         preformShooting();
@@ -70,7 +70,7 @@ public class HardLevel extends BaseScene {
             player.setUnShielded();
         }
         if (alienAnimationCycle.isGameLost()) {
-            gsm.addScene(new GameOver(gsm), true);
+            gsm.addScene(new GameOver(gsm), true, false);
         }
 
     }
@@ -130,7 +130,7 @@ public class HardLevel extends BaseScene {
             try {
                 Shot shot = shots.get(i);
                 if (shot.isVisible() && !shot.isDying())
-                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), null);
             } catch (Exception e) {
                 // porb null, current modify, out of bound
             }
@@ -145,7 +145,7 @@ public class HardLevel extends BaseScene {
             Bomb b = a.getBomb();
 
             if (!b.isDestroyed()) {
-                g.drawImage(b.getImage(), b.getX(), b.getY(), this);
+                g.drawImage(b.getImage(), b.getX(), b.getY(), null);
             }
         }
     }
@@ -180,7 +180,7 @@ public class HardLevel extends BaseScene {
             playerSprite.die();
             havewon = false;
             // TODO go to the game over screen when the player dies
-            gsm.addScene(new GameOver(gsm), true);
+            gsm.addScene(new GameOver(gsm), true, false);
         }
     }
 

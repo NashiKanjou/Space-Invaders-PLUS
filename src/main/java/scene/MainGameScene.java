@@ -63,7 +63,7 @@ public class MainGameScene extends BaseScene {
             // player won
             // TODO add message to the Won scene
             // After defeating the first set of aliens the medium level scene will be called
-            gsm.addScene(new MediumLevel(gsm), true);
+            gsm.addScene(new MediumLevel(gsm), true, true);
         }
         alienAnimationCycle.animate();
         preformShooting();
@@ -74,7 +74,7 @@ public class MainGameScene extends BaseScene {
             player.setUnShielded();
         }
         if (alienAnimationCycle.isGameLost()) {
-            gsm.addScene(new GameOver(gsm), true);
+            gsm.addScene(new GameOver(gsm), true, false);
         }
     }
 
@@ -216,7 +216,7 @@ public class MainGameScene extends BaseScene {
             try {
                 Shot shot = shots.get(i);
                 if (shot.isVisible() && !shot.isDying())
-                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+                    g.drawImage(shot.getImage(), shot.getX(), shot.getY(), null);
             } catch (Exception e) {
                 // porb null, current modify, out of bound
             }
@@ -231,7 +231,7 @@ public class MainGameScene extends BaseScene {
             Bomb b = a.getBomb();
 
             if (!b.isDestroyed()) {
-                g.drawImage(b.getImage(), b.getX(), b.getY(), this);
+                g.drawImage(b.getImage(), b.getX(), b.getY(), null);
             }
         }
     }
@@ -266,7 +266,7 @@ public class MainGameScene extends BaseScene {
             playerSprite.die();
             havewon = false;
             // TODO go to the game over screen when the player dies
-            gsm.addScene(new GameOver(gsm), true);
+            gsm.addScene(new GameOver(gsm), true, false);
         }
     }
 

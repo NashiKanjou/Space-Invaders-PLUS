@@ -2,6 +2,7 @@ package main.java.manager;
 
 import com.studiohartman.jamepad.ControllerManager;
 import com.studiohartman.jamepad.ControllerState;
+import main.java.SpaceInvaders;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -36,6 +37,8 @@ public class InputManager implements KeyListener {
     private final float DEADZONE = 0.5f;
     private InputSource currentInputSource;
     private boolean controllerShouldRumble;
+    private boolean printedControllerMsg = false;
+    private boolean wasControllerConnected = false;
 
     public InputManager() {
         controllerManager = new ControllerManager();
@@ -180,8 +183,19 @@ public class InputManager implements KeyListener {
 
     private void handleController() {
         controllerState = controllerManager.getState(0);
-        if (!controllerState.isConnected)
+        if (!controllerState.isConnected) {
+            if (wasControllerConnected) {
+                SpaceInvaders.debugMessage = "Controller Disconnected";
+                wasControllerConnected = false;
+            }
+            printedControllerMsg = false;
             return;
+        }
+        if (!printedControllerMsg) {
+            wasControllerConnected = true;
+            SpaceInvaders.debugMessage = "Controller Connected";
+            printedControllerMsg = true;
+        }
         currentInputSource = InputSource.CONTROLLER;
 
         // fire bullet
@@ -198,6 +212,9 @@ public class InputManager implements KeyListener {
 
         // quit
         controllerToggle(TKey.QUIT, controllerState.back);
+
+        // enter
+        controllerToggle(TKey.ENTER, controllerState.y);
 
         if (controllerShouldRumble) {
             System.out.println("controller rumble");
