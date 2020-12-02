@@ -47,7 +47,7 @@ public class MediumLevel extends BaseScene {
         //player = new Player();
         player = new Player(5,5,500,3);
         shots = new ArrayList<>();
-        alienAnimationCycle = new AlienAnimationCycle(aliens, player, 10);
+        alienAnimationCycle = new AlienAnimationCycle(aliens, player, 15);
     }
 
     @Override
