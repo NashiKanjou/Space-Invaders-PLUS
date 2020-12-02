@@ -5,7 +5,7 @@ import main.java.graphics.AlienAnimationCycle;
 import main.java.graphics.Sprite;
 import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 import main.java.util.Map;
 import main.java.util.MapLoader;
 
@@ -250,17 +250,17 @@ public class MediumLevel extends BaseScene {
     }
 
     @Override
-    public void input(KeyboardManager keyboardManager) {
+    public void input(InputManager inputManager) {
         var playerSprite = player.getAnimatedSprite();
 
         // update the player movement on key events
-        if (keyboardManager.left.down) {
+        if (inputManager.left.down) {
             if (player.getShield() > 0)
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT_SHIELD));
             else
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
             playerSprite.setDx(-2);
-        } else if (keyboardManager.right.down) {
+        } else if (inputManager.right.down) {
             if (player.getShield() > 0)
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT_SHIELD));
             else
@@ -274,16 +274,16 @@ public class MediumLevel extends BaseScene {
                 playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
         }
 
-        if (keyboardManager.up.down) {
+        if (inputManager.up.down) {
             playerSprite.setDy(-2);
-        } else if (keyboardManager.down.down) {
+        } else if (inputManager.down.down) {
             playerSprite.setDy(2);
         } else {
             playerSprite.setDy(0);
         }
 
         // shoot the bullet
-        if (keyboardManager.space.down) {
+        if (inputManager.space.down) {
             if (player.canShoot()) {
                 int m = player.getMultiTrajectoryProjectiles();
                 int i = m / 2;
@@ -317,16 +317,16 @@ public class MediumLevel extends BaseScene {
         }
 
         // change the shot angle
-        if (keyboardManager.angleDec.clicked) {
+        if (inputManager.angleDec.clicked) {
             angle += 15;
         }
-        if (keyboardManager.angleInc.clicked) {
+        if (inputManager.angleInc.clicked) {
             angle -= 15;
         }
 
         // check for quit
         //TODO Remove quit from game level and make into a paused screen that has an option to quit or resume
-//        if (keyboardManager.escape.clicked)
+//        if (inputManager.escape.clicked)
 //            gsm.ingame = false;
     }
 
