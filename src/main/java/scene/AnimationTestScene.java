@@ -4,11 +4,10 @@ import main.java.graphics.AnimatedSprite;
 import main.java.graphics.Sprite;
 import main.java.graphics.SpriteSheet;
 import main.java.manager.GameSceneManager;
-import main.java.manager.KeyboardManager;
+import main.java.manager.InputManager;
 import main.java.util.Pair;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class AnimationTestScene extends BaseScene {
@@ -54,13 +53,13 @@ public class AnimationTestScene extends BaseScene {
     }
 
     @Override
-    public void input(KeyboardManager keyboardManager) {
-        if (keyboardManager.right.down) {
+    public void input(InputManager inputManager) {
+        if (inputManager.right.down) {
             sprite.setDx(2);
             wasFrameChanged = true;
             animatedSprite.setFrames(rightFrame);
         }
-        else if (keyboardManager.left.down) {
+        else if (inputManager.left.down) {
             sprite.setDx(-2);
             wasFrameChanged = true;
             animatedSprite.setFrames(leftFrame);
@@ -74,9 +73,9 @@ public class AnimationTestScene extends BaseScene {
         }
 
 
-        if (keyboardManager.up.down)
+        if (inputManager.up.down)
             sprite.setDy(-2);
-        else if (keyboardManager.down.down)
+        else if (inputManager.down.down)
             sprite.setDy(2);
         else {
             sprite.setDy(0);
