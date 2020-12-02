@@ -5,7 +5,7 @@ import main.java.graphics.AlienAnimationCycle;
 import main.java.graphics.Sprite;
 import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
-import main.java.manager.InputManager;
+import main.java.manager.KeyboardManager;
 import main.java.util.Map;
 import main.java.util.MapLoader;
 
@@ -14,16 +14,14 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
-
-public class MainGameScene extends BaseScene {
+public class MediumLevel extends BaseScene {
     private static final long serialVersionUID = 1L;
 
     private ArrayList<Sprite> aliens;
     private ArrayList<Shot> shots;
     private Player player;
     private Map gameMap;
-//    private Shot shot;
+    //    private Shot shot;
     private GameOver gameend;
     private Won vunnet;
     private boolean havewon = true;
@@ -31,21 +29,19 @@ public class MainGameScene extends BaseScene {
     private final String alienpix = "/img/alien.png";
     private AlienAnimationCycle alienAnimationCycle;
 
-    private InputManager inputManager;
-
-//    private int direction = -1;
+    //    private int direction = -1;
     private int deaths = 0;
 
     private double angle = 0; // aiming angle for shooting, default straight
 
-    public MainGameScene(GameSceneManager gsm) {
+    public MediumLevel(GameSceneManager gsm) {
         super(gsm);
         init();
     }
 
     private void init() {
         // load the map
-        gameMap = MapLoader.loadMap("\\levels\\testlevel.txt", 30, 18);
+        gameMap = MapLoader.loadMap("\\levels\\mediumlevel.txt", 30, 18);
         // get a reference to the list of aliens
         aliens = gameMap.getSprites();
         //player = new Player();
@@ -62,8 +58,8 @@ public class MainGameScene extends BaseScene {
         if (deaths == gameMap.getNumberOfEnemies()) {
             // player won
             // TODO add message to the Won scene
-            // After defeating the first set of aliens the medium level scene will be called
-            gsm.addScene(new MediumLevel(gsm), true);
+            // After defeating the medium level the hard level scene will be loaded
+            gsm.addScene(new HardLevel(gsm), true);
         }
         alienAnimationCycle.animate();
         preformShooting();
@@ -76,8 +72,8 @@ public class MainGameScene extends BaseScene {
         if (alienAnimationCycle.isGameLost()) {
             gsm.addScene(new GameOver(gsm), true);
         }
-    }
 
+    }
 
     public void drawHealth(Graphics g) {
         int max = player.getMaxhealth();
@@ -95,88 +91,6 @@ public class MainGameScene extends BaseScene {
         }
 
         g.fillRect(0, BOARD_HEIGHT - 20, s, 10);
-    }
-
-    @Override
-    public void input(InputManager inputManager) {
-        alienAnimationCycle.input(inputManager);
-        var playerSprite = player.getAnimatedSprite();
-
-        // update the player movement on key events
-        if (inputManager.left.down) {
-            if (player.getShield() > 0)
-                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT_SHIELD));
-            else
-                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
-            playerSprite.setDx(-2);
-        } else if (inputManager.right.down) {
-            if (player.getShield() > 0)
-                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT_SHIELD));
-            else
-                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT));
-            playerSprite.setDx(2);
-        } else {
-            playerSprite.setDx(0);
-            if (player.getShield() > 0)
-                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE_SHIELD));
-            else
-                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
-        }
-
-        if (inputManager.up.down) {
-            playerSprite.setDy(-2);
-        } else if (inputManager.down.down) {
-            playerSprite.setDy(2);
-        } else {
-            playerSprite.setDy(0);
-        }
-
-        // shoot the bullet
-        if (inputManager.space.down) {
-            if (player.canShoot()) {
-               int m = player.getMultiTrajectoryProjectiles();
-                int i = m / 2;
-
-//                var x = playerSprite.getX();
-//                var y = playerSprite.getY();
-
-                int x,y;
-                if(player.getShield()>0){
-                    x = playerSprite.getX() + (player.getWidth() / 5);
-                    y = playerSprite.getY() + (player.getHeight() / 5);
-                }else{
-                    x = playerSprite.getX();
-                    y = playerSprite.getY();
-                }
-
-
-                for (int a = 0; a < i; a++) {
-                    int b = a - i;
-                    shots.add(new Shot(x - 5 * b, y,angle));
-                    shots.add(new Shot(x + 5 * b, y,angle));
-                }
-                if (m % 2 != 0) {
-                    shots.add(new Shot(x, y,angle));
-                }
-                /*
-                 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
-                 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
-                 */
-            }
-        }
-
-        // change the shot angle
-        if (inputManager.angleDec.clicked) {
-            angle += 15;
-        }
-        if (inputManager.angleInc.clicked) {
-            angle -= 15;
-        }
-
-        // check for quit
-        //TODO Remove quit from game level and make into a paused screen that has an option to quit or resume
-//        if (keyboardManager.escape.clicked)
-//            gsm.ingame = false;
     }
 
     @Override
@@ -334,4 +248,86 @@ public class MainGameScene extends BaseScene {
         }
         shots.removeAll(temp);
     }
+
+    @Override
+    public void input(KeyboardManager keyboardManager) {
+        var playerSprite = player.getAnimatedSprite();
+
+        // update the player movement on key events
+        if (keyboardManager.left.down) {
+            if (player.getShield() > 0)
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT_SHIELD));
+            else
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_LEFT));
+            playerSprite.setDx(-2);
+        } else if (keyboardManager.right.down) {
+            if (player.getShield() > 0)
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT_SHIELD));
+            else
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_RIGHT));
+            playerSprite.setDx(2);
+        } else {
+            playerSprite.setDx(0);
+            if (player.getShield() > 0)
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE_SHIELD));
+            else
+                playerSprite.setFrames(AnimationManager.getInstance().getFrames(AnimationManager.Assets.PLAYER_IDLE));
+        }
+
+        if (keyboardManager.up.down) {
+            playerSprite.setDy(-2);
+        } else if (keyboardManager.down.down) {
+            playerSprite.setDy(2);
+        } else {
+            playerSprite.setDy(0);
+        }
+
+        // shoot the bullet
+        if (keyboardManager.space.down) {
+            if (player.canShoot()) {
+                int m = player.getMultiTrajectoryProjectiles();
+                int i = m / 2;
+
+//                var x = playerSprite.getX();
+//                var y = playerSprite.getY();
+
+                int x,y;
+                if(player.getShield()>0){
+                    x = playerSprite.getX() + (player.getWidth() / 5);
+                    y = playerSprite.getY() + (player.getHeight() / 5);
+                }else{
+                    x = playerSprite.getX();
+                    y = playerSprite.getY();
+                }
+
+
+                for (int a = 0; a < i; a++) {
+                    int b = a - i;
+                    shots.add(new Shot(x - 5 * b, y,angle));
+                    shots.add(new Shot(x + 5 * b, y,angle));
+                }
+                if (m % 2 != 0) {
+                    shots.add(new Shot(x, y,angle));
+                }
+                /*
+                 * if(player.isDoubleTrajectoryProjectiles()) { shots.add(new Shot(x-5, y));
+                 * shots.add(new Shot(x+5, y)); }else{ shots.add(new Shot(x, y)); }
+                 */
+            }
+        }
+
+        // change the shot angle
+        if (keyboardManager.angleDec.clicked) {
+            angle += 15;
+        }
+        if (keyboardManager.angleInc.clicked) {
+            angle -= 15;
+        }
+
+        // check for quit
+        //TODO Remove quit from game level and make into a paused screen that has an option to quit or resume
+//        if (keyboardManager.escape.clicked)
+//            gsm.ingame = false;
+    }
+
 }

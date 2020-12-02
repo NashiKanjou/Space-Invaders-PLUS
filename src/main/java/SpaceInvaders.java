@@ -4,6 +4,7 @@ import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.InputManager;
 import main.java.scene.MainGameScene;
+import main.java.scene.UnlimitedLevels;
 import main.java.util.Commons;
 
 import javax.swing.*;
@@ -225,6 +226,9 @@ public class SpaceInvaders implements Commons {
 		gsm.ingame = true;
 
 		gsm.addScene(new MainGameScene(gsm));
+
+		// For arcade mode/unlimited levels mode call this scene
+		//gsm.addScene(new UnlimitedLevels(gsm));
 
 		long lastTime = System.nanoTime();
 		// used to reset fps and timer per second
