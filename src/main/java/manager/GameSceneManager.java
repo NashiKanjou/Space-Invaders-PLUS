@@ -12,6 +12,7 @@ public class GameSceneManager {
 
     public boolean paused;
     public boolean ingame;
+    private boolean canStateBePaused = true;
 
     public GameSceneManager() {
         ingame = paused = false;
@@ -19,7 +20,7 @@ public class GameSceneManager {
     }
 
     public void input(InputManager inputManager) {
-        if (inputManager.escape.clicked) {
+        if (canStateBePaused && inputManager.escape.clicked) {
             if (!paused) {
                 paused = true;
                 addScene(new PausedScene(this));
@@ -34,13 +35,6 @@ public class GameSceneManager {
         }
     }
 
-    /**
-     * Adds the new scene and sets it as the current scene that will be updated and
-     * rendered per frame
-     * 
-     * @param scene The scene to be add and marked as the current scene to be
-     *              displayed
-     */
     public void addScene(IScene scene) {
         if (scene != null) {
             scenes.push(scene);
@@ -56,12 +50,15 @@ public class GameSceneManager {
      * 
      * @param removeCurrentScene Whether the current scene should be disposed before
      *                           adding the new scene
+     *
+     * @param canStateBePaused Tells the GSM which state can go into a paused state
      */
-    public void addScene(IScene scene, boolean removeCurrentScene) {
+    public void addScene(IScene scene, boolean removeCurrentScene, boolean canStateBePaused) {
         if (scene != null) {
             if (removeCurrentScene && !scenes.empty()) {
                 scenes.pop().dispose();
             }
+            this.canStateBePaused = canStateBePaused;
             this.addScene(scene);
         }
     }

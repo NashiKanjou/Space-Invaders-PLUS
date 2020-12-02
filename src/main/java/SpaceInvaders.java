@@ -4,7 +4,6 @@ import main.java.manager.AnimationManager;
 import main.java.manager.GameSceneManager;
 import main.java.manager.InputManager;
 import main.java.scene.MainGameScene;
-import main.java.scene.UnlimitedLevels;
 import main.java.util.Commons;
 
 import javax.swing.*;
@@ -27,6 +26,7 @@ import java.util.HashMap;
 public class SpaceInvaders implements Commons {
 	public static Language lang;
 	public static double delta = 0;
+	public static String debugMessage = "";
 
 	private JButton start, help, lang_sel;
 
@@ -39,6 +39,7 @@ public class SpaceInvaders implements Commons {
 	private InputManager inputManager;
 	private Canvas gameCanvas;
 	private Thread gameThread;
+	private double debugElapsedTime = 0;
 
 	/*
 	 * Constructor
@@ -225,7 +226,7 @@ public class SpaceInvaders implements Commons {
 		gsm = new GameSceneManager();
 		gsm.ingame = true;
 
-		gsm.addScene(new MainGameScene(gsm));
+		gsm.addScene(new MainGameScene(gsm), false, true);
 
 		// For arcade mode/unlimited levels mode call this scene
 		//gsm.addScene(new UnlimitedLevels(gsm));
@@ -234,7 +235,6 @@ public class SpaceInvaders implements Commons {
 		// used to reset fps and timer per second
 		long timer = System.currentTimeMillis();
 		final double ns = 1e9 / UPDATE_PER_SECOND;
-//		double delta = 0;
 		int fps = 0;
 		int updates = 0;
 
@@ -245,7 +245,7 @@ public class SpaceInvaders implements Commons {
 			lastTime = now;
 
 			while (delta >= 1) {
-				update();
+				update(delta);
 				updates++;
 				delta--;
 				shouldUpdate = true;
@@ -269,7 +269,16 @@ public class SpaceInvaders implements Commons {
 		System.out.println("game over");
 	}
 
-	private void update() {
+	private void update(double delta) {
+		// displays the debug message for a specific amount of time
+		if (debugElapsedTime >= 150) {
+			debugMessage = "";
+			debugElapsedTime = 0;
+		}
+		// only update time if the message isn't empty
+		if (debugMessage.length() > 0)
+			debugElapsedTime += delta;
+
 		inputManager.update();
 		gsm.input(inputManager);
 		AnimationManager.getInstance().update();
@@ -291,6 +300,9 @@ public class SpaceInvaders implements Commons {
 
 		// render the current screen
 		gsm.draw(g2d);
+
+		g2d.setColor(Color.WHITE);
+		g2d.drawString(debugMessage, 2, 10);
 
 		g2d.dispose();
 		// swap buffers
