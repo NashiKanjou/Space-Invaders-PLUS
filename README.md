@@ -8,7 +8,7 @@ FOR gamers and ordinary people WHO need to pass time, take a quick fun break, or
 ## Raymond
 Joseph, age 45, is a video game developer for Capcom. Joseph is one of the lead designers for Capcom’s Street Fighter series. He grew up in the era when arcade games such as Pac-Man, Donkey Kong, and Space Invaders were gaining popularity during the early 1980s. These influential arcade games are what started Joseph’s love for video games which later lead to him pursuing a career in video game development. He is very interested in our project Space Invaders PLUS as this game has been very influential in not only his life but the entire gaming industry. Joseph is excited to experience our revamped version of Space Invaders and he cannot wait to see the new features and additions we have added to the game. 
 
-## Chin
+## Chin-Hung
 Arusu, age 24, is a game designer in Compile Heart. She has a diploma in computer science from Tokyo Institute of Technology. She went to several software companies in Japan. Since she loves games more, she joined the Compile Heart and become a game designer.
 Before Arusu actually join a game company, she does not only do programming for work, she also had her own club creating games as a hobby. She released several mini games and those games have lots of positive reviews. Arusu is interested in Space Invaders Plus and want to try and test the game.
 
